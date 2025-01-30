@@ -1,0 +1,7 @@
+/ssl
+
+.idea/
+.vscode/
+
+.env.production
+/backend/accounts/certificates-production/
