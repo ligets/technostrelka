@@ -38,8 +38,8 @@ export default function LKUser(){
                         >Загрузить маршрут</button>
                     </div>
                     <div className={isOpen === 1 ? "flex flex-col  gap-7" : "hidden"} >
-                        
-                        {/* если у человека нет созданных им маршрутов */}
+
+                        {/* если у  человека нет созданных им маршрутов */}
                         {/* <div className="flex flex-col items-start gap-4">
                             <span className="text-[#000] text-[16px] font-bold px-2">
                                 У вас нет маршрутов, 
@@ -49,7 +49,7 @@ export default function LKUser(){
                             <div className="border-dashed border border-[#6874f9] w-[100%]"></div>
                         </div> */}
 
-                        <div className="flex flex-col gap-7">
+                        {/* <div className="flex flex-col gap-7">
                             <div className="flex flex-row justify-between">
                                 <h1 className="text-[#000] text-[16px] font-bold">Кавказские горы - пешая тропа </h1>
                                 <div className="flex flex-row gap-[1em]">
@@ -90,6 +90,26 @@ export default function LKUser(){
                             </div>
                             <div className="border-dashed border border-[#6874f9] w-[100%]"></div>
                         </div>
+                         */}
+                        
+                        <div className="flex flex-col items-start gap-4"> 
+                            <span className="text-[#000] text-[20px] font-semibold px-2">
+                                Редактировать - Кавказские горы - пешая тропа  
+                            </span>
+                            <div className="border-dashed border border-[#6874f9] w-[100%]"></div>
+                            <form className="flex flex-col gap-4 w-[100%]" action="">
+                                <div className="flex flex-row items-start justify-between">
+                                    <label htmlFor="" className="text-[#8d8d8d] text-[16px] font-semibold">Название</label>
+                                    <input type="text" placeholder="Кавказские горы - пешая тропа" className="w-[70%] border border-gray-400 rounded-lg  h-[36px] px-2 outline-none"/>
+                                </div>
+                                <div className="flex flex-row items-start justify-between">
+                                    <label htmlFor="" className="text-[#8d8d8d] text-[16px] font-semibold">описание</label>
+                                    <input type="text" placeholder="Кавказские горы - пешая тропа" className="w-[70%] border border-gray-400 rounded-lg  h-[36px] px-2 outline-none"/>
+                                </div>
+                                
+                            </form>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
