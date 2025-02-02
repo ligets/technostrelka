@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-[22px]  h-[913px] shadow-[0_0_5px_1px_rgba(0,0,0,0.25)] bg-white">
+    <>
       <div className="flex items-center justify-between  w-[92%] ">
       <div className="flex flex-col justify-between w-[40%]">
         <div className="pb-[2em]">
@@ -75,6 +75,6 @@ export default function Home() {
       </div>
 
       </div>
-    </div>
+    </>
   );
 }
