@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Login from "@/app/authorization/login/page";
 import Register from "@/app/authorization/register/page";
 import Link from "next/link";
+import VerifyCodeModal from "@/app/authorization/components/code/page";
 
 const montserrat = Montserrat({
     variable: "--font-montserrat-sans",
@@ -66,13 +67,12 @@ export default function RootLayout({ children }) {
         {isModalOpen && (
             <>
                 {isLoginForm ? (
-                    <Login closeModal={closeModal} />
+                    <Login closeModal={closeModal} setIsLoginForm={setIsLoginForm} />
                 ) : (
-                    <Register closeModal={closeModal} />
+                    <Register closeModal={closeModal} setIsLoginForm={setIsLoginForm} />
                 )}
             </>
         )}
-
         <main className="p-7">{children}</main>
         </body>
         </html>

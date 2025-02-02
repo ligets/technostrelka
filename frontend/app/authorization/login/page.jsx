@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-export default function Login({ closeModal }) {
+export default function Login({ closeModal, setIsLoginForm }) {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [isChecked, setIsChecked] = useState(false);
@@ -87,8 +87,8 @@ export default function Login({ closeModal }) {
 
                 <p className="mt-2 text-left text-sm text-black">
                     Нет аккаунта?{" "}
-                    <button onClick={() => { setIsLoginForm(false); }} className="underline font-semibold text-[#6874F9] ">
-                        Зарегестрируйтесь
+                    <button onClick={() => { setIsLoginForm(false); }} className="font-semibold text-[#6874F9] no-underline">
+                        Зарегистрироваться
                     </button>
                 </p>
             </motion.div>
