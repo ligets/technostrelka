@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import Image from "next/image";
 
 export default function LKUser(){
@@ -19,6 +19,24 @@ export default function LKUser(){
           reader.readAsDataURL(file);
         }
       };
+    const [step, setStep] = useState(1);
+    const [routeData, setRouteData] = useState({
+        startPoint: "",
+        routeMap: null,
+        name: "",
+        description: "",
+        access: "public",
+        type: "hiking",
+        media: [],
+        landmarks: [],
+    });
+
+    const nextStep = () => setStep(prev => prev + 1);
+    const prevStep = () => setStep(prev => prev - 1);
+    console.log(step)
+    useEffect(() => {
+        console.log("Current step:", step);
+    });
 
     return(
         <div className="flex flex-col w-[92%] h-[94%]">
@@ -33,21 +51,21 @@ export default function LKUser(){
                 </div>
                 <div className="flex flex-col gap-9">
                     <div >
-                        <button 
-                        className={isOpen === 1 
-                            ? "bg-[#6874f9] text-white text-[16px] font-light rounded-tl-[14px] rounded-tr-[15px] px-8 py-2" 
+                        <button
+                        className={isOpen === 1
+                            ? "bg-[#6874f9] text-white text-[16px] font-light rounded-tl-[14px] rounded-tr-[15px] px-8 py-2"
                             : "text-[16px] text-[#6874f9] rounded-tl-[14px] rounded-tr-[15px]  bg-[#d9d9d9] font-light px-8 py-2"}
                         onClick={() => setIsOpen(1)}
                         >Ваши маршруты</button>
-                        <button 
-                        className={isOpen === 2 
-                            ? "bg-[#6874f9] text-white text-[16px] font-light rounded-tl-[14px] rounded-tr-[15px] px-8 py-2" 
+                        <button
+                        className={isOpen === 2
+                            ? "bg-[#6874f9] text-white text-[16px] font-light rounded-tl-[14px] rounded-tr-[15px] px-8 py-2"
                             : "text-[16px] text-[#6874f9] rounded-tl-[14px] rounded-tr-[15px] px-8 py-2 bg-[#d9d9d9] font-light"}
                         onClick={() => setIsOpen(2)}
                         >Сохраненные маршруты</button>
-                        <button 
-                        className={isOpen === 3 
-                            ? "bg-[#6874f9] text-white text-[16px] font-light rounded-tl-[14px] rounded-tr-[15px] px-8 py-2" 
+                        <button
+                        className={isOpen === 3
+                            ? "bg-[#6874f9] text-white text-[16px] font-light rounded-tl-[14px] rounded-tr-[15px] px-8 py-2"
                             : "text-[16px] text-[#6874f9] rounded-tl-[14px] rounded-tr-[15px] px-8 py-2 bg-[#d9d9d9] font-light"}
                         onClick={() => setIsOpen(3)}
                         >Загрузить маршрут</button>
@@ -58,8 +76,8 @@ export default function LKUser(){
                         {/* если у  человека нет созданных им маршрутов */}
                         {/* <div className="flex flex-col items-start gap-4">
                             <span className="text-[#000] text-[16px] font-bold px-2">
-                                У вас нет маршрутов, 
-                                <a className="text-[#6874f9] text-[16px] font-bold px-1" href="">создайте</a> 
+                                У вас нет маршрутов,
+                                <a className="text-[#6874f9] text-[16px] font-bold px-1" href="">создайте</a>
                                 первый маршрут!
                             </span>
                             <div className="border-dashed border border-[#6874f9] w-[100%]"></div>
@@ -79,7 +97,7 @@ export default function LKUser(){
                                         <p className="text-[#000] font-light text-[15px]">Расстояние</p>
                                         <h1 className="text-[#000] font-bold text-[17px]">10,72 км</h1>
                                     </div>
-                                    <div className="flex flex-col gap-[0.5em] items-start"> 
+                                    <div className="flex flex-col gap-[0.5em] items-start">
                                         <p className="text-[#000] font-light text-[15px]">Высота</p>
                                         <h1 className="text-[#000] font-bold text-[17px]">300 м</h1>
                                     </div>
@@ -107,10 +125,10 @@ export default function LKUser(){
                             <div className="border-dashed border border-[#6874f9] w-[100%]"></div>
                         </div>
                          */}
-                        
-                        <div className="flex flex-col items-start gap-4"> 
+
+                        <div className="flex flex-col items-start gap-4">
                             <span className="text-[#000] text-[20px] font-semibold px-2">
-                                Редактировать - Кавказские горы - пешая тропа  
+                                Редактировать - Кавказские горы - пешая тропа
                             </span>
                             <div className="border-dashed border border-[#6874f9] w-[100%]"></div>
                             <form className="flex flex-col gap-10 w-[100%] " action="">
@@ -196,7 +214,7 @@ export default function LKUser(){
                                         <a className="px-[3em] py-3 font-semibold text-[#fff] text-[14px] bg-[#6874f9] rounded-[10px]" href="">Принять</a>
                                     </div>
                                 </div>
-                                
+
                             </form>
 
                         </div>
@@ -206,7 +224,7 @@ export default function LKUser(){
                         <div className={step === 1 ? "flex" : "hidden"}>
                             <h1 className="text-[#000] font-bold text-[17px]">жопааааа</h1>
                         </div>
-
+                        
                     </div>
                 </div>
             </div>
