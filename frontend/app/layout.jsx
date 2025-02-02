@@ -5,6 +5,7 @@ import "./globals.css";
 import { motion } from "framer-motion";
 import Login from "@/app/authorization/login/page";
 import Register from "@/app/authorization/register/page";
+import Link from "next/link";
 
 const montserrat = Montserrat({
     variable: "--font-montserrat-sans",
@@ -26,11 +27,12 @@ export default function RootLayout({ children }) {
 
     return (
         <html lang="en" className={montserrat.variable} >
-        <body className="antialiased font-montserrat w-[85%] mx-auto">
-        <header className="flex items-center justify-between p-4">
-                    <span className="text-[#4400BA] text-[32px] font-bold">
+        <body className="antialiased font-montserrat ">
+        <header className="flex items-center justify-between p-4 bg-[#fff]">
+                    <Link className="text-[#6874f9] text-[32px] font-bold" 
+                    href="/">
                         GeoTouristicService
-                    </span>
+                    </Link>
 
             <div className="flex items-center gap-2 w-[600px] relative">
                 <div className="absolute left-3">
@@ -48,13 +50,13 @@ export default function RootLayout({ children }) {
             <div className="flex gap-2">
                 <button
                     onClick={() => { setIsLoginForm(true); openModal(); }}
-                    className="rounded-[25px] py-[0.5em] px-[2em] bg-[#4400BA] text-white text-[15px] font-bold border-[1px] border-[#4400BA] hover:bg-transparent hover:text-indigo-800 transition-all duration-300"
+                    className="rounded-[25px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
                 >
                     Войти
                 </button>
                 <button
                     onClick={() => { setIsLoginForm(false); openModal(); }}
-                    className="rounded-[25px] py-[0.5em] px-[2em] bg-[#4400BA] text-white text-[15px] font-bold border-[1px] border-[#4400BA] hover:bg-transparent hover:text-indigo-800 transition-all duration-300"
+                    className="rounded-[25px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
                 >
                     Регистрация
                 </button>
@@ -71,7 +73,7 @@ export default function RootLayout({ children }) {
             </>
         )}
 
-        <main className="p-4">{children}</main>
+        <main className="p-7">{children}</main>
         </body>
         </html>
     );
