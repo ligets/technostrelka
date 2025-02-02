@@ -26,14 +26,35 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-[6em] w-[40%]">
-        <div className="flex justify-between">
-          <div className="flex flex-col justify-between">
-            <Image src="" alt="" className=" w-[300px] h-[200px]"/>
-            <Image src="" alt="" className=" w-[300px] h-[200px]" />
+        <div className="flex flex-col gap-[6em] w-[40%]">
+          <div className="flex gap-x-8 w-full">
+            <div className="flex flex-col gap-y-8 w-[60%]">
+              <Image
+                  src="/man1.png"
+                  alt="upper_man"
+                  width={370}
+                  height={220}
+                  className="w-full h-auto object-cover"
+              />
+              <Image
+                  src="/man1_down.png"
+                  alt="down_man"
+                  width={370}
+                  height={200}
+                  className="w-full h-auto object-cover"
+              />
+            </div>
+
+            <div className="w-[47%]">
+              <Image
+                  src="/man_right.png"
+                  alt="right_man"
+                  width={292}
+                  height={461}
+                  className="w-full h-full object-cover"
+              />
+            </div>
           </div>
-          <Image src="" alt="" className="rounded-[36px] w-[242px] h-[461px]"/>
-        </div>
 
         <div className="flex items-center justify-between rounded-[15px] p-[20px_17px]  shadow-[3px_4px_4px_2px_rgba(0,0,0,0.25)] bg-white">
           <div className="flex flex-col items-start justify-center">

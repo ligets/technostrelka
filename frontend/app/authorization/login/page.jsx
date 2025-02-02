@@ -25,7 +25,7 @@ export default function Login({ closeModal }) {
     };
     return (
         <div
-            className="fixed inset-0 bg-[#4A4949]/40 flex justify-center items-center z-50"
+            className="fixed inset-0 bg-[#4A4949]/40 flex justify-center items-center z-50 p-[30px]"
             onClick={(e) => e.target === e.currentTarget && closeModal()}
         >
             <motion.div
@@ -33,7 +33,7 @@ export default function Login({ closeModal }) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.2 }}
-                className="w-[405px] h-[373px] rounded-[8px] flex bg-white flex-col p-6 relative"
+                className="w-[405px] rounded-[8px] flex bg-white flex-col p-6 relative"
             >
                 <button
                     onClick={closeModal}
@@ -85,18 +85,12 @@ export default function Login({ closeModal }) {
                     </button>
                 </form>
 
-                {/*<p className="mt-3 text-center text-sm">*/}
-                {/*    <a href="/forgot-password" className="text-white hover:underline">*/}
-                {/*        Забыли пароль?*/}
-                {/*    </a>*/}
-                {/*</p>*/}
-
-                {/*<p className="mt-2 text-center text-sm text-white">*/}
-                {/*    Еще не зарегистрированы?{" "}*/}
-                {/*    <button onClick={() => { setIsLoginForm(false); }} className="underline font-semibold">*/}
-                {/*        Регистрация*/}
-                {/*    </button>*/}
-                {/*</p>*/}
+                <p className="mt-2 text-left text-sm text-black">
+                    Нет аккаунта?{" "}
+                    <button onClick={() => { setIsLoginForm(false); }} className="underline font-semibold text-[#6874F9] ">
+                        Зарегестрируйтесь
+                    </button>
+                </p>
             </motion.div>
         </div>
     );
