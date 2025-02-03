@@ -1,13 +1,30 @@
 "use client"
 import {useEffect, useState} from "react"
 import Image from "next/image";
-
+import axios from "axios";
+import {Helmet} from "react-helmet";
+const YANDEX_API_KEY = "fee3278a-7b07-4bf9-a6e3-dcf1b7c93bdb";
 export default function LKUser(){
     const [isOpen, setIsOpen] = useState(1);// вкладки в лк 
     const [isModalOpen, setIsModalOpen] = useState(false);//открытие закрытие окна редактирования маршрута
     const [isModalValue, setIsModalValue] = useState("Пеший");//выбранный тип маршрута
     const [imageSrc, setImageSrc] = useState(null);//превью картинки в редактировании маршрута
-    const [step, setStep] = useState(3);//шаги создания маршрута
+    const [step, setStep] = useState(1);//шаги создания маршрута
+
+    const [query, setQuery] = useState("");//для поиска
+    const [suggestions, setSuggestions] = useState([]);//для поиска
+    const [selectedAddress, setSelectedAddress] = useState(""); // Состояние для выбранного адреса
+    const handleAddressClick = (address) => {
+        setSelectedAddress(address); // Запоминаем выбранный адрес в стейте
+        setQuery(address); // Обновляем input с выбранным адресом
+        setSuggestions([]); // Скрываем список предложений после выбора
+        console.log(address)
+    };
+
+    useEffect(() => {
+        fetchSuggestions();
+    }, [query]); // Запрашиваем данные при изменении query
+
     const [routeData, setRouteData] = useState({
         startPoint: "",
         routeMap: null,
@@ -18,7 +35,18 @@ export default function LKUser(){
         media: [],
         landmarks: [],
     });//данные маршрута в создании маршрута 
-    
+
+    useEffect(() => {    //Это апи яндекс я всё шатал
+        // Проверяем, если такого мета-тега еще нет
+        const metaTag = document.querySelector('meta[name="referrer"]');
+        if (!metaTag) {
+            const newMetaTag = document.createElement("meta");
+            newMetaTag.name = "referrer";
+            newMetaTag.content = "no-referrer";
+            document.head.appendChild(newMetaTag);
+        }
+    }, []);
+
     // Список типов маршрутов
     var listExpenditions = [ "Пеший", "Автомобильный", "Спортивное ориентирование", "Альпинизм", "Велосипедный маршрут", "Кемпинг", "Лыжный маршрут", "Байдарки", "Сапсерфинг", "Дайвинг", "Рафтинг", "Верховая езда", "Снегоход", "Багги"," Эндуро", "Внедорожник", "Поезд"];
 
@@ -31,11 +59,27 @@ export default function LKUser(){
           reader.readAsDataURL(file);
         }
       };
-    
+    const fetchSuggestions = () => {
+        if (!query.trim()) return; // Проверка, чтобы не отправлять пустой запрос
+
+        axios
+            .get(`https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=Россия+${encodeURIComponent(query)}&format=json`)  // Используйте encodeURIComponent для корректной вставки запроса
+            .then((response) => {
+                const items = response.data?.response?.GeoObjectCollection?.featureMember || [];
+                setSuggestions(items); // Обновляем список предложений
+            })
+            .catch((error) => {
+                console.error('Ошибка при получении данных:', error);
+            });
+    };
+    const filterInvalidAddresses = (address) => {
+        return address && !/^, ?$/.test(address); // Проверяем, что строка не пустая и не состоит только из запятой
+    };
+
     // Функции для перехода на следующий и предыдущий шаг
     const nextStep = () => setStep(prev => prev + 1);
     const prevStep = () => setStep(prev => prev - 1);
-    
+
     return(
         <div className="flex flex-col w-[92%] h-[94%]">
             <h1 className="text-[#000] text-[25px] font-bold">Sergeuuuu</h1>
@@ -284,14 +328,59 @@ export default function LKUser(){
 
                             {/* ШАГ 1 */}
                             <div className={step === 1 ? "flex flex-col gap-[1em] w-[100%]" : "hidden"}>
-    
-                                <h1 className="text-[#8d8d8d] text-[15px] font-light">Место начала маршрута (Город, река, гора...)</h1>
-                                <div className="flex flex-row w-[100%] justify-between">
-                                    <input className="font-light text-[15px] border-[#8d8d8d] border-2 rounded-[10px] outline-none w-[70%]" type="text" />
-                                    <button 
-                                    className="rounded-[10px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-light border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
-                                    onClick={() => setStep(2)}
-                                    >Найти</button>
+
+                                <div>
+                                    <h1 className="text-[#8d8d8d] text-[15px] font-light text-black">
+                                        Место начала маршрута (Город, река, гора...)
+                                    </h1>
+                                    <div className="flex flex-row w-[100%] justify-between">
+                                        <input
+                                            className="font-light text-[15px] border-[#8d8d8d] border-2 rounded-[10px] outline-none w-[70%] text-black"
+                                            type="text"
+                                            value={query}
+                                            onChange={(e) => {
+                                                setQuery(e.target.value); // query upd
+                                                fetchSuggestions();
+                                            }} // Обновляем query при изменении в input
+                                        />
+                                        <button
+                                            className="rounded-[10px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-light border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
+                                            onClick={fetchSuggestions} // Загружаем предложения
+                                        >
+                                            Найти
+                                        </button>
+                                    </div>
+
+                                    {suggestions.length > 0 && (
+                                        <ul className="bg-white shadow-md rounded mt-2 text-black">
+                                            {suggestions.map((item, index) => {
+                                                // Извлекаем компоненты адреса
+                                                const addressComponents = item.GeoObject?.metaDataProperty?.GeocoderMetaData?.Address?.Components || [];
+
+                                                const street = addressComponents.find(component => component.kind === "street")?.name || "";
+                                                const house = addressComponents.find(component => component.kind === "house")?.name || "";
+                                                const fullAddress = `${street}, ${house}`;
+
+                                                // Пропускаем некорректные адреса
+                                                if (!filterInvalidAddresses(fullAddress)) return null;
+                                                console.log(fullAddress)
+                                                return (
+                                                    <li
+                                                        key={index}
+                                                        className="p-2 border-b cursor-pointer hover:bg-gray-200 text-black"
+                                                        onClick={() => handleAddressClick(fullAddress)} // При клике на адрес обновляем значения
+                                                    >
+                                                        {fullAddress}
+                                                    </li>
+                                                );
+                                            })}
+                                        </ul>
+                                    )}
+                                </div>
+
+                                <div className="mt-4">
+                                    <h2>Выбранный адрес:</h2>
+                                    <p>{selectedAddress}</p>
                                 </div>
 
                             </div>
