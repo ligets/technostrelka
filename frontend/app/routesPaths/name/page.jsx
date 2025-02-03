@@ -85,7 +85,7 @@ export default function routePath() {
                         <h1 className="text-[#000] text-[18px] font-semibold">Статистика маршрута</h1>
                         <div>
                             <div>
-                                <h1 className="">Расстояние</h1>
+                                <h1 className="">Рассddddddddтояние</h1>
                                 <p>10.72 км</p>
                             </div>
                             <div>
