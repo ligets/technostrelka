@@ -73,7 +73,7 @@ export default function RootLayout({ children }) {
                 )}
             </>
         )}
-        <main className="m-7 flex flex-col items-center justify-center rounded-[22px]  h-[913px] shadow-[0_0_5px_1px_rgba(0,0,0,0.25)] bg-white">{children}</main>
+        <main className="m-7 flex flex-col items-center  p-10 rounded-[22px] min-h-[913px] h-auto shadow-[0_0_5px_1px_rgba(0,0,0,0.25)] bg-white">{children}</main>
         </body>
         </html>
     );

@@ -284,7 +284,7 @@ export default function LKUser(){
 
                             {/* ШАГ 1 */}
                             <div className={step === 1 ? "flex flex-col gap-[1em] w-[100%]" : "hidden"}>
-    
+                                
                                 <h1 className="text-[#8d8d8d] text-[15px] font-light">Место начала маршрута (Город, река, гора...)</h1>
                                 <div className="flex flex-row w-[100%] justify-between">
                                     <input className="font-light text-[15px] border-[#8d8d8d] border-2 rounded-[10px] outline-none w-[70%]" type="text" />
