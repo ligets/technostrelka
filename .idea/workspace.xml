@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2c562a08-7e46-4174-8981-0e99d1b6dd8f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/frontend/app/admin/page.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/routesPaths/name/page.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/public/admin-prof.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/layout.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/app/lk/user/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/user/page.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -31,7 +35,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "Merging master",
     "last.edited.regexp": "Sample Text",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -65,7 +69,7 @@
       <workItem from="1738499518541" duration="1346000" />
       <workItem from="1738500881688" duration="10452000" />
       <workItem from="1738531185184" duration="426000" />
-      <workItem from="1738599123337" duration="10843000" />
+      <workItem from="1738599123337" duration="13529000" />
     </task>
     <servers />
   </component>
