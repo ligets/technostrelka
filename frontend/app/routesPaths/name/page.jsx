@@ -81,42 +81,42 @@ export default function routePath() {
                         <div className="border-[1px] border-[#d9d9d9] w-[100%]"></div>
                         <a className="text-[#8d8d8d] text-[14px] font-light" href="">Другие маршруты этого автора</a>
                     </div>  
-                    <div>
+                    <div className="flex flex-col items-start gap-[1em]">
                         <h1 className="text-[#000] text-[18px] font-semibold">Статистика маршрута</h1>
-                        <div>
-                            <div>
-                                <h1 className="">Рассddddddddтояние</h1>
-                                <p>10.72 км</p>
+                        <div className="flex flex-col items-start gap-[1em]">
+                            <div className="flex flex-col items-start gap-[0.1em]">
+                                <h1 className="text-[#696868] text-[14px] font-light">Рассddddddddтояние</h1>
+                                <p className="text-[#000] text-[14px] font-light">10.72 км</p>
                             </div>
-                            <div>
-                                <h1>Высота</h1>
-                                <p>10.72 км</p>
+                            <div className="flex flex-col items-start gap-[0.1em]">
+                                <h1 className="text-[#696868] text-[14px] font-light">Высота</h1>
+                                <p className="text-[#000] text-[14px] font-light">10.72 км</p>
                             </div>
-                            <div>
-                                <h1>Тип маршрута</h1>
-                                <p>10.72 км</p>
+                            <div className="flex flex-col items-start gap-[0.1em]">
+                                <h1 className="text-[#696868] text-[14px] font-light">Тип маршрута</h1>
+                                <p className="text-[#000] text-[14px] font-light">10.72 км</p>
                             </div>
-                            <div>
-                                <h1>Время в пути</h1>
-                                <p>10.72 км</p>
+                            <div className="flex flex-col items-start gap-[0.1em]"> 
+                                <h1 className="text-[#696868] text-[14px] font-light">Время в пути</h1>
+                                <p className="text-[#000] text-[14px] font-light">10.72 км</p>
                             </div>
-                            <div>
-                                <h1>Загруженно</h1>
-                                <p>10.72 км</p>
+                            <div className="flex flex-col items-start gap-[0.1em]">
+                                <h1 className="text-[#696868] text-[14px] font-light">Загруженно</h1>
+                                <p className="text-[#000] text-[14px] font-light">10.72 км</p>
                             </div>
                            
                         </div>
                     </div>
-                    <div className="border-[2px] border-[#8d8d8d] "></div>
-                    <div>
+                    <div className="border-[1px] border-[#d9d9d9] "></div>
+                    <div className="flex flex-col gap-[1em] ">
                         <h1 className="text-[#000] text-[18px] font-semibold">Рейтинг и комментарии</h1>
-                        <div>
+                        <div className="flex flex-row gap-[1em] ">
                             <div className="flex justify-between flex-row items-center">
                                 <Image src="/Star.png" alt="" width={17} height={16}/>
                                 <h1 className="text-[#000] font-bold text-[17px]">4.5</h1>
                             </div>
-                            <div className="border-[2px] border-[#000] "></div>
-                            <h1>2 комментария</h1>
+                            <div className="w-[1px] bg-[#000]"></div>
+                            <h1 className="text-[#000] font-light text-[14px] ">2 комментария</h1>
                         </div>
                     </div>
                 </div>
