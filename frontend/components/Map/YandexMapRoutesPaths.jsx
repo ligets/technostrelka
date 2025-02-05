@@ -31,16 +31,17 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) 
           controls: ["zoomControl", "fullscreenControl"],
         });
 
+        // Создание маршрута
         const multiRoute = new window.ymaps.multiRouter.MultiRoute(
           {
             referencePoints: [
-              [55.751244, 37.618423], // Точка старта
-              [55.7485, 37.605],      // Привал
-              [55.742, 37.590],       // Конечная точка
+              [55.751244, 37.618423], 
+              [55.7485, 37.605],      
+              [55.742, 37.590],       
             ],
             params: {
               routingMode: "auto",    // auto, pedestrian, masstransit
-              avoidTrafficJams: true, // Учитывать пробки
+              avoidTrafficJams: true, 
             },
           },
           {
