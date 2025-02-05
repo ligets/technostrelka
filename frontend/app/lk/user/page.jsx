@@ -15,11 +15,18 @@ export default function LKUser() {
     const [query, setQuery] = useState("");//для поиска
     const [suggestions, setSuggestions] = useState([]);//для поиска
     const [selectedAddress, setSelectedAddress] = useState(""); // Состояние для выбранного адреса
+    const [isAddressSelected, setIsAddressSelected] = useState(false); // Флаг, чтобы избежать лишних запросов
+
+    const handleInputChange = (e) => {
+        setQuery(e.target.value);
+        setIsAddressSelected(false); // Разрешаем новые запросы при ручном вводе
+    };
     const handleAddressClick = (address) => {
-        setSelectedAddress(address); // Запоминаем выбранный адрес в стейте
-        setQuery(address); // Обновляем input с выбранным адресом
-        setSuggestions([]); // Скрываем список предложений после выбора
-        console.log(address)
+        setSelectedAddress(address);
+        setQuery(address);
+        setSuggestions([]);
+        setIsAddressSelected(true); // Адрес выбран
+        console.log("Выбран адрес:", address);
     };
 
     useEffect(() => {
@@ -47,6 +54,10 @@ export default function LKUser() {
             document.head.appendChild(newMetaTag);
         }
     }, []);
+    useEffect(() => {
+        if (!query.trim() || isAddressSelected) return; // Если адрес выбран, не делать запрос
+        fetchSuggestions();
+    }, [query, isAddressSelected]); // Зависимости теперь включают isAddressSelected
 
     // Список типов маршрутов
     var listExpenditions = ["Пеший", "Автомобильный", "Спортивное ориентирование", "Альпинизм", "Велосипедный маршрут", "Кемпинг", "Лыжный маршрут", "Байдарки", "Сапсерфинг", "Дайвинг", "Рафтинг", "Верховая езда", "Снегоход", "Багги", " Эндуро", "Внедорожник", "Поезд"];
@@ -61,20 +72,32 @@ export default function LKUser() {
         }
     };
     const fetchSuggestions = () => {
-        if (!query.trim()) return; // Проверка, чтобы не отправлять пустой запрос
-
         axios
-            .get(`https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=Россия+${encodeURIComponent(query)}&format=json`)  // Используйте encodeURIComponent для корректной вставки запроса
+            .get(`https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=Россия+${encodeURIComponent(query)}&format=json`)
             .then((response) => {
                 const items = response.data?.response?.GeoObjectCollection?.featureMember || [];
-                setSuggestions(items); // Обновляем список предложений
+
+                const addresses = items.map((item) => {
+                    const addressComponents = item.GeoObject?.metaDataProperty?.GeocoderMetaData?.Address?.Components ?? [];
+                    const country = addressComponents.find(component => component.kind === "country")?.name || "";
+                    const province = addressComponents.find(component => component.kind === "province")?.name || "";
+                    const locality = addressComponents.find(component => component.kind === "locality")?.name || "";
+                    const street = addressComponents.find(component => component.kind === "street")?.name || "";
+                    const house = addressComponents.find(component => component.kind === "house")?.name || "";
+
+                    return [country, province, locality, street, house].filter(Boolean).join(", ");
+                });
+
+                setSuggestions(addresses);
             })
             .catch((error) => {
                 console.error('Ошибка при получении данных:', error);
             });
     };
+
     const filterInvalidAddresses = (address) => {
-        return address && !/^, ?$/.test(address); // Проверяем, что строка не пустая и не состоит только из запятой
+        console.log("filterInvalidAddresses", address)
+        return address && !/^, ?$/.test(address);// Проверяем, что строка не пустая и не состоит только из запятой
     };
 
     // Функции для перехода на следующий и предыдущий шаг
@@ -349,7 +372,6 @@ export default function LKUser() {
 
                             {/* ШАГ 1 */}
                             <div className={step === 1 ? "flex flex-col gap-[1em] w-[100%]" : "hidden"}>
-
                                 <div>
                                     <h1 className="text-[#8d8d8d] text-[15px] font-light text-black">
                                         Место начала маршрута (Город, река, гора...)
@@ -360,46 +382,32 @@ export default function LKUser() {
                                             type="text"
                                             value={query}
                                             onChange={(e) => {
-                                                setQuery(e.target.value); // query upd
-                                            }} // Обновляем query при изменении в input
+                                                setQuery(e.target.value); // Обновляем query
+                                                setIsAddressSelected(false); // Разрешаем новые запросы
+                                            }}
                                         />
-                                        <button
-                                            className="rounded-[10px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-light border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
-                                            onClick={fetchSuggestions} // Загружаем предложения
-                                        >
-                                            Найти
-                                        </button>
                                     </div>
 
                                     {suggestions.length > 0 && (
                                         <ul className="bg-white shadow-md rounded mt-2 text-black">
-                                            {suggestions.map((item, index) => {
-                                                // Извлекаем компоненты адреса
-                                                const addressComponents = item.GeoObject?.metaDataProperty?.GeocoderMetaData?.Address?.Components || [];
+                                            {suggestions.map((address, index) => {
+                                                if (!filterInvalidAddresses(address)) return null;
 
-                                                const street = addressComponents.find(component => component.kind === "street")?.name || "";
-                                                const house = addressComponents.find(component => component.kind === "house")?.name || "";
-                                                const fullAddress = `${street}, ${house}`;
-
-                                                // Пропускаем некорректные адреса
-                                                if (!filterInvalidAddresses(fullAddress)) return null;
-                                                console.log(fullAddress)
                                                 return (
                                                     <li
                                                         key={index}
                                                         className="p-2 border-b cursor-pointer hover:bg-gray-200 text-black"
-                                                        onClick={() => handleAddressClick(fullAddress)} // При клике на адрес обновляем значения
+                                                        onClick={() => handleAddressClick(address)}
                                                     >
-                                                        {fullAddress}
+                                                        {address}
                                                     </li>
                                                 );
                                             })}
                                         </ul>
                                     )}
                                 </div>
-
-
                             </div>
+
 
 
                             {/* ШАГ 2 */}
