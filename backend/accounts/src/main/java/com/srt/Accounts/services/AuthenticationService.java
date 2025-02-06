@@ -1,6 +1,5 @@
 package com.srt.Accounts.services;
 
-import com.srt.Accounts.dto.AccessTokenDto;
 import com.srt.Accounts.dto.JwtAuthenticationDto;
 import com.srt.Accounts.dto.SignInRequest;
 import com.srt.Accounts.dto.SignUpRequest;
