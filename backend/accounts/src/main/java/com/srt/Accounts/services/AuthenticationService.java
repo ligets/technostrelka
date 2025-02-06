@@ -66,7 +66,7 @@ public class AuthenticationService {
         );
     }
 
-    public AccessTokenDto getTokens(UUID refreshTokenId) {
+    public JwtAuthenticationDto getTokens(UUID refreshTokenId) {
         Token token = tokenRepository.findById(refreshTokenId)
                 .orElseThrow(() -> new RefreshTokenNotFoundException("токен не найден"));
 
@@ -75,7 +75,17 @@ public class AuthenticationService {
             throw new RefreshTokenExpiredException("время действия токена истекло");
         }
 
-        return new AccessTokenDto(jwtService.generateAccessToken(token.getUser()));
+        Token newToken = Token.builder()
+                .token(jwtService.generateRefreshToken(token.getUser()))
+                .user(token.getUser())
+                .build();
+        tokenRepository.delete(token);
+        tokenRepository.save(newToken);
+
+        return new JwtAuthenticationDto(
+                jwtService.generateAccessToken(token.getUser()),
+                newToken.getId()
+        );
     }
 
     private void validation(SignUpRequest request) {
