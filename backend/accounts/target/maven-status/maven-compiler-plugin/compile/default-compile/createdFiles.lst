@@ -13,6 +13,7 @@ com/srt/Accounts/models/User.class
 com/srt/Accounts/config/SwaggerConfig.class
 com/srt/Accounts/repository/AuthRepository.class
 com/srt/Accounts/auth/JwtAuthenticationFilter.class
+com/srt/Accounts/exceptions/RefreshTokenExpiredException.class
 com/srt/Accounts/AccountsApplication.class
 com/srt/Accounts/exceptions/RefreshTokenNotFoundException.class
 com/srt/Accounts/dto/JwtAuthenticationDto.class

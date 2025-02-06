@@ -1,8 +1,10 @@
 package com.srt.Accounts.exceptions.handlers;
 
 import com.srt.Accounts.exceptions.ApiError;
+import com.srt.Accounts.exceptions.RefreshTokenExpiredException;
 import com.srt.Accounts.exceptions.RefreshTokenNotFoundException;
 import com.srt.Accounts.exceptions.SignUpValidationException;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -26,6 +28,11 @@ public class AuthExceptionHandler {
     @ExceptionHandler(RefreshTokenNotFoundException.class)
     public ResponseEntity<String> handleRefreshTokenNotFoundException(RefreshTokenNotFoundException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(RefreshTokenExpiredException.class)
+    public ResponseEntity<String> handleRefreshTokenExpiredException(RefreshTokenExpiredException e) {
+        return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -4,6 +4,7 @@ import com.srt.Accounts.dto.AccessTokenDto;
 import com.srt.Accounts.dto.JwtAuthenticationDto;
 import com.srt.Accounts.dto.SignInRequest;
 import com.srt.Accounts.dto.SignUpRequest;
+import com.srt.Accounts.exceptions.RefreshTokenExpiredException;
 import com.srt.Accounts.exceptions.RefreshTokenNotFoundException;
 import com.srt.Accounts.exceptions.SignUpValidationException;
 import com.srt.Accounts.models.Role;
@@ -68,6 +69,12 @@ public class AuthenticationService {
     public AccessTokenDto getTokens(UUID refreshTokenId) {
         Token token = tokenRepository.findById(refreshTokenId)
                 .orElseThrow(() -> new RefreshTokenNotFoundException("токен не найден"));
+
+        if (jwtService.isTokenExpired(token.getToken())) {
+            tokenRepository.delete(token);
+            throw new RefreshTokenExpiredException("время действия токена истекло");
+        }
+
         return new AccessTokenDto(jwtService.generateAccessToken(token.getUser()));
     }
 

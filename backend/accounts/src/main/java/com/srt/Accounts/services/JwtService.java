@@ -2,6 +2,7 @@ package com.srt.Accounts.services;
 
 import com.srt.Accounts.models.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,8 +87,15 @@ public class JwtService {
     }
 
     public boolean isTokenExpired(String token) {
-        Date expirationDate = extractClaims(token).getExpiration();
-        return expirationDate.before(new Date());
+        try {
+            Jwts.parser()
+                    .verifyWith(publicKey)
+                    .build()
+                    .parseSignedClaims(token);
+            return false; // Токен действителен
+        } catch (ExpiredJwtException e) {
+            return true; // Токен истёк
+        }
     }
 
     private Claims extractClaims(String token) {
