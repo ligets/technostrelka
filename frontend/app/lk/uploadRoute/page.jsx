@@ -1,14 +1,9 @@
-"use client"
-import YandexMap from "@/components/Map/YandexMapRoutesPaths";
-
+'use client'
 import {useEffect, useState} from "react"
 import axios from "axios";
-import Image from "next/image";
-
 
 const YANDEX_API_KEY = "fee3278a-7b07-4bf9-a6e3-dcf1b7c93bdb";
-
-export default function LKUser() {
+export default function uploadRoute() {
 
     const [step, setStep] = useState(1);//шаги создания маршрута
 
@@ -89,89 +84,16 @@ export default function LKUser() {
     };
 
     // Функции для перехода на следующий и предыдущий шаг
-    const nextStep = () => setStep(prev => prev + 1);
+    const nextStep = () => {
+        setStep(prev => prev + 1)
+        console.log(selectedAddress)
+    };
     const prevStep = () => setStep(prev => prev - 1);
 
+
     return (
-        <div className="flex flex-col w-[92%] h-[94%]">
-            <h1 className="text-[#000] text-[25px] font-bold">Sergeuuuu</h1>
-            <div className="flex flex-row gap-[10%] py-8">
-                <div className="flex flex-col gap-5">
-                    <div className="relative">
-                        <img src="" alt="" className="w-[207px] h-[207px] rounded-[10px]"/>
-                        <a className="absolute top-0 right-0 font-semibold text-[#000] text-[13px] p-2"
-                           href="">Изменить</a>
-                    </div>
-                    <p className="text-[#000] text-[16px] font-semibold">2 маршрута</p>
-                </div>
-                <div className="flex flex-col gap-9">
-                    <div>
-                        <button
-                            className={isOpen === 1
-                                ? "bg-[#6874f9] text-white text-[16px] font-light rounded-tl-[14px] rounded-tr-[15px] px-8 py-2"
-                                : "text-[16px] text-[#6874f9] rounded-tl-[14px] rounded-tr-[15px]  bg-[#d9d9d9] font-light px-8 py-2"}
-                            onClick={() => setIsOpen(1)}
-                        >Ваши маршруты
-                        </button>
-                        <button
-                            className={isOpen === 2
-                                ? "bg-[#6874f9] text-white text-[16px] font-light rounded-tl-[14px] rounded-tr-[15px] px-8 py-2"
-                                : "text-[16px] text-[#6874f9] rounded-tl-[14px] rounded-tr-[15px] px-8 py-2 bg-[#d9d9d9] font-light"}
-                            onClick={() => setIsOpen(2)}
-                        >Сохраненные маршруты
-                        </button>
-                        <button
-                            className={isOpen === 3
-                                ? "bg-[#6874f9] text-white text-[16px] font-light rounded-tl-[14px] rounded-tr-[15px] px-8 py-2"
-                                : "text-[16px] text-[#6874f9] rounded-tl-[14px] rounded-tr-[15px] px-8 py-2 bg-[#d9d9d9] font-light"}
-                            onClick={() => setIsOpen(3)}
-                        >Загрузить маршрут
-                        </button>
-                    </div>
-
-
-                    
-                    <div className={isOpen === 2 ? "flex flex-col  gap-7" : "hidden"}>
-                        {/* ЕСЛИ У ЧЕЛОВЕК НЕТ СОхраненных маршрутов*/}
-                        
-
-                        {/* ЕСЛИ У ЧЕЛОВЕК ЕСТЬ СОхраненные маршруты */}
-                        {/* <div className="flex flex-col gap-7">
-                            <div className="flex flex-row justify-between">
-                                <h1 className="text-[#000] text-[16px] font-bold">Кавказские горы - пешая тропа </h1>
-                                <div className="flex flex-row gap-[1em]">
-                                    <a className="text-[#6874f9] font-light"  href="">На карте</a>
-                                </div>
-                            </div>
-                            <div className="flex flex-row justify-between">
-                                <div className="flex flex-row justify-between gap-[3em]">
-                                    <div className="flex flex-col gap-[0.5em] items-start">
-                                        <p className="text-[#000] font-light text-[15px]">Расстояние</p>
-                                        <h1 className="text-[#000] font-bold text-[17px]">10,72 км</h1>
-                                    </div>
-                                    <div className="flex flex-col gap-[0.5em] items-start">
-                                        <p className="text-[#000] font-light text-[15px]">Высота</p>
-                                        <h1 className="text-[#000] font-bold text-[17px]">300 м</h1>
-                                    </div>
-                                    <div className="flex flex-col gap-[0.5em] items-start">
-                                        <p className="text-[#000] font-light text-[15px]">Рейтинг</p>
-                                        <div className="flex justify-between flex-row items-center">
-                                            <Image src="/Star.png" alt="" width={25} height={25}/>
-                                            <h1 className="text-[#000] font-bold text-[17px]">4.5</h1>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="border-dashed border border-[#6874f9] w-[100%]"></div>
-                        </div> */}
-
-
-                    </div>
-
-
-                    <div className={isOpen === 3 ? "flex flex-col  gap-7" : "hidden"}>
-                        <div className="flex flex-col items-start gap-4 w-[100%]">
+        <>  
+            <div className="flex flex-col items-start gap-4 w-[100%]">
                             <span className="text-[#000] text-[20px] font-semibold px-2">
                                 Свой маршрут
                             </span>
@@ -339,12 +261,7 @@ export default function LKUser() {
                             <div className={step === 4 ? "flex w-[100%]" : "hidden"}>
 
                             </div>
-                        </div>
-
-
                     </div>
-                </div>
-            </div>
-        </div>
+        </>
     );
 }

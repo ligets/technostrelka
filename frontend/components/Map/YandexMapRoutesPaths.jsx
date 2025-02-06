@@ -9,7 +9,7 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) 
     const loadYandexMaps = () => {
       if (!document.getElementById("yandex-maps-script")) {
         const script = document.createElement("script");
-        script.src = `https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=fee3278a-7b07-4bf9-a6e3-dcf1b7c93bdb`;
+        script.src = `https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=992fe970-e498-4df8-a05f-800422eb064d`;
         script.type = "text/javascript";
         script.id = "yandex-maps-script";
         script.onload = () => window.ymaps.ready(initMap);
@@ -18,6 +18,7 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) 
         window.ymaps.ready(initMap);
       }
     };
+
 
     const initMap = () => {
       if (mapRef.current) {
@@ -50,6 +51,16 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) 
             routeActiveStrokeWidth: 6,
           }
         );
+        
+        const metaTag = document.querySelector('meta[name="referrer"]');
+        if (!metaTag) {
+            const newMetaTag = document.createElement("meta");
+            newMetaTag.name = "referrer";
+            newMetaTag.content = "no-referrer";
+            document.head.appendChild(newMetaTag);
+        }
+
+
 
         // Обработка ошибок маршрута
         multiRoute.events.add("requestfail", function (event) {
@@ -59,7 +70,7 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) 
         mapInstance.current.geoObjects.add(multiRoute);
       }
     };
-
+    
     loadYandexMaps();
 
     return () => {
