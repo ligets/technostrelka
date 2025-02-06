@@ -10,7 +10,7 @@ services:
         environment:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
-            POSTGRES_DB: volga
+            POSTGRES_DB: postgres
         network:
             - dev
 
@@ -58,6 +58,23 @@ services:
 #        command: uvicorn src/main.py:app --host 0.0.0.0 --port 8081 --reload
 #        network:
 #            - dev
+
+    app:
+        build: .
+        container_name: accounts_app
+        restart: always
+        depends_on:
+            - postgres
+            - rabbitmq
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+            SPRING_DATASOURCE_USERNAME: postgres
+            SPRING_DATASOURCE_PASSWORD: postgres
+            SPRING_RABBITMQ_HOST: rabbitmq
+            SPRING_RABBITMQ_USERNAME: guest
+            SPRING_RABBITMQ_PASSWORD: guest
+        ports:
+            - "8081:8081"
 
 network:
     dev:

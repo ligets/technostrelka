@@ -6,6 +6,6 @@ COPY . .
 RUN ./mvnw package -DskipTests
 COPY target/Accounts-0.0.1-SNAPSHOT.jar Accounts-0.0.1-SNAPSHOT.jar
 
-EXPOSE 8080
+EXPOSE 8081
 
 ENTRYPOINT ["java", "-jar", "Accounts-0.0.1-SNAPSHOT.jar"]
