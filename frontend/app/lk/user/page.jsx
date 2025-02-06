@@ -3,6 +3,7 @@ import {useEffect, useState} from "react"
 import Image from "next/image";
 import axios from "axios";
 import {Helmet} from "react-helmet";
+import YandexMap from "@/components/Map/YandexMapRoutesPaths";
 
 const YANDEX_API_KEY = "fee3278a-7b07-4bf9-a6e3-dcf1b7c93bdb";
 export default function LKUser() {
@@ -406,13 +407,21 @@ export default function LKUser() {
                                         </ul>
                                     )}
                                 </div>
+                                <button
+                                    className={`rounded-[10px] py-[0.5em] px-[2em] text-white text-[15px] font-light border-[1px] transition-all duration-300 
+                                    ${selectedAddress ? "bg-[#6874f9] border-[#6874f9] hover:bg-transparent hover:text-blue-600" : "bg-gray-400 border-gray-400 cursor-not-allowed"}`}
+                                    onClick={nextStep}
+                                    disabled={!selectedAddress} // Блокируем кнопку, если адрес не выбран
+                                >
+                                    Дальше
+                                </button>
                             </div>
 
 
 
                             {/* ШАГ 2 */}
                             <div className={step === 2 ? "flex w-[100%]" : "hidden"}>
-
+                                {/*<YandexMap/>*/}
                             </div>
 
 
