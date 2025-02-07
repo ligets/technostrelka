@@ -10,4 +10,6 @@
     docker-compose up --build
 ```
 
+---
+
 Ссылка на figma [КЛИКАБЕЛЬНО!!!](https://www.figma.com/design/9fhhrJkNBst6rEiaaPSbkm/Technostrelka?node-id=1-2&t=FKHjwP4Ir8WqFCho-1)
