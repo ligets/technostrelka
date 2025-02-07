@@ -18,29 +18,26 @@ public class AuthenticationController {
 
     @Operation(summary = "Регистрация пользователя")
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequest request) {
+    public void signUp(@Valid @RequestBody SignUpRequest request) {
         authenticationService.signUp(request);
-        return ResponseEntity.ok("пользователь зарегистрирован");
     }
-
 
     @Operation(summary = "Авторизация пользователя")
     @PostMapping("/signin")
-    public ResponseEntity<JwtAuthenticationDto> signIn(
-            @Valid @RequestBody SignInRequest request) {
-        return ResponseEntity.ok(authenticationService.signIn(request));
+    public JwtAuthenticationDto signIn(@Valid @RequestBody SignInRequest request) {
+        return authenticationService.signIn(request);
     }
 
     @Operation(summary = "Получаене нового access токена")
     @PostMapping("/refresh-token")
-    public ResponseEntity<AccessTokenDto> refreshToken(
-            @RequestBody RefreshTokenIdRequest request) {
-        return ResponseEntity.ok(authenticationService.getTokens(request.getRefreshTokenId()));
+    public JwtAuthenticationDto refreshToken(
+            @Valid @RequestBody RefreshTokenIdRequest request) {
+        return authenticationService.getTokens(request.getRefreshTokenId());
     }
 
     @Operation(summary = "Проверка аутентификации (доступ только аутентифицированным пользователям)")
     @GetMapping("/is-auth")
-    public ResponseEntity<String> isAuth() {
-        return ResponseEntity.ok("hello user");
+    public String isAuth() {
+        return "hello user";
     }
 }
