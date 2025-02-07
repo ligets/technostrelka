@@ -14,6 +14,14 @@ const YandexMap = ({ center = [], zoom = 15 }) => {
     addPoint
   } = useFormCreateRoutes();
 
+
+
+
+
+
+
+
+  
   useEffect(() => {
     const loadYandexMaps = () => {
       if (!document.getElementById("yandex-maps-script")) {
