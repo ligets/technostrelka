@@ -1,6 +1,7 @@
 package com.srt.Accounts.config;
 
 import com.srt.Accounts.auth.JwtAuthenticationFilter;
+import com.srt.Accounts.models.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,8 +40,11 @@ public class SecurityConfig {
                         .requestMatchers("/auth/signup").permitAll()
                         .requestMatchers("/auth/signin").permitAll()
                         .requestMatchers("/auth/refresh-token").permitAll()
+
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
+
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -67,7 +71,8 @@ public class SecurityConfig {
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
-                                                       @Bean
+
+    @Bean
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));

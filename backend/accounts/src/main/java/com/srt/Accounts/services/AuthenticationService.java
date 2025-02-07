@@ -9,7 +9,7 @@ import com.srt.Accounts.exceptions.SignUpValidationException;
 import com.srt.Accounts.models.Role;
 import com.srt.Accounts.models.Token;
 import com.srt.Accounts.models.User;
-import com.srt.Accounts.repository.AuthRepository;
+import com.srt.Accounts.repository.UserRepository;
 import com.srt.Accounts.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +25,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final AuthRepository authRepository;
+    private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -42,7 +42,7 @@ public class AuthenticationService {
                 .roles(new HashSet<>(List.of(Role.ROLE_USER)))
                 .build();
 
-        authRepository.save(user);
+        userRepository.save(user);
     }
 
     public JwtAuthenticationDto signIn(SignInRequest request) {
@@ -50,7 +50,7 @@ public class AuthenticationService {
                 request.getLogin(),
                 request.getPassword()
         ));
-        User user = authRepository.findByLogin(request.getLogin())
+        User user = userRepository.findByLogin(request.getLogin())
                 .orElseThrow(RuntimeException::new);
 
         Token token = Token.builder()
@@ -92,10 +92,10 @@ public class AuthenticationService {
         if (!request.getPassword().equals(request.getConfirmPassword())) {
             errors.add("пароли не совпадают");
         }
-        if (authRepository.existsByLogin(request.getLogin())) {
+        if (userRepository.existsByLogin(request.getLogin())) {
             errors.add("этот логин уже занят");
         }
-        if (authRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             errors.add("эта почта уже занята");
         }
 

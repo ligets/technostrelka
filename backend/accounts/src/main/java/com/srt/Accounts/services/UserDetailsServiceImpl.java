@@ -2,7 +2,7 @@ package com.srt.Accounts.services;
 
 import com.srt.Accounts.auth.UserDetailsImpl;
 import com.srt.Accounts.models.User;
-import com.srt.Accounts.repository.AuthRepository;
+import com.srt.Accounts.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final AuthRepository authRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = authRepository.findByLogin(username)
+        User user = userRepository.findByLogin(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "пользователь с логином " + username + " не найден"
                 ));
