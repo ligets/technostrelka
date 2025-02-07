@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2c562a08-7e46-4174-8981-0e99d1b6dd8f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/lk/user/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/user/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.dev.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.dev.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/page.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +67,9 @@
       <workItem from="1738500881688" duration="10452000" />
       <workItem from="1738531185184" duration="426000" />
       <workItem from="1738599123337" duration="20868000" />
-      <workItem from="1738863049609" duration="2022000" />
+      <workItem from="1738863049609" duration="3408000" />
+      <workItem from="1738918018669" duration="3904000" />
+      <workItem from="1738927613799" duration="1956000" />
     </task>
     <servers />
   </component>

@@ -11,7 +11,7 @@ services:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
             POSTGRES_DB: postgres
-        network:
+        networks:
             - dev
 
     pgadmin:
@@ -24,7 +24,7 @@ services:
             PGADMIN_DEFAULT_PASSWORD: admin
         depends_on:
             - postgres
-        network:
+        networks:
             - dev
 
     rabbitmq:
@@ -38,7 +38,7 @@ services:
             interval: 30s
             timeout: 10s
             retries: 5
-        network:
+        networks:
             - dev
 
 #    python-example:
@@ -56,7 +56,7 @@ services:
 #        volumes:
 #            - .:/app
 #        command: uvicorn src/main.py:app --host 0.0.0.0 --port 8081 --reload
-#        network:
+#        networks:
 #            - dev
 
     app:
@@ -76,7 +76,7 @@ services:
         ports:
             - "8081:8081"
 
-network:
+networks:
     dev:
 
 volumes:

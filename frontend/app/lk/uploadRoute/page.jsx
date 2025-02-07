@@ -16,12 +16,13 @@ export default function uploadRoute() {
         setQuery(e.target.value);
         setIsAddressSelected(false); // Разрешаем новые запросы при ручном вводе
     };
-    const handleAddressClick = (address) => {
-        setSelectedAddress(address);
-        setQuery(address);
+    const handleAddressClick = (selectedItem) => {
+        setSelectedAddress({ lat: selectedItem.lat, lon: selectedItem.lon });
+        setQuery(selectedItem.fullAddress);
         setSuggestions([]);
-        setIsAddressSelected(true); // Адрес выбран
-        console.log("Выбран адрес:", address);
+        setIsAddressSelected(true);
+
+        console.log(`Выбранные координаты: широта ${selectedItem.lat}, долгота ${selectedItem.lon}`);
     };
 
     useEffect(() => {
@@ -55,23 +56,34 @@ export default function uploadRoute() {
     }, [query, isAddressSelected]); // Зависимости теперь включают isAddressSelected
 
     const fetchSuggestions = () => {
+        setIsAddressSelected(false);
+        if (!query.trim()) return;
+
         axios
             .get(`https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=Россия+${encodeURIComponent(query)}&format=json`)
             .then((response) => {
                 const items = response.data?.response?.GeoObjectCollection?.featureMember || [];
 
                 const addresses = items.map((item) => {
-                    const addressComponents = item.GeoObject?.metaDataProperty?.GeocoderMetaData?.Address?.Components ?? [];
+                    const geoObject = item.GeoObject;
+                    const addressComponents = geoObject?.metaDataProperty?.GeocoderMetaData?.Address?.Components ?? [];
+
                     const country = addressComponents.find(component => component.kind === "country")?.name || "";
                     const province = addressComponents.find(component => component.kind === "province")?.name || "";
                     const locality = addressComponents.find(component => component.kind === "locality")?.name || "";
                     const street = addressComponents.find(component => component.kind === "street")?.name || "";
                     const house = addressComponents.find(component => component.kind === "house")?.name || "";
 
-                    return [country, province, locality, street, house].filter(Boolean).join(", ");
+                    const fullAddress = [country, province, locality, street, house].filter(Boolean).join(", ");
+
+                    // Получаем координаты (широту и долготу)
+                    const [lon, lat] = geoObject?.Point?.pos.split(" ") || [];
+
+                    return { fullAddress, lat, lon };
                 });
 
                 setSuggestions(addresses);
+                console.log("Список адресов:", addresses);
             })
             .catch((error) => {
                 console.error('Ошибка при получении данных:', error);
@@ -127,19 +139,16 @@ export default function uploadRoute() {
 
                                     {suggestions.length > 0 && (
                                         <ul className="bg-white shadow-md rounded mt-2 text-black">
-                                            {suggestions.map((address, index) => {
-                                                if (!filterInvalidAddresses(address)) return null;
-
-                                                return (
-                                                    <li
-                                                        key={index}
-                                                        className="p-2 border-b cursor-pointer hover:bg-gray-200 text-black"
-                                                        onClick={() => handleAddressClick(address)}
-                                                    >
-                                                        {address}
-                                                    </li>
-                                                );
-                                            })}
+                                            {suggestions.map((item, index) => (
+                                                <li
+                                                    key={index}
+                                                    className="p-2 border-b cursor-pointer hover:bg-gray-200 text-black"
+                                                    onClick={() => handleAddressClick(item)} // Передаем объект item
+                                                >
+                                                    {item.fullAddress} <br />
+                                                    <span className="text-gray-500 text-sm">(Ш: {item.lat}, Д: {item.lon})</span>
+                                                </li>
+                                            ))}
                                         </ul>
                                     )}
                                 </div>
