@@ -1,7 +1,1 @@
-Запуск:
-~~~
-docker compose build
-docker compose up
-~~~
-
-Swagger - http://localhost:8080/api/accounts/swagger-ui/index.html
+Swagger - http://localhost:8081/api/accounts/swagger-ui/index.html
