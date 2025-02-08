@@ -2,13 +2,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 export default function Register({ closeModal, setIsLoginForm }) {
     const [formData, setFormData] = useState({
-        name: "",
+        login: "",
         email: "",
         password: "",
-        confirm_password: "",
+        confirmPassword: "",
     });
     const [isChecked, setIsChecked] = useState(false);
     const [error, setError] = useState("");
@@ -27,34 +28,29 @@ export default function Register({ closeModal, setIsLoginForm }) {
         e.preventDefault();
         setError("");
 
-        if (formData.password !== formData.confirm_password) {
+        if (formData.password !== formData.confirmPassword) {
             setError("Пароли не совпадают");
             return;
         }
         if (isChecked) {
-            console.log(formData.name, formData.email, formData.password, formData.confirm_password, isChecked);
+            console.log(formData.login, formData.email, formData.password, formData.confirmPassword, isChecked);
         }
 
-        // try {
-        //     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/AccService/Authentication/SignUp`, {
-        //         first_name: formData.name,
-        //         email: formData.email,
-        //         password: formData.password,
-        //         confirm_password: formData.confirm_password,
-        //     }, {
-        //         headers: {
-        //             Accept: "application/json",
-        //             "Content-Type": "application/json"
-        //         },
-        //     });
-        //     console.log(document.cookie);
-        //     closeModal();
-        //     document.cookie = `access_token=${response.data.access_token}; path=/; max-age=2592000`;
-        //     document.cookie = `refresh_token=${response.data.refresh_token}; path=/; max-age=2592000`;
-        // } catch (err) {
-        //     console.log(err.response);
-        //     setError("Ошибка при регистрации. Пожалуйста, попробуйте снова.");
-        // }
+        try {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/accounts/auth/signup`, {
+                login: formData.login,
+                email: formData.email,
+                password: formData.password,
+                confirmPassword: formData.confirmPassword,
+            });
+            console.log('Response:', response.data);
+
+            document.cookie = `accessToken=${response.data.accessToken}; path=/; max-age=2592000`;
+            document.cookie = `refreshTokenId=${response.data.refreshTokenId}; path=/; max-age=2592000`;
+        } catch (err) {
+            console.log(err.response);
+            setError("Ошибка при регистрации. Пожалуйста, попробуйте снова.");
+        }
     };
 
     return (
@@ -81,8 +77,8 @@ export default function Register({ closeModal, setIsLoginForm }) {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                     <input
                         type="text"
-                        name="name"
-                        value={formData.name}
+                        name="login"
+                        value={formData.login}
                         onChange={handleInputChange}
                         className="bg-transparent border-solid border-[2px] rounded-[5px] px-[16px] py-[8px] text-[18px] placeholder-[#D9D9D9] text-black focus:outline-none"
                         placeholder="Ваше имя"
@@ -108,8 +104,8 @@ export default function Register({ closeModal, setIsLoginForm }) {
                     />
                     <input
                         type="password"
-                        name="confirm_password"
-                        value={formData.confirm_password}
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
                         onChange={handleInputChange}
                         className="bg-transparent border-solid border-[2px] rounded-[5px] px-[16px] py-[8px] text-[18px] placeholder-[#D9D9D9] text-black focus:outline-none"
                         placeholder="Подтвердите пароль"

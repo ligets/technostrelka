@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import axios from "axios";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 export default function Login({ closeModal, setIsLoginForm }) {
     const [login, setLogin] = useState("");
@@ -11,16 +13,30 @@ export default function Login({ closeModal, setIsLoginForm }) {
         setIsChecked((prev) => !prev);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Логика отправки формы
-
-        if (isChecked) {
-            console.log(login, password, isChecked);
-            closeModal();
-        } else {
+        if (!isChecked) {
             console.log("Галочка не выбрана");
+            return;
+        }
+
+        try {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/accounts/auth/signin`, {
+                login: login,
+                password: password,
+            });
+
+            console.log('Response:', response.data);
+
+            // Устанавливаем cookie
+            document.cookie = `accessToken=${response.data.accessToken}; path=/; max-age=2592000`;
+            document.cookie = `refreshTokenId=${response.data.refreshTokenId}; path=/; max-age=2592000`;
+
+            // Закрываем модальное окно после успешного входа
+            closeModal();
+        } catch (err) {
+            console.error("Ошибка при авторизации:", err.response);
         }
     };
     return (
@@ -48,6 +64,7 @@ export default function Login({ closeModal, setIsLoginForm }) {
                     <input
                         type="text"
                         value={login}
+                        name="login"
                         onChange={(e) => setLogin(e.target.value)}
                         className="bg-transparent border-solid border-[2px] rounded-[5px] px-[16px] py-[8px] text-[18px] placeholder-[#D9D9D9] text-black focus:outline-none"
                         placeholder="Ваш логин"
@@ -56,6 +73,7 @@ export default function Login({ closeModal, setIsLoginForm }) {
                     <input
                         type="password"
                         value={password}
+                        name="password"
                         onChange={(e) => setPassword(e.target.value)}
                         className="bg-transparent border-solid border-[2px] rounded-[5px] px-[16px] py-[8px] text-[18px] placeholder-[#D9D9D9] text-black focus:outline-none"
                         placeholder="Ваш пароль"
