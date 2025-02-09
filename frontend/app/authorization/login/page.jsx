@@ -35,6 +35,7 @@ export default function Login({ closeModal, setIsLoginForm }) {
 
             // Закрываем модальное окно после успешного входа
             closeModal();
+            window.location.reload();
         } catch (err) {
             console.error("Ошибка при авторизации:", err.response);
         }

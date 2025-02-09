@@ -7,7 +7,7 @@ import Login from "@/app/authorization/login/page";
 import Register from "@/app/authorization/register/page";
 import Link from "next/link";
 import VerifyCodeModal from "@/app/authorization/components/code/page";
-import { useCookies } from "react-cookie";
+import {useCookies} from "react-cookie";
 
 const montserrat = Montserrat({
     variable: "--font-montserrat-sans",
@@ -19,6 +19,7 @@ export default function RootLayout({ children }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoginForm, setIsLoginForm] = useState(true); // Управляем текущей формой (вход/регистрация)
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [cookies, setCookie, removeCookie] = useCookies(["accessToken", "refreshTokenId"]);
     const openModal = () => {
         setIsModalOpen(true);
     };
@@ -34,10 +35,10 @@ export default function RootLayout({ children }) {
         setIsAuthenticated(!!token);
         console.log("Токен: ", token)
     }
-    const removeCookie = useCookies();
     function quit() {
-        removeCookie("accessToken");
-
+        removeCookie("accessToken", { path: "/" });
+        removeCookie("refreshTokenId", { path: "/" });
+        window.location.reload();
     }
 
     useEffect(() =>{
