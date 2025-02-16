@@ -1,4 +1,4 @@
-package com.srt.Accounts.auth;
+package com.srt.Accounts.utils.init;
 
 import com.srt.Accounts.models.Role;
 import com.srt.Accounts.models.User;

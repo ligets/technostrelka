@@ -63,6 +63,8 @@ services:
         build: ./backend/accounts/
         container_name: accounts_app
         restart: always
+        volumes:
+            - avatars:/app/uploads/avatars
         depends_on:
             - postgres
             - rabbitmq
@@ -85,3 +87,4 @@ volumes:
     postgres_data:
     redis_data:
     elastic_data:
+    avatars:

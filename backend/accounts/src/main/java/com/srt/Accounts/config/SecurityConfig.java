@@ -45,6 +45,8 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**").permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        .requestMatchers("/user/get-avatar/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

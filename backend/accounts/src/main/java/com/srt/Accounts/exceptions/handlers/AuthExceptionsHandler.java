@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class AuthExceptionHandler {
+public class AuthExceptionsHandler {
 
     @ExceptionHandler(SignUpValidationException.class)
     public ResponseEntity<ApiError> handleSignUpValidationException(SignUpValidationException e) {

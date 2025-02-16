@@ -24,6 +24,10 @@ spring:
     username: guest
     password: guest
 
+  servlet:
+    multipart:
+      enabled: true
+
 server:
   port: 8081
 
@@ -33,3 +37,7 @@ auth:
     public-key-path: keys/public_key.pem
     access-expire-min: 15
     refresh-expire-days: 30
+
+images:
+  storage-path: /app/uploads/avatars
+  default-avatar-path: /static/images/default-avatar.jpeg
