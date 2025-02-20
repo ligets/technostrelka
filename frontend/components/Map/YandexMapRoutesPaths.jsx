@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef } from "react";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) => {
   const mapRef = useRef(null);
@@ -9,11 +10,13 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) 
     const loadYandexMaps = () => {
       if (!document.getElementById("yandex-maps-script")) {
         const script = document.createElement("script");
-        script.src = `https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=992fe970-e498-4df8-a05f-800422eb064d`;
+        script.src = 'https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=' + process.env.NEXT_PUBLIC_YANDEX_API_KEY;
+
         script.type = "text/javascript";
         script.id = "yandex-maps-script";
         script.onload = () => window.ymaps.ready(initMap);
         document.body.appendChild(script);
+
       } else if (window.ymaps) {
         window.ymaps.ready(initMap);
       }
@@ -36,13 +39,13 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) 
         const multiRoute = new window.ymaps.multiRouter.MultiRoute(
           {
             referencePoints: [
-              [55.751244, 37.618423], 
-              [55.7485, 37.605],      
-              [55.742, 37.590],       
+              [55.751244, 37.618423],
+              [55.7485, 37.605],
+              [55.742, 37.590],
             ],
             params: {
               routingMode: "auto",    // auto, pedestrian, masstransit
-              avoidTrafficJams: true, 
+              avoidTrafficJams: true,
             },
           },
           {
@@ -51,7 +54,7 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) 
             routeActiveStrokeWidth: 6,
           }
         );
-        
+
         const metaTag = document.querySelector('meta[name="referrer"]');
         if (!metaTag) {
             const newMetaTag = document.createElement("meta");
@@ -70,7 +73,7 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) 
         mapInstance.current.geoObjects.add(multiRoute);
       }
     };
-    
+
     loadYandexMaps();
 
     return () => {

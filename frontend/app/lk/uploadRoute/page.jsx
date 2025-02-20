@@ -5,8 +5,8 @@ import { useFormCreateRoutes  } from "@/store/formCreateRoutes";
 
 import YandexMap from "@/components/Map/YandexMapRedactor";
 import RedactorRoutesLK from "@/components/yourRoutesLK/redactorRoutesLK";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
-const YANDEX_API_KEY = "fee3278a-7b07-4bf9-a6e3-dcf1b7c93bdb";
 export default function uploadRoute() {
 
     const [query, setQuery] = useState("");//для поиска
@@ -59,7 +59,7 @@ export default function uploadRoute() {
         if (!query.trim()) return;
 
         axios
-            .get(`https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=Россия+${encodeURIComponent(query)}&format=json`)
+            .get(`https://geocode-maps.yandex.ru/1.x/?apikey=${process.env.NEXT_PUBLIC_YANDEX_API_KEY}&geocode=Россия+${encodeURIComponent(query)}&format=json`)
             .then((response) => {
                 const items = response.data?.response?.GeoObjectCollection?.featureMember || [];
 
