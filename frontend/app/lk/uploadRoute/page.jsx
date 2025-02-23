@@ -4,7 +4,7 @@ import axios from "axios";
 import { useFormCreateRoutes  } from "@/store/formCreateRoutes";
 
 import YandexMap from "@/components/Map/YandexMapRedactor";
-import RedactorRoutesLK from "@/components/yourRoutesLK/redactorRoutesLK";
+import mainDescriptionRoute from "@/components/Map/main_descrition_route";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 export default function uploadRoute() {
@@ -59,7 +59,7 @@ export default function uploadRoute() {
         if (!query.trim()) return;
 
         axios
-            .get(`https://geocode-maps.yandex.ru/1.x/?apikey=${process.env.NEXT_PUBLIC_YANDEX_API_KEY}&geocode=Россия+${encodeURIComponent(query)}&format=json`)
+            .get(`https://geocode-maps.yandex.ru/1.x/?apikey=696c19dd-f78a-4ff5-be6f-4dd729576e45&geocode=Россия+${encodeURIComponent(query)}&format=json`)
             .then((response) => {
                 const items = response.data?.response?.GeoObjectCollection?.featureMember || [];
 
@@ -169,7 +169,7 @@ export default function uploadRoute() {
                             {
                                 step === 2 && (
                                     
-                                    <div className="flex w-[100%] h-96">
+                                    <div className="flex w-[100%] h-96 flex-col relative">
                                         <YandexMap center={start} />
                                         <button
                                             className={`rounded-[10px] py-[0.5em] px-[2em] text-white text-[15px] font-light border-[1px] transition-all duration-300 
@@ -193,7 +193,7 @@ export default function uploadRoute() {
                                 step === 3 && (
                                     <div className="flex w-[100%]">
                                     {/* СОздание  МАРШУРТа */}
-                                    <RedactorRoutesLK/>
+                                    <mainDescriptionRoute/>
                                 </div>
                                 )
 
