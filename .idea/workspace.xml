@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2c562a08-7e46-4174-8981-0e99d1b6dd8f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/components/Map/YandexMapRedactor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/Map/YandexMapRedactor.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/components/Map/YandexMapRoutesPaths.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/Map/YandexMapRoutesPaths.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/page.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +39,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor.code.editing&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;discord-application&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -91,7 +89,14 @@
       <workItem from="1739127561523" duration="112000" />
       <workItem from="1739295326207" duration="595000" />
       <workItem from="1739296901849" duration="1293000" />
-      <workItem from="1740069908998" duration="7056000" />
+      <workItem from="1740069908998" duration="7360000" />
+      <workItem from="1740146977889" duration="656000" />
+      <workItem from="1740149011042" duration="3091000" />
+      <workItem from="1740253377543" duration="22000" />
+      <workItem from="1740253758857" duration="199000" />
+      <workItem from="1740302290989" duration="1025000" />
+      <workItem from="1740303335031" duration="6869000" />
+      <workItem from="1740385471140" duration="302000" />
     </task>
     <servers />
   </component>

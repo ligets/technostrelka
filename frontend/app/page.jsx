@@ -21,7 +21,8 @@ export default function Home() {
           href="routesPaths"
           >Маршруты</Link>
           <Link 
-          className="rounded-[25px] py-[1em] px-[4em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300" href=""
+          className="rounded-[25px] py-[1em] px-[4em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
+          href="routesNear"
           >Маршруты рядом</Link>
         </div>
       </div>
