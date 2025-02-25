@@ -94,7 +94,6 @@ class AuthService:
         to_encode = {
             'sub': str(user.id),
             'role': user.role.name,
-            'district_id': str(user.district_id),
             'is_deleted': user.is_deleted,
             'exp': datetime.now(timezone.utc) + timedelta(minutes=settings.auth_jwt.access_token_expire_minutes)
         }
