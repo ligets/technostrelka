@@ -4,7 +4,7 @@ services:
         container_name: postgres
         volumes:
             - postgres_data:/var/lib/postgresql/data/
-        #      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
         ports:
             - "5433:5432"
         environment:
@@ -41,6 +41,36 @@ services:
         networks:
             - dev
 
+    auth_service:
+       build:
+           context: ./backend/account/
+       container_name: auth_technostrelka
+       ports:
+           - "8081:8081"
+       depends_on:
+           - rabbitmq
+           - postgres
+        #    - redis
+       env_file:
+           - ./backend/account/.env
+       networks:
+           - dev
+
+    notification_service:
+       build:
+           context: ./backend/notification/
+       container_name: notification_technostrelka
+       ports:
+           - "8083:8083"
+       depends_on:
+           - rabbitmq
+           - postgres
+        #    - redis
+       env_file:
+           - ./backend/notification/.env
+       networks:
+           - dev
+
 #    python-example:
 #        build:
 #            context: ./backend/example/
@@ -59,24 +89,24 @@ services:
 #        networks:
 #            - dev
 
-    app:
-        build: ./backend/accounts/
-        container_name: accounts_app
-        restart: always
-        depends_on:
-            - postgres
-            - rabbitmq
-        environment:
-            SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
-            SPRING_DATASOURCE_USERNAME: postgres
-            SPRING_DATASOURCE_PASSWORD: postgres
-            SPRING_RABBITMQ_HOST: rabbitmq
-            SPRING_RABBITMQ_USERNAME: guest
-            SPRING_RABBITMQ_PASSWORD: guest
-        ports:
-            - "8081:8081"
-        networks:
-            - dev
+    # app:
+    #     build: ./backend/accounts/
+    #     container_name: accounts_app
+    #     restart: always
+    #     depends_on:
+    #         - postgres
+    #         - rabbitmq
+    #     environment:
+    #         SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+    #         SPRING_DATASOURCE_USERNAME: postgres
+    #         SPRING_DATASOURCE_PASSWORD: postgres
+    #         SPRING_RABBITMQ_HOST: rabbitmq
+    #         SPRING_RABBITMQ_USERNAME: guest
+    #         SPRING_RABBITMQ_PASSWORD: guest
+    #     ports:
+    #         - "8081:8081"
+    #     networks:
+    #         - dev
 
 networks:
     dev:

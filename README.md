@@ -4,7 +4,7 @@
 ```
 
 ---
-
+[docker-compose.dev.yaml](docker-compose.dev.yaml)
 Запуск docker-compose.yaml для production
 ```shell
     docker-compose up --build

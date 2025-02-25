@@ -6,8 +6,47 @@
   <component name="ChangeListManager">
     <list default="true" id="2c562a08-7e46-4174-8981-0e99d1b6dd8f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/.mvn/wrapper/MavenWrapperDownloader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/HELP.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/AccountsApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/auth/JwtAuthenticationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/auth/UserDetailsImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/config/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/config/SwaggerConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/controllers/AuthenticationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/dto/JwtAuthenticationDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/dto/RefreshTokenIdRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/dto/SignInRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/dto/SignUpRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/exceptions/ApiError.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/exceptions/RefreshTokenExpiredException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/exceptions/RefreshTokenNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/exceptions/SignInValidationException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/exceptions/SignUpValidationException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/exceptions/handlers/AuthExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/models/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/models/Token.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/models/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/repository/AuthRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/repository/TokenRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/services/AuthenticationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/services/JwtService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/java/com/srt/Accounts/services/UserDetailsServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/resources/application.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/resources/keys/private_key.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/main/resources/keys/public_key.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/accounts/src/test/java/com/srt/Accounts/AccountsApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/notifications/README.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.dev.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.dev.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/page.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,9 +56,24 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "ligets"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/ligets/technostrelka.git",
+    "accountId": "afce03c5-5ea1-4123-a99d-502f203aca95"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
   <component name="ProjectId" id="2sRAXaeyfzUYe3DVXWGhTy2SWRz" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -52,6 +106,14 @@
       </map>
     </option>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.19072.16" />
+        <option value="bundled-python-sdk-8336bb23522e-2767605e8bc2-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.19072.16" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -70,6 +132,7 @@
       <workItem from="1738863049609" duration="3408000" />
       <workItem from="1738918018669" duration="3904000" />
       <workItem from="1738927613799" duration="1956000" />
+      <workItem from="1740495240239" duration="3118000" />
     </task>
     <servers />
   </component>
