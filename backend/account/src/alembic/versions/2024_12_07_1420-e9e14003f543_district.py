@@ -24,7 +24,6 @@ def upgrade() -> None:
                     sa.Column('name', sa.String(length=100), nullable=False),
                     sa.PrimaryKeyConstraint('id')
                     )
-    op.add_column('users', sa.Column('patronymic', sa.String(), nullable=True))
     op.add_column('users', sa.Column('district_id', sa.UUID(), nullable=True))
     op.drop_column('users', 'district')
     op.drop_column('users', 'middle_name')
@@ -36,6 +35,5 @@ def downgrade() -> None:
     op.add_column('users', sa.Column('middle_name', sa.VARCHAR(), autoincrement=False, nullable=True))
     op.add_column('users', sa.Column('district', sa.VARCHAR(), autoincrement=False, nullable=True))
     op.drop_column('users', 'district_id')
-    op.drop_column('users', 'patronymic')
     op.drop_table('districts')
     # ### end Alembic commands ###
