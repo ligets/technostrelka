@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Geist_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
 import { motion } from "framer-motion";
@@ -7,6 +7,7 @@ import Login from "@/app/authorization/login/page";
 import Register from "@/app/authorization/register/page";
 import Link from "next/link";
 import VerifyCodeModal from "@/app/authorization/components/code/page";
+import {useCookies} from "react-cookie";
 
 const montserrat = Montserrat({
     variable: "--font-montserrat-sans",
@@ -17,7 +18,8 @@ const montserrat = Montserrat({
 export default function RootLayout({ children }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoginForm, setIsLoginForm] = useState(true); // Управляем текущей формой (вход/регистрация)
-
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [cookies, setCookie, removeCookie] = useCookies(["accessToken", "refreshTokenId"]);
     const openModal = () => {
         setIsModalOpen(true);
     };
@@ -26,10 +28,27 @@ export default function RootLayout({ children }) {
         setIsModalOpen(false);
     };
 
+    const CheckAuth = () => {
+        const token = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("accessToken="));
+        setIsAuthenticated(!!token);
+        console.log("Токен: ", token)
+    }
+    function quit() {
+        removeCookie("accessToken", { path: "/" });
+        removeCookie("refreshTokenId", { path: "/" });
+        window.location.reload();
+    }
+
+    useEffect(() =>{
+        CheckAuth();
+    },[]);
+
     return (
         <html lang="en" className={montserrat.variable} >
         <body className="antialiased font-montserrat ">
-        <header className="flex items-center justify-between p-4 bg-[#fff]">
+        <header className="flex items-center justify-around p-4 bg-[#fff]">
                     <Link className="text-[#6874f9] text-[32px] font-bold" 
                     href="/">
                         GeoTouristicService
@@ -49,18 +68,40 @@ export default function RootLayout({ children }) {
             </div>
 
             <div className="flex gap-2">
-                <button
-                    onClick={() => { setIsLoginForm(true); openModal(); }}
-                    className="rounded-[25px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
-                >
-                    Войти
-                </button>
-                <button
-                    onClick={() => { setIsLoginForm(false); openModal(); }}
-                    className="rounded-[25px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
-                >
-                    Регистрация
-                </button>
+                {isAuthenticated ? (
+                <div className="flex gap-x-[25%]">
+                    <div className="flex items-center gap-2">
+                        <img
+                            src="/man_lk.png"
+                            className="rounded-[50px] h-[50px]"
+                            alt="User avatar"
+                        />
+                        <span className="text-black">Имя пользователя</span>
+                    </div>
+                    <button
+                        onClick={() => {quit()}}
+                        className="rounded-[25px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
+                    >
+                        Выйти
+                    </button>
+                </div>
+                ) : (
+                    <div className="flex">
+                        <button
+                                onClick={() => { setIsLoginForm(true); openModal(); }}
+                                className="rounded-[25px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
+                            >
+                                Войти
+                            </button>
+
+                            <button
+                                onClick={() => { setIsLoginForm(false); openModal(); }}
+                                className="rounded-[25px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
+                            >
+                                Регистрация
+                            </button>
+                    </div>
+                )}
             </div>
         </header>
 

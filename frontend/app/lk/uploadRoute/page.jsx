@@ -1,16 +1,57 @@
 'use client'
 import {useEffect, useState} from "react"
 import axios from "axios";
+import { useFormCreateRoutes  } from "@/store/formCreateRoutes";
 
-const YANDEX_API_KEY = "fee3278a-7b07-4bf9-a6e3-dcf1b7c93bdb";
+import YandexMap from "@/components/Map/YandexMapRedactor";
+import DescriptionRoute from "@/components/Map/main_descrition_route";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
+import Image from "next/image"; 
+
+
 export default function uploadRoute() {
-
-    const [step, setStep] = useState(1);//шаги создания маршрута
 
     const [query, setQuery] = useState("");//для поиска
     const [suggestions, setSuggestions] = useState([]);//для поиска
     const [selectedAddress, setSelectedAddress] = useState(""); // Состояние для выбранного адреса
     const [isAddressSelected, setIsAddressSelected] = useState(false); // Флаг, чтобы избежать лишних запросов
+
+    const [editingPoint, setEditingPoint] = useState(null);
+
+
+    const  { step, 
+            start,
+            points,
+            setStep,
+            setStart,
+            setPoints,
+            removePoint,
+            routeInfo,
+            updatePoint
+         } = useFormCreateRoutes();
+    
+    // Функция для загрузки фото
+    const handleMediaUpload = (e) => {
+        if (!editingPoint) return;
+
+        const files = Array.from(e.target.files);
+        if (files.length + (editingPoint.photos?.length || 0) > 3) {
+            alert("Можно загрузить максимум 3 фотографии!");
+            return;
+        }
+
+        const newFiles = files.map((file) => URL.createObjectURL(file));
+        setEditingPoint({ ...editingPoint, photos: [...(editingPoint.photos || []), ...newFiles] });
+    };
+
+    // Функция удаления фото
+    const removeMediaFile = (index) => {
+        if (!editingPoint) return;
+        const updatedPhotos = [...editingPoint.photos];
+        updatedPhotos.splice(index, 1);
+        setEditingPoint({ ...editingPoint, photos: updatedPhotos });
+    };
+
 
     const handleInputChange = (e) => {
         setQuery(e.target.value);
@@ -28,17 +69,6 @@ export default function uploadRoute() {
     useEffect(() => {
         fetchSuggestions();
     }, [query]); // Запрашиваем данные при изменении query
-
-    const [routeData, setRouteData] = useState({
-        startPoint: "",
-        routeMap: null,
-        name: "",
-        description: "",
-        access: "public",
-        type: "hiking",
-        media: [],
-        landmarks: [],
-    });//данные маршрута в создании маршрута 
 
     useEffect(() => {    //Это апи яндекс я всё шатал
         // Проверяем, если такого мета-тега еще нет
@@ -60,7 +90,7 @@ export default function uploadRoute() {
         if (!query.trim()) return;
 
         axios
-            .get(`https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=Россия+${encodeURIComponent(query)}&format=json`)
+            .get(`https://geocode-maps.yandex.ru/1.x/?apikey=913bd6fa-b6c5-4101-b248-38f0f10e7f1b&geocode=Россия+${encodeURIComponent(query)}&format=json`)
             .then((response) => {
                 const items = response.data?.response?.GeoObjectCollection?.featureMember || [];
 
@@ -95,13 +125,7 @@ export default function uploadRoute() {
         return address && !/^, ?$/.test(address);// Проверяем, что строка не пустая и не состоит только из запятой
     };
 
-    // Функции для перехода на следующий и предыдущий шаг
-    const nextStep = () => {
-        setStep(prev => prev + 1)
-        console.log(selectedAddress)
-    };
-    const prevStep = () => setStep(prev => prev - 1);
-
+    
 
     return (
         <>  
@@ -120,156 +144,222 @@ export default function uploadRoute() {
                             </div>
 
                             {/* ШАГ 1 */}
-                            <div className={step === 1 ? "flex flex-col gap-[1em] w-[100%]" : "hidden"}>
-                                <div>
-                                    <h1 className="text-[15px] font-light text-black">
-                                        Место начала маршрута (Город, река, гора...)
-                                    </h1>
-                                    <div className="flex flex-row w-[100%] justify-between">
-                                        <input
-                                            className="font-light text-[15px] border-[#8d8d8d] border-2 rounded-[10px] outline-none w-[70%] text-black"
-                                            type="text"
-                                            value={query}
-                                            onChange={(e) => {
-                                                setQuery(e.target.value); // Обновляем query
-                                                setIsAddressSelected(false); // Разрешаем новые запросы
-                                            }}
-                                        />
+                            {
+                                step === 1 && (
+                                    <div className="flex flex-col gap-[1em] w-[100%]">
+                                    <div>
+                                        <h1 className="text-[15px] font-light text-black">
+                                            Место начала маршрута (Город, река, гора...)
+                                        </h1>
+                                        <div className="flex flex-row w-[100%] justify-between">
+                                            <input
+                                                className="font-light text-[15px] border-[#8d8d8d] border-2 rounded-[10px] outline-none w-[70%] text-black"
+                                                type="text"
+                                                value={query}
+                                                onChange={(e) => {
+                                                    setQuery(e.target.value); // Обновляем query
+                                                    setIsAddressSelected(false); // Разрешаем новые запросы
+                                                }}
+                                            />
+                                        </div>
+    
+                                        {suggestions.length > 0 && (
+                                            <ul className="bg-white shadow-md rounded mt-2 text-black">
+                                                {suggestions.map((item, index) => (
+                                                    <li
+                                                        key={index}
+                                                        className="p-2 border-b cursor-pointer hover:bg-gray-200 text-black"
+                                                        onClick={() => handleAddressClick(item)} // Передаем объект item
+                                                    >
+                                                        {item.fullAddress} <br />
+                                                        <span className="text-gray-500 text-sm">(Ш: {item.lat}, Д: {item.lon})</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
                                     </div>
-
-                                    {suggestions.length > 0 && (
-                                        <ul className="bg-white shadow-md rounded mt-2 text-black">
-                                            {suggestions.map((item, index) => (
-                                                <li
-                                                    key={index}
-                                                    className="p-2 border-b cursor-pointer hover:bg-gray-200 text-black"
-                                                    onClick={() => handleAddressClick(item)} // Передаем объект item
-                                                >
-                                                    {item.fullAddress} <br />
-                                                    <span className="text-gray-500 text-sm">(Ш: {item.lat}, Д: {item.lon})</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
+                                    <button
+                                        className={`rounded-[10px] py-[0.5em] px-[2em] text-white text-[15px] font-light border-[1px] transition-all duration-300 
+                                        ${selectedAddress ? "bg-[#6874f9] border-[#6874f9] hover:bg-transparent hover:text-blue-600" : "bg-gray-400 border-gray-400 cursor-not-allowed"}`}
+                                        onClick={() => {
+                                            setStep(step+1)
+                                            setStart([selectedAddress.lat , selectedAddress.lon])
+                                        }}
+                                        disabled={!selectedAddress} // Блокируем кнопку, если адрес не выбран
+                                    >
+                                        Дальше
+                                    </button>
                                 </div>
-                                <button
-                                    className={`rounded-[10px] py-[0.5em] px-[2em] text-white text-[15px] font-light border-[1px] transition-all duration-300 
-                                    ${selectedAddress ? "bg-[#6874f9] border-[#6874f9] hover:bg-transparent hover:text-blue-600" : "bg-gray-400 border-gray-400 cursor-not-allowed"}`}
-                                    onClick={nextStep}
-                                    disabled={!selectedAddress} // Блокируем кнопку, если адрес не выбран
-                                >
-                                    Дальше
-                                </button>
-                            </div>
+                                )
+                            }
+                           
 
 
 
                             {/* ШАГ 2 */}
-                            <div className={step === 2 ? "flex w-[100%]" : "hidden"}>
-                                {/*<YandexMap/>*/}
+                            {step === 2 && (
+                            <div className="flex w-[100%] h-96 flex-col relative">
+                                <YandexMap center={start} />
+
+                                {/* СПИСОК ТОЧЕК */}
+                                <div className="flex flex-col gap-[0.5em] mt-4">
+                                <h1 className="text-[#8D8D8D] font-semibold text-16px">Ориентиры</h1>
+                                <div className="flex flex-col w-[100%] gap-[1em]">
+                                    {points.map((point, index) => (
+                                    <div key={point.id} className="flex flex-row justify-between w-[100%]">
+                                        <div className="flex flex-row items-center gap-[2em]">
+                                        <h1 className="text-[#000] font-semibold text-16px">{index + 1}.</h1>
+                                        <h1 className="text-[#000] font-semibold text-16px">{point.name || `Точка ${index + 1}`}</h1>
+                                        </div>
+
+                                        {/* Убираем иконку редактирования */}
+                                        <button onClick={() => removePoint(point.id)}>
+                                        <Image src="/otmena.svg" alt="Удалить" width={17} height={16} />
+                                        </button>
+                                    </div>
+                                    ))}
+                                </div>
+                                </div>
+
+                                <button
+                                className={`rounded-[10px] py-[0.5em] px-[2em] text-white text-[15px] font-light border-[1px] transition-all duration-300 
+                                            ${points.length >= 3 ? "bg-[#6874f9] border-[#6874f9] hover:bg-transparent hover:text-blue-600" : "bg-gray-400 border-gray-400 cursor-not-allowed"}`}
+                                onClick={() => setStep(step + 1)}
+                                disabled={points.length < 3} // Блокируем кнопку, если меньше 3 точек
+                                >
+                                Дальше
+                                </button>
                             </div>
+                            )}
+                                                        
+                            
 
 
                             {/* ШАГ 3 */}
-                            <div className={step === 3 ? "flex w-[100%]" : "hidden"}>
-                                {/* СОздание  МАРШУРТа */}
-                                {/* <div className="flex flex-col items-start gap-4">
-                                    <span className="text-[#000] text-[20px] font-semibold px-2">
-                                        Редактировать - Кавказские горы - пешая тропа
-                                    </span>
-                                    <div className="border-dashed border border-[#6874f9] w-[100%]"></div>
-                                    <form className="flex flex-col gap-10 w-[100%] " action="">
-                                        <div className="flex flex-row items-start justify-between">
-                                            <label htmlFor="" className="text-[#8d8d8d] text-[16px] font-semibold">Название</label>
-                                            <input type="text" placeholder="Кавказские горы - пешая тропа" className="w-[70%] border border-gray-400 rounded-lg  h-[36px] px-2 outline-none"/>
-                                        </div>
+                            {
+                                step === 3 && (
+                                    <div className="flex w-[100%]">
+                                    {/* СОздание  МАРШУРТа */}
+                                    <DescriptionRoute/>
+                                </div>
+                                )
 
-                                        <div className="flex flex-row items-start justify-between">
-                                            <label htmlFor="" className="text-[#8d8d8d] text-[16px] font-semibold">Описание</label>
-                                            <textarea name="" id="" className="w-[70%] border border-gray-400 rounded-lg  h-[10em] px-2 outline-none resize-none "></textarea>
-                                        </div>
-
-                                        <div className="flex flex-row items-start justify-between w-[37%]">
-                                            <label htmlFor="" className="text-[#8d8d8d] text-[16px] font-semibold">Публичный/
-                                                Приватный</label>
-                                            <label className="inline-flex items-center cursor-pointer">
-                                                <input type="checkbox" value="" className="sr-only peer outline-none"/>
-                                                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-                                            </label>
-                                        </div>
-
-                                        <div className="flex flex-row items-start justify-between w-[37%]">
-                                            <label htmlFor="" className="text-[#8d8d8d] text-[16px] font-semibold">Поход</label>
-                                            <div 
-                                                className="flex flex-col items-center justify-center w-20 h-20 bg-[#d9d9d9] rounded-[5px] cursor-pointer"
-                                                onClick = {() => setIsModalOpen(true)}
-                                            >
-                                                <h1 className="text-[#000]  text-[10px] font-light">{isModalValue}</h1>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className={isModalOpen ? "fixed top-0 left-0 w-[100%] h-[100%] bg-[rgba(29,29,29,0.53)] flex flex-col justify-center items-center " : "hidden" }>
-                                            <div className="relative w-[40%] h-[80%] bg-[#fff] rounded-[5px] p-10 flex flex-row flex-wrap gap-[20px]" >
-                                                <span className="absolute right-0 top-0 cursor-pointer p-3 font-semibold text-[25px] text-[#000]" onClick={() => setIsModalOpen(false)}>✕</span>
-                                                {listExpenditions.map((value) => (
-                                                    
-
-                                                    <div key={value}  className="flex flex-col items-center justify-center w-[8em] h-[8em]  bg-[#d9d9d9] rounded-[5px] cursor-pointer " onClick={() => (setIsModalValue(value) , setIsModalOpen(false))}>
-                                                        <h1 className="text-[#000]  text-[12px] font-light">{value}</h1>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div className="flex flex-row items-start justify-between ">
-                                            <label htmlFor="" className="text-[#8d8d8d] text-[16px] font-semibold">Фото и видео</label>
-                                            <div className="w-[70%] p-4 bg-white rounded-lg shadow-md">
-                                                <label
-                                                htmlFor="fileInput"
-                                                className="flex items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500"
-                                                >
-                                                <span className="text-gray-500">Загрузите сюда ваши фото или видео</span>
-                                                <input
-                                                    type="file"
-                                                    id="fileInput"
-                                                    accept="image/*"
-                                                    className="hidden"
-                                                    onChange={handleImageUpload}
-                                                />
-                                                </label>
-
-                                                {imageSrc && (
-                                                <div className="mt-4">
-                                                    <img
-                                                    src={imageSrc}
-                                                    alt="Предпросмотр"
-                                                    className="w-full rounded-lg shadow-md"
-                                                    />
-                                                </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-row items-center justify-between ">
-                                            <div className="flex flex-row items-center gap-2"> 
-                                                <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M3.4375 0V0.666667H0V2H0.6875V10.6667C0.6875 11.0203 0.832366 11.3594 1.09023 11.6095C1.34809 11.8595 1.69783 12 2.0625 12H8.9375C9.30217 12 9.65191 11.8595 9.90977 11.6095C10.1676 11.3594 10.3125 11.0203 10.3125 10.6667V2H11V0.666667H7.5625V0H3.4375ZM2.0625 2H8.9375V10.6667H2.0625V2ZM3.4375 3.33333V9.33333H4.8125V3.33333H3.4375ZM6.1875 3.33333V9.33333H7.5625V3.33333H6.1875Z" fill="black" />
-                                                </svg>
-                                                <h1>Удалить маршрут</h1>
-                                            </div>
-                                            <div className="flex flex-row items-center justify-between gap-5">
-                                                <a className="font-semibold text-[#6874f9] text-[14px] " href="">Отменить</a>
-                                                <a className="px-[3em] py-3 font-semibold text-[#fff] text-[14px] bg-[#6874f9] rounded-[10px]" href="">Принять</a>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div> */}
-                            </div>
+                            }
 
 
                             {/* ШАГ 4 */}
-                            <div className={step === 4 ? "flex w-[100%]" : "hidden"}>
+                            {step === 4 && (
+                                <div className="flex flex-col gap-[0.5em]">
+                                    <h1 className="text-[#8D8D8D] font-semibold text-16px">Ориентиры</h1>
 
-                            </div>
+                                    {/* Перебираем поинты */}
+                                    {points.map((point, index) => (
+                                        <div key={point.id} className="flex flex-col w-[100%] gap-[1em]">
+                                            <div className="flex flex-row justify-between w-[100%]">
+                                                <div className="flex flex-row items-center gap-[2em]">
+                                                    <h1 className="text-[#000] font-semibold text-16px">{index + 1}.</h1>
+                                                    <h1 className="text-[#000] font-semibold text-16px">{point.name || "Без названия"}</h1>
+                                                </div>
+                                                <div className="flex flex-row gap-[1em] items-center">
+                                                    <button onClick={() => setEditingPoint(point)}>
+                                                        <Image src="/pen.svg" alt="Редактировать" width={17} height={16} />
+                                                    </button>
+                                                    <button onClick={() => removePoint(point.id)}>
+                                                        <Image src="/otmena.svg" alt="Удалить" width={17} height={16} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    {/* Модальное окно редактирования поинта */}
+                                    {editingPoint && (
+                                        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                                            <div className="bg-white p-6 rounded-lg w-[50%]">
+                                                <h2 className="text-lg font-semibold mb-4">Редактирование точки</h2>
+
+                                                {/* Название */}
+                                                <label className="text-sm font-semibold">Название</label>
+                                                <input
+                                                    type="text"
+                                                    value={editingPoint.name || ""}
+                                                    onChange={(e) => setEditingPoint({ ...editingPoint, name: e.target.value })}
+                                                    className="w-full border rounded-lg p-2 mb-4"
+                                                />
+
+                                                {/* Описание */}
+                                                <label className="text-sm font-semibold">Описание</label>
+                                                <textarea
+                                                    value={editingPoint.description || ""}
+                                                    onChange={(e) => setEditingPoint({ ...editingPoint, description: e.target.value })}
+                                                    className="w-full border rounded-lg p-2 mb-4"
+                                                />
+
+                                                {/* Фото */}
+                                                <label className="text-sm font-semibold">Фото (макс. 3)</label>
+                                                <div className="w-full p-4 bg-gray-100 rounded-lg shadow-md mb-4">
+                                                    <label
+                                                        htmlFor="fileInput"
+                                                        className={`flex items-center justify-center w-full h-32 border-2 border-dashed ${
+                                                            (editingPoint.photos?.length || 0) < 3 ? "border-gray-300 hover:border-blue-500" : "border-red-500"
+                                                        } rounded-lg cursor-pointer`}
+                                                    >
+                                                        <span className="text-gray-500">Загрузите фото</span>
+                                                        <input
+                                                            type="file"
+                                                            id="fileInput"
+                                                            accept="image/*"
+                                                            multiple
+                                                            className="hidden"
+                                                            onChange={handleMediaUpload}
+                                                            disabled={(editingPoint.photos?.length || 0) >= 3}
+                                                        />
+                                                    </label>
+
+                                                    {/* Превью загруженных фото */}
+                                                    {editingPoint.photos?.length > 0 && (
+                                                        <div className="mt-4 grid grid-cols-3 gap-4">
+                                                            {editingPoint.photos.map((file, index) => (
+                                                                <div key={index} className="relative">
+                                                                    <img src={file} alt="Фото" className="w-full rounded-lg shadow-md" />
+                                                                    <button
+                                                                        className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
+                                                                        onClick={() => removeMediaFile(index)}
+                                                                    >
+                                                                        ✕
+                                                                    </button>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Кнопки */}
+                                                <div className="flex justify-end gap-4">
+                                                    <button
+                                                        className="px-4 py-2 bg-gray-400 text-white rounded-lg"
+                                                        onClick={() => setEditingPoint(null)}
+                                                    >
+                                                        Отмена
+                                                    </button>
+                                                    <button
+                                                        className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+                                                        onClick={() => {
+                                                            updatePoint(editingPoint.id, editingPoint);
+                                                            setEditingPoint(null);
+                                                        }}
+                                                    >
+                                                        Сохранить
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+        
+        
+                                    )}
+                                </div>
+                            )}
+                            
                     </div>
         </>
     );
