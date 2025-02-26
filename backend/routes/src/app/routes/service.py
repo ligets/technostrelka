@@ -35,7 +35,7 @@ class RouteService:
     @classmethod
     async def get_routes(cls, session: AsyncSession):
         return await RouteDAO.find_all(session,
-                                       [and_(RouteModel.is_public == True, RouteModel.status == RouteStatus.APPROVED)])
+                                       and_(RouteModel.is_public == True, RouteModel.status == RouteStatus.APPROVED))
 
     @classmethod
     async def get_routes_user(cls, session: AsyncSession, user: dict):
