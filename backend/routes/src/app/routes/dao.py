@@ -39,7 +39,9 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, RouteUpdateDB]):
                 select(RouteModel).options(
                     joinedload(RouteModel.points),
                     joinedload(RouteModel.photos),
-                    joinedload(RouteModel.comments)
+                    joinedload(RouteModel.comments).options(
+                        joinedload(CommentModel.answers)
+                    )
                 ).filter(RouteModel.id == route.id)
             )
 
@@ -107,7 +109,9 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, RouteUpdateDB]):
             .options(
                 selectinload(RouteModel.points),
                 selectinload(RouteModel.photos),
-                selectinload(RouteModel.comments)
+                selectinload(RouteModel.comments).options(
+                        selectinload(CommentModel.answers)
+                    )
             )
             .filter(*filters)
             .filter_by(**filter_by)
@@ -149,7 +153,9 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, RouteUpdateDB]):
                 select(RouteModel).options(
                     selectinload(RouteModel.points),
                     selectinload(RouteModel.photos),
-                    selectinload(RouteModel.comments)
+                    selectinload(RouteModel.comments).options(
+                        selectinload(CommentModel.answers)
+                    )
                 ).filter(RouteModel.id == route.id)
             )
             route = result.scalars().one()
