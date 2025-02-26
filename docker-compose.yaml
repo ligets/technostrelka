@@ -71,6 +71,8 @@ services:
             - ./backend/routes/.env
         environment:
             - POSTGRES_HOST=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
         networks:
             - work
 
