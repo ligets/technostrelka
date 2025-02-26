@@ -6,6 +6,7 @@ import ListAndModel from "./components/step4/listAndModel";
 import ListAndMap from "./components/step2/listAndMap";
 import SearchAdress from "./components/step1/searchAdress";
 import StepNavigation from "./components/stepNavigation";
+import CompliteStep from "./components/complite/compliteStep";
 
 export default function uploadRoute() {
 
@@ -55,6 +56,14 @@ export default function uploadRoute() {
                                 step === 4 && (
                                     <div className="w-100%">
                                         <ListAndModel/>
+                                    </div>
+                                )
+                            }
+                            {/* Комплит */}
+                            {
+                                step === 5 && (
+                                    <div className="w-100%">
+                                        <CompliteStep/>
                                     </div>
                                 )
                             }

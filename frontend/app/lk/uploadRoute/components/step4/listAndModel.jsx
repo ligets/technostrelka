@@ -1,24 +1,38 @@
-import { useFormCreateRoutes } from "@/store/formCreateRoutes";
 import { useState } from "react";
 import Image from "next/image";
-import { steps } from "framer-motion";
+import { useFormCreateRoutes } from "@/store/formCreateRoutes";
 
 export default function ListAndModel() {
     const [editingPoint, setEditingPoint] = useState(null);
     const [error, setError] = useState(""); // Ошибка валидации
-    const { step, points, removePoint, updatePoint, routeInfo,setStep } = useFormCreateRoutes();
+    const { points, removePoint, updatePoint, setStep } = useFormCreateRoutes();
 
-    // Функция для загрузки фото (только одно)
-    const handleMediaUpload = (e) => {
+    // Функция для конвертации файла в base64
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
+
+    // Функция загрузки фото
+    const handleMediaUpload = async (e) => {
         if (!editingPoint) return;
 
         const file = e.target.files[0];
         if (!file) return;
 
-        setEditingPoint((prev) => ({
-            ...prev,
-            photo: file, // Сохраняем только одно фото
-        }));
+        try {
+            const base64 = await convertToBase64(file);
+            setEditingPoint((prev) => ({
+                ...prev,
+                photo: base64, // Сохраняем ссылку в base64
+            }));
+        } catch (error) {
+            console.error("Ошибка конвертации файла:", error);
+        }
     };
 
     // Функция удаления фото
@@ -77,10 +91,7 @@ export default function ListAndModel() {
             <button
                 className={`px-4 py-2 rounded-lg mt-[15px] ${canProceedToNextStep ? "bg-[#6874f9] text-white border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300 " : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
                 disabled={!canProceedToNextStep}
-                onClick={() =>{
-                    console.log(points,routeInfo)
-                    setStep(step+1)
-                }}
+                onClick={() => setStep(5)}
             >
                 Создать
             </button>
@@ -103,6 +114,7 @@ export default function ListAndModel() {
                             className="w-full border rounded-lg p-2 mb-2"
                         />
                         {error && <p className="text-red-500 text-sm">{error}</p>}
+                        
 
                         {/* Описание */}
                         <label className="text-sm font-semibold">Описание</label>
@@ -112,13 +124,14 @@ export default function ListAndModel() {
                             className="w-full border rounded-lg p-2 mb-4"
                         />
 
+
                         {/* Фото */}
                         <label className="text-sm font-semibold">Фото *</label>
                         <div className="w-full p-4 bg-gray-100 rounded-lg shadow-md mb-4">
                             {editingPoint.photo ? (
                                 <div className="relative">
                                     <img
-                                        src={URL.createObjectURL(editingPoint.photo)}
+                                        src={editingPoint.photo}
                                         alt="Фото"
                                         className="w-full rounded-lg shadow-md"
                                     />
