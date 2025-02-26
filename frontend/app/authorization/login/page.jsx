@@ -37,7 +37,7 @@ export default function Login({ closeModal, setIsLoginForm }) {
             closeModal();
             window.location.reload();
         } catch (err) {
-            console.error("Ошибка при авторизации:", err.response);
+            console.error("Ошибка при авторизации:", err.data);
         }
     };
     return (

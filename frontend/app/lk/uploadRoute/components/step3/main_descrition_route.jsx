@@ -31,14 +31,26 @@ export default function DescriptionRoute() {
         return Object.keys(newErrors).length === 0;
     };
 
+    // Функция конвертации файла в Base64
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
+
     // Функция загрузки фото
-    const handleMediaUpload = (e) => {
+    const handleMediaUpload = async (e) => {
         const files = Array.from(e.target.files);
         if (files.length + media.length > 3) {
             alert("Можно загрузить максимум 3 фотографии!");
             return;
         }
-        setMedia([...media, ...files]);
+
+        const base64Files = await Promise.all(files.map(file => convertToBase64(file)));
+        setMedia([...media, ...base64Files]);
     };
 
     // Функция удаления фото
@@ -53,7 +65,7 @@ export default function DescriptionRoute() {
         updateRouteInfo("title", title);
         updateRouteInfo("description", description);
         updateRouteInfo("type", type);
-        updateRouteInfo("media", media);
+        updateRouteInfo("media", media); // Сохраняем в Zustand Base64
         updateRouteInfo("isPublic", isPublic);
 
         setStep(step + 1);
@@ -115,26 +127,8 @@ export default function DescriptionRoute() {
                     </div>
                 </div>
 
-                {/* Модальное окно выбора типа */}
-                {isModalOpen && (
-                    <div className="fixed top-0 left-0 w-full h-full bg-[rgba(29,29,29,0.53)] flex justify-center items-center">
-                        <div className="relative w-[40%] h-[80%] bg-white rounded-lg p-10 flex flex-wrap gap-4">
-                            <span className="absolute right-0 top-0 cursor-pointer p-3 text-2xl" onClick={() => setIsModalOpen(false)}>✕</span>
-                            {listExpenditions.map((value) => (
-                                <div 
-                                    key={value}
-                                    className="flex flex-col items-center justify-center w-[8em] h-[8em] bg-[#d9d9d9] rounded-[5px] cursor-pointer"
-                                    onClick={() => { setType(value); setIsModalOpen(false); setErrors((prev) => ({ ...prev, type: null })); }}
-                                >
-                                    <h1 className="text-[#000] text-[12px]">{value}</h1>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                 {/* Фото */}
-                 <label className="text-sm font-semibold">Фото (макс. 3)</label>
+                {/* Фото */}
+                <label className="text-sm font-semibold">Фото (макс. 3)</label>
                 <div className="w-full p-4 bg-gray-100 rounded-lg shadow-md mb-4">
                     <label
                         htmlFor="fileInput"
@@ -155,17 +149,17 @@ export default function DescriptionRoute() {
                     {/* Превью загруженных фото */}
                     {media.length > 0 && (
                         <div className="mt-4 grid grid-cols-3 gap-4">
-                            {media.map((file, index) => (
+                            {media.map((base64, index) => (
                                 <div key={index} className="relative">
-                                    <img src={URL.createObjectURL(file)} alt="Фото" className="w-full rounded-lg shadow-md" />
-                                    <button className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full" onClick={(e) => removeMediaFile(e,index)}>✕</button>
+                                    <img src={base64} alt="Фото" className="w-full rounded-lg shadow-md" />
+                                    <button className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full" onClick={(e) => removeMediaFile(e, index)}>✕</button>
                                 </div>
                             ))}
                         </div>
                     )}
                 </div>
 
-                {/* Кнопки */}
+                {/* Кнопка принятия */}
                 <button type="button" className="px-6 py-3 text-white bg-[#6874f9] rounded-lg font-semibold" onClick={handleSubmit}>Принять</button>
             </form>
         </div>

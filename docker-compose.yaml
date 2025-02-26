@@ -1,31 +1,31 @@
 services:
-    postgres:
-        image: postgres:15-alpine
-        container_name: postgres
-        volumes:
-            - postgres_data:/var/lib/postgresql/data/
-        #      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-        ports:
-            - "5433:5432"
-        environment:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-            POSTGRES_DB: postgres
-        networks:
-            - work
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    networks:
+      - work
 
-    rabbitmq:
-        image: "rabbitmq:4"
-        container_name: rabbitmq
-        ports:
-            - "5672:5672"
-        healthcheck:
-            test: rabbitmq-diagnostics -q ping
-            interval: 30s
-            timeout: 10s
-            retries: 5
-        networks:
-            - work
+  rabbitmq:
+    image: 'rabbitmq:4'
+    container_name: rabbitmq
+    ports:
+      - '5672:5672'
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - work
 
     auth_service:
         build:
@@ -93,7 +93,6 @@ services:
         networks:
             - work
 
-
 #    python-example:
 #        build:
 #            context: ./backend/example/
@@ -110,9 +109,9 @@ services:
 #            - work
 
 networks:
-    work:
+  work:
 
 volumes:
-    postgres_data:
-    redis_data:
-    elastic_data:
+  postgres_data:
+  redis_data:
+  elastic_data:
