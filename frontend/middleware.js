@@ -51,13 +51,13 @@ export async function middleware(request) {
                     // Установка новых токенов
                     response.cookies.set("access_token", data.access_token, {
                         path: "/",
-                        httpOnly: true,
+                        httpOnly: false,
                         maxAge: 60 * 60 * 24 * 30, // 30 дней
                     });
 
                     response.cookies.set("refresh_token", data.refresh_token, {
                         path: "/",
-                        httpOnly: true,
+                        httpOnly: false,
                         maxAge: 60 * 60 * 24 * 365, // 1 год
                     });
 

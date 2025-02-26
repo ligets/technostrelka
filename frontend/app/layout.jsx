@@ -8,6 +8,8 @@ import Register from "@/app/authorization/register/page";
 import Link from "next/link";
 import VerifyCodeModal from "@/app/authorization/components/code/page";
 import {useCookies} from "react-cookie";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
+import axios from "axios";
 
 const montserrat = Montserrat({
     variable: "--font-montserrat-sans",
@@ -20,6 +22,8 @@ export default function RootLayout({ children }) {
     const [isLoginForm, setIsLoginForm] = useState(true); // Управляем текущей формой (вход/регистрация)
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [cookies, setCookie, removeCookie] = useCookies(["accessToken", "refreshTokenId"]);
+    const [user, setUser] = useState(null);
+    const[loading, setLoading] = useState(true)
     const openModal = () => {
         setIsModalOpen(true);
     };
@@ -29,27 +33,54 @@ export default function RootLayout({ children }) {
     };
 
     const CheckAuth = () => {
+
+        console.log(document.cookie);
         const token = document.cookie
             .split("; ")
-            .find((row) => row.startsWith("accessToken="));
+            .find((row) => row.startsWith("access_token="));
         setIsAuthenticated(!!token);
         console.log("Токен: ", token)
+
     }
     function quit() {
-        removeCookie("accessToken", { path: "/" });
-        removeCookie("refreshTokenId", { path: "/" });
+        removeCookie("access_token", { path: "/" });
+        removeCookie("refresh_token", { path: "/" });
         window.location.reload();
     }
 
     useEffect(() =>{
         CheckAuth();
     },[]);
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = document.cookie.split('; ').find(row => row.startsWith('access_token='));
+                if (!token) {
+                    console.error('Токен не найден');
+                    return;
+                }
 
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST_AUTH}/Accounts/Me`, {
+                    headers: {
+                        Authorization: `Bearer ${token.split('=')[1]}`, // Передача токена в заголовке
+                    },
+                    withCredentials: true, // Важно для отправки куки
+                });
+
+                setUser(response.data);
+            } catch (error) {
+                console.error("Ошибка получения данных пользователя: ", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUserData();
+    }, []);
     return (
         <html lang="en" className={montserrat.variable} >
         <body className="antialiased font-montserrat ">
         <header className="flex items-center justify-around p-4 bg-[#fff]">
-                    <Link className="text-[#6874f9] text-[32px] font-bold" 
+                    <Link className="text-[#6874f9] text-[32px] font-bold"
                     href="/">
                         GeoTouristicService
                     </Link>
@@ -76,7 +107,7 @@ export default function RootLayout({ children }) {
                             className="rounded-[50px] h-[50px]"
                             alt="User avatar"
                         />
-                        <span className="text-black">Имя пользователя</span>
+                        <span className="text-black">{user.first_name}</span>
                     </div>
                     <button
                         onClick={() => {quit()}}
