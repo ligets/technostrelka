@@ -49,7 +49,7 @@ class RouteService:
     async def get_route_by_id(cls, session: AsyncSession, route_id: uuid.UUID):
         route = await RouteDAO.find_one_or_none(session, RouteModel.id == route_id)
         if not route:
-            raise HTTPException(status_code=404, detail="User not found")
+            raise HTTPException(status_code=404, detail="Route not found")
         return route
 
     @classmethod
