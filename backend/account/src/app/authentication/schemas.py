@@ -6,12 +6,12 @@ from pydantic import BaseModel, Field, EmailStr
 
 
 class CredentialsJSON(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 
 class CredentialsFormData(BaseModel):
-    username: str = Form(...)
+    username: EmailStr = Form(...)
     password: str = Form(...)
 
 
