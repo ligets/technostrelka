@@ -1,5 +1,6 @@
 import uuid
 from pathlib import Path
+from typing import Optional
 
 from pydantic import BaseModel, conlist
 
@@ -27,4 +28,26 @@ class RouteCreateDB(RouteCreate):
     photos: list[Path]
     status: RouteStatus
     owner_id: uuid.UUID
+
+
+class RouteUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    type: Optional[RouteType] = None
+    is_public: Optional[bool] = None
+    photos: Optional[conlist(str, min_length=1, max_length=3)] = None
+
+    @classmethod
+    def validate_non_empty(cls, values):
+        if not any(values.values()):
+            raise ValueError("At least one field must be provided")
+        return values
+
+    def model_post_init(self, __context):
+        self.validate_non_empty(self.model_dump())
+
+
+class RouteUpdateDB(RouteUpdate):
+    status: RouteStatus
+    photos: list[Path]
 

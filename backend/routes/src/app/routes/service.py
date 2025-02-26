@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app.routes.dao import RouteDAO, PointDAO
 from src.app.routes.models import RouteStatus, RouteModel, PointModel
-from src.app.routes.schemas import RouteCreate, RouteCreateDB
+from src.app.routes.schemas import RouteCreate, RouteCreateDB, RouteUpdateDB, RouteUpdate
 from src.app.routes.utils import upload_photo
 
 
@@ -89,3 +89,35 @@ class RouteService:
         if route.owner_id != uuid.UUID(user.get("sub")) and user.get("role") != "Admin":
             raise HTTPException(status_code=403, detail="Access denied")
         return await RouteDAO.delete(session, RouteModel.id == route_id)
+
+    @classmethod
+    async def update_route(
+            cls,
+            session: AsyncSession,
+            data: RouteUpdate,
+            route_id: uuid.UUID,
+            user: dict
+    ):
+        route = await RouteDAO.find_one_or_none(session, RouteModel.id == route_id)
+        if not route:
+            raise HTTPException(status_code=404, detail="Route not found")
+        if route.owner_id != uuid.UUID(user.get("sub")):
+            raise HTTPException(status_code=403, detail="Access denied")
+
+        saved_files = []
+        for i, photo in enumerate(data.photos):
+            saved_files.append(await upload_photo(i, photo))
+        del data.photos
+
+        is_public = data.is_public if data.is_public is not None else route.is_public
+        status = RouteStatus.MODERATION if is_public else RouteStatus.APPROVED
+
+        return await RouteDAO.update(
+            session,
+            RouteModel.id == route_id,
+            obj_in=RouteUpdateDB(
+                **data.model_dump(exclude_unset=True),
+                status=status,
+                photos=saved_files
+            )
+        )

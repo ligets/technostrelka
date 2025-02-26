@@ -2,17 +2,17 @@ import uuid
 from typing import Union, Dict, Any, Optional
 
 from fastapi import HTTPException
-from sqlalchemy import insert, select, func
+from sqlalchemy import insert, select, func, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
 from src.app.comments.models import CommentModel
 from src.app.routes.models import RouteModel, PointModel, RoutePhotosModel, SavedRouteModel
-from src.app.routes.schemas import RouteCreateDB
+from src.app.routes.schemas import RouteCreateDB, RouteUpdateDB
 from src.base_dao import BaseDAO
 
 
-class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, None]):
+class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, RouteUpdateDB]):
     model = RouteModel
 
     @classmethod
@@ -28,7 +28,6 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, None]):
 
         points = create_data.pop('points', None)
         photos = create_data.pop('photos', None)
-        print(photos)
         try:
             route = cls.model(**create_data, id=uuid.uuid4())
             route.points = [PointModel(**data, route_id=route.id) for data in points]
@@ -121,6 +120,44 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, None]):
             route.rating = row.get("rating")  # Присваиваем рейтинг
             return route
         return None
+
+    @classmethod
+    async def update(
+            cls,
+            session: AsyncSession,
+            *where,
+            obj_in: Union[RouteUpdateDB, Dict[str, Any]],
+    ) -> Optional[RouteModel]:
+        if isinstance(obj_in, dict):
+            update_data = obj_in
+        else:
+            update_data = obj_in.model_dump(exclude_unset=True)
+
+        photos = update_data.pop('photos', None)
+
+        try:
+            stmt = update(cls.model).where(*where).values(**update_data).returning(cls.model)
+            result = await session.execute(stmt)
+            route = result.scalars().one_or_none()
+            if photos:
+                route.photos = [RoutePhotosModel(photo_path=str(data), route_id=route.id) for data in photos]
+                session.add_all(route.photos)
+            await session.commit()
+            await session.refresh(route)
+
+            result = await session.execute(
+                select(RouteModel).options(
+                    selectinload(RouteModel.points),
+                    selectinload(RouteModel.photos),
+                    selectinload(RouteModel.comments)
+                ).filter(RouteModel.id == route.id)
+            )
+            route = result.scalars().one()
+
+            return route
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
 
 
 class PointDAO(BaseDAO[PointModel, None, None]):
