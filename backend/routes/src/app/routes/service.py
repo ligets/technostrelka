@@ -1,15 +1,13 @@
-import base64
-import os
 import uuid
 
 from fastapi import HTTPException
+from sqlalchemy import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.app.routes.dao import RouteDAO
-from src.app.routes.models import RouteStatus
+from src.app.routes.dao import RouteDAO, PointDAO
+from src.app.routes.models import RouteStatus, RouteModel, PointModel
 from src.app.routes.schemas import RouteCreate, RouteCreateDB
 from src.app.routes.utils import upload_photo
-from src.config import settings
 
 
 class RouteService:
@@ -32,3 +30,30 @@ class RouteService:
             owner_id=uuid.UUID(user.get("sub"))
         )
         return await RouteDAO.add(session, route)
+
+    @classmethod
+    async def get_routes(cls, session: AsyncSession):
+        return await RouteDAO.find_all(session, [and_(RouteModel.is_public == True, RouteModel.status == RouteStatus.APPROVED)])
+
+    @classmethod
+    async def get_routes_user(cls, session: AsyncSession, user: dict):
+        return await RouteDAO.find_all(session, RouteModel.owner_id == user.get("sub"))
+
+    @classmethod
+    async def get_routes_user_saved(cls, session: AsyncSession, user: dict):
+        return await RouteDAO.find_all_saved(session, user_id=user.get("sub"))
+
+    @classmethod
+    async def get_route_by_id(cls, session: AsyncSession, route_id: uuid.UUID):
+        route = await RouteDAO.find_one_or_none(session, RouteModel.id == route_id)
+        if not route:
+            raise HTTPException(status_code=404, detail="User not found")
+        return route
+
+    @classmethod
+    async def get_route_points_by_id(cls, session: AsyncSession, route_id: uuid.UUID):
+        return await PointDAO.find_all(session, PointModel.route_id == route_id)
+
+    @classmethod
+    async def get_moderation_queue(cls, session: AsyncSession):
+        return await RouteDAO.find_all(session, RouteModel.status == RouteStatus.MODERATION)

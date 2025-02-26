@@ -26,7 +26,8 @@ async def get_current_user(token: str = Depends(validate_token)):
 
 
 async def get_current_admin(user: dict = Depends(get_current_user)):
-    if "Admin" not in user.get('roles'):
+    print(user)
+    if user.get('role') != "Admin":
         raise HTTPException(status_code=403, detail="Not enough privileges.")
     return user
 

@@ -2,11 +2,12 @@ import uuid
 from typing import Union, Dict, Any, Optional
 
 from fastapi import HTTPException
-from sqlalchemy import insert, select
+from sqlalchemy import insert, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 
-from src.app.routes.models import RouteModel, PointModel, RoutePhotosModel
+from src.app.comments.models import CommentModel
+from src.app.routes.models import RouteModel, PointModel, RoutePhotosModel, SavedRouteModel
 from src.app.routes.schemas import RouteCreateDB
 from src.base_dao import BaseDAO
 
@@ -46,3 +47,83 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, None]):
             return route
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
+
+    @classmethod
+    async def find_all(
+            cls,
+            session: AsyncSession,
+            *filters,
+            offset: int = 0,
+            limit: int = 100,
+            **filter_by
+    ):
+        stmt = (
+            select(cls.model, func.avg(CommentModel.rating).label("rating"))
+            .outerjoin(CommentModel, CommentModel.route_id == cls.model.id)
+            .options(selectinload(cls.model.photos))
+            .filter(*filters)
+            .filter_by(**filter_by)
+            .group_by(cls.model.id)
+            .offset(offset)
+            .limit(limit)
+        )
+        result = await session.execute(stmt)
+        return [{"route": route, "rating": average_rating} for route, average_rating in result.all()]
+
+    @classmethod
+    async def find_all_saved(
+            cls,
+            session: AsyncSession,
+            user_id: uuid.UUID,
+            *filters,
+            offset: int = 0,
+            limit: int = 100,
+            **filter_by
+    ):
+
+        stmt = (
+            select(RouteModel, func.avg(CommentModel.rating).label("rating"))
+            .outerjoin(CommentModel, CommentModel.route_id == cls.model.id)
+            .options(selectinload(cls.model.photos))
+            .join(SavedRouteModel, SavedRouteModel.route_id == RouteModel.id)
+            .filter(*[*filters, SavedRouteModel.user_id == user_id])
+            .filter_by(**filter_by)
+            .group_by(cls.model.id)
+            .offset(offset)
+            .limit(limit)
+        )
+        result = await session.execute(stmt)
+        return [{"route": route, "rating": average_rating} for route, average_rating in result.all()]
+
+    @classmethod
+    async def find_one_or_none(
+            cls,
+            session: AsyncSession,
+            *filters,
+            **filter_by
+    ) -> Optional[RouteModel]:
+        stmt = (
+            select(cls.model, func.avg(CommentModel.rating).label("rating"))
+            .outerjoin(CommentModel, CommentModel.route_id == cls.model.id)
+            .options(
+                selectinload(RouteModel.points),
+                selectinload(RouteModel.photos),
+                selectinload(RouteModel.comments)
+            )
+            .filter(*filters)
+            .filter_by(**filter_by)
+            .group_by(cls.model.id)
+        )
+        result = await session.execute(stmt)
+        row = result.mappings().first()  # Получаем только первый результат до закрытия
+        if row:
+            route = row[RouteModel]  # Извлекаем RouteModel
+            route.rating = row.get("rating")  # Присваиваем рейтинг
+            return route
+        return None
+
+
+class PointDAO(BaseDAO[PointModel, None, None]):
+    model = PointModel
+
+

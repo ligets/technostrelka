@@ -23,7 +23,7 @@ class RouteType(Enum):
     RAFTING = "Рафтинг"
     HORSEBACK_RIDING = "Верховая езда"
     SNOWMOBILE = "Снегоход"
-    BUGGY = "Багuи"
+    BUGGY = "Багги"
     ENDURO = "Эндуро"
     OFF_ROAD = "Внедорожник"
     TRAIN = "Поезд"
@@ -64,6 +64,12 @@ class RouteModel(Base):
         cascade="all, delete-orphan",
         passive_deletes=True
     )
+    saved: Mapped[list["SavedRouteModel"]] = relationship(
+        "SavedRouteModel",
+        back_populates="route",
+        cascade="all, delete-orphan",
+        passive_deletes=True
+    )
 
 
 class PointModel(Base):
@@ -89,3 +95,14 @@ class RoutePhotosModel(Base):
 
     route: Mapped["RouteModel"] = relationship("RouteModel", back_populates="photos")
 
+
+class SavedRouteModel(Base):
+    __tablename__ ='saved_routes'
+    id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID, nullable=False)
+    route_id: Mapped[uuid.UUID] = mapped_column(UUID, ForeignKey("routes.id", ondelete="CASCADE"), nullable=False)
+
+    route: Mapped["RouteModel"] = relationship(
+        "RouteModel",
+        back_populates="saved"
+    )
