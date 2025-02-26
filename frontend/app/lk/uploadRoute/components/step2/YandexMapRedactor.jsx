@@ -2,7 +2,7 @@
 import { useEffect, useRef, useCallback } from "react";
 import { useFormCreateRoutes } from "@/store/formCreateRoutes";
 
-const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10 }) => {
+const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const routeRef = useRef(null);

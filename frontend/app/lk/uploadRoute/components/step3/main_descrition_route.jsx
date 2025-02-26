@@ -2,19 +2,22 @@
 import { useState } from "react";
 import { useFormCreateRoutes } from "@/store/formCreateRoutes";
 
-export default function RedactorRoutesLK() {
-    const { routeInfo, updateRouteInfo, setStep,step } = useFormCreateRoutes();
-
-    const [imageSrc, setImageSrc] = useState(null);//превью картинки в редактировании маршрута
+export default function DescriptionRoute() {
+    const { routeInfo, updateRouteInfo, setStep, step } = useFormCreateRoutes();
     const [title, setTitle] = useState(routeInfo.title);
     const [description, setDescription] = useState(routeInfo.description);
     const [isPublic, setIsPublic] = useState(routeInfo.isPublic);
     const [type, setType] = useState(routeInfo.type);
-    const [media, setMedia] = useState(routeInfo.media);
+    const [media, setMedia] = useState(routeInfo.media || []);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [errors, setErrors] = useState({});
 
-    const listExpenditions = ["Пеший", "Автомобильный", "Спортивное ориентирование", "Альпинизм", "Велосипедный маршрут", "Кемпинг", "Лыжный маршрут", "Байдарки", "Сапсерфинг", "Дайвинг", "Рафтинг", "Верховая езда", "Снегоход", "Багги", "Эндуро", "Внедорожник", "Поезд"];
+    const listExpenditions = [
+        "Пеший", "Автомобильный", "Спортивное ориентирование", "Альпинизм", 
+        "Велосипедный маршрут", "Кемпинг", "Лыжный маршрут", "Байдарки", 
+        "Сапсерфинг", "Дайвинг", "Рафтинг", "Верховая езда", "Снегоход", 
+        "Багги", "Эндуро", "Внедорожник", "Поезд"
+    ];
 
     const validateForm = () => {
         let newErrors = {};
@@ -28,17 +31,20 @@ export default function RedactorRoutesLK() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleImageUpload = (event) => {
-        const file = event.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setMedia([...media, e.target.result]);
-                setErrors((prev) => ({ ...prev, media: null }));
-                setImageSrc(e.target.result);
-            };
-            reader.readAsDataURL(file);
+    // Функция загрузки фото
+    const handleMediaUpload = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length + media.length > 3) {
+            alert("Можно загрузить максимум 3 фотографии!");
+            return;
         }
+        setMedia([...media, ...files]);
+    };
+
+    // Функция удаления фото
+    const removeMediaFile = (event, index) => {
+        event.preventDefault(); // Предотвращаем обновление страницы
+        setMedia(media.filter((_, i) => i !== index));
     };
 
     const handleSubmit = () => {
@@ -50,17 +56,12 @@ export default function RedactorRoutesLK() {
         updateRouteInfo("media", media);
         updateRouteInfo("isPublic", isPublic);
 
-        setStep(step+1);
+        setStep(step + 1);
     };
 
     return (
-        <div className="flex flex-col items-start gap-4">
-            <span className="text-[#000] text-[20px] font-semibold px-2">
-                Редактировать - {title || "Кавказские горы - пешая тропа"}
-            </span>
-            <div className="border-dashed border border-[#6874f9] w-[100%]"></div>
-
-            <form className="flex flex-col gap-10 w-[100%]">
+        <div className="flex flex-col w-full items-start gap-4">
+            <form className="flex flex-col gap-10 w-full">
                 {/* Название маршрута */}
                 <div className="flex flex-row items-start justify-between">
                     <label className="text-[#8d8d8d] text-[16px] font-semibold">Название</label>
@@ -132,38 +133,40 @@ export default function RedactorRoutesLK() {
                     </div>
                 )}
 
-                {/* Фото и видео */}
-                <div className="flex flex-row items-start justify-between">
-                    <label className="text-[#8d8d8d] text-[16px] font-semibold">Фото и видео</label>
-                    <div className="w-[70%] p-4 bg-white rounded-lg shadow-md">
-                        <label className="flex items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500">
-                            <span className="text-gray-500">Загрузите фото или видео</span>
-                            <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-                        </label>
-                        {imageSrc && (
-                            <div className="mt-4">
-                                <img
-                                    src={imageSrc}
-                                    alt="Предпросмотр"
-                                    className="w-full rounded-lg shadow-md"
-                                />
-                            </div>
-                        )}
-                        {errors.media && <p className="text-red-500 text-sm">{errors.media}</p>}
-                    </div>
+                 {/* Фото */}
+                 <label className="text-sm font-semibold">Фото (макс. 3)</label>
+                <div className="w-full p-4 bg-gray-100 rounded-lg shadow-md mb-4">
+                    <label
+                        htmlFor="fileInput"
+                        className={`flex items-center justify-center w-full h-32 border-2 border-dashed ${media.length < 3 ? "border-gray-300 hover:border-blue-500" : "border-red-500"} rounded-lg cursor-pointer`}
+                    >
+                        <span className="text-gray-500">Загрузите фото</span>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            accept="image/*"
+                            multiple
+                            className="hidden"
+                            onChange={handleMediaUpload}
+                            disabled={media.length >= 3}
+                        />
+                    </label>
+
+                    {/* Превью загруженных фото */}
+                    {media.length > 0 && (
+                        <div className="mt-4 grid grid-cols-3 gap-4">
+                            {media.map((file, index) => (
+                                <div key={index} className="relative">
+                                    <img src={URL.createObjectURL(file)} alt="Фото" className="w-full rounded-lg shadow-md" />
+                                    <button className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full" onClick={(e) => removeMediaFile(e,index)}>✕</button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Кнопки */}
-                <div className="flex flex-row justify-between">
-                    <button type="button" className="text-[#6874f9] font-semibold">Отменить</button>
-                    <button 
-                        type="button"
-                        className="px-6 py-3 text-white bg-[#6874f9] rounded-lg font-semibold"
-                        onClick={handleSubmit}
-                    >
-                        Принять
-                    </button>
-                </div>
+                <button type="button" className="px-6 py-3 text-white bg-[#6874f9] rounded-lg font-semibold" onClick={handleSubmit}>Принять</button>
             </form>
         </div>
     );
