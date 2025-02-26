@@ -45,7 +45,7 @@ export default function Register({ closeModal, setIsLoginForm }) {
             });
             console.log('Response:', response.data);
 
-            document.cookie = `accessToken=${response.data.accessToken}; path=/; max-age=2592000`;
+            document.cookie = `access_token=${response.data.access_token}; path=/; max-age=2592000`;
             document.cookie = `refresh_token=${response.data.refresh_token}; path=/; max-age=2592000`;
         } catch (err) {
             console.log(err.response);

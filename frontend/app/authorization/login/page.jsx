@@ -5,7 +5,7 @@ import axios from "axios";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 export default function Login({ closeModal, setIsLoginForm }) {
-    const [login, setLogin] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isChecked, setIsChecked] = useState(false);
 
@@ -22,16 +22,16 @@ export default function Login({ closeModal, setIsLoginForm }) {
         }
 
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/accounts/auth/signin`, {
-                login: login,
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST_AUTH}/Authentication/SignIn`, {
+                email: email,
                 password: password,
             });
 
             console.log('Response:', response.data);
 
             // Устанавливаем cookie
-            document.cookie = `accessToken=${response.data.accessToken}; path=/; max-age=2592000`;
-            document.cookie = `refreshTokenId=${response.data.refreshTokenId}; path=/; max-age=2592000`;
+            document.cookie = `access_token=${response.data.access_token}; path=/; max-age=2592000`;
+            document.cookie = `refresh_token=${response.data.refresh_token}; path=/; max-age=2592000`;
 
             // Закрываем модальное окно после успешного входа
             closeModal();
@@ -63,10 +63,10 @@ export default function Login({ closeModal, setIsLoginForm }) {
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                     <input
-                        type="text"
-                        value={login}
-                        name="login"
-                        onChange={(e) => setLogin(e.target.value)}
+                        type="email"
+                        value={email}
+                        name="email"
+                        onChange={(e) => setEmail(e.target.value)}
                         className="bg-transparent border-solid border-[2px] rounded-[5px] px-[16px] py-[8px] text-[18px] placeholder-[#D9D9D9] text-black focus:outline-none"
                         placeholder="Ваш логин"
                         required
