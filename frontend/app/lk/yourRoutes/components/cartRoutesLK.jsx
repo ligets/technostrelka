@@ -1,7 +1,7 @@
 import Image from "next/image";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
-export default function NoneRoutesLK({ routes }) {
+export default function NoneRoutesLK({ routes, onEditRoute }) {
     return (
         <>
             {routes.map((route, index) => (
@@ -9,7 +9,11 @@ export default function NoneRoutesLK({ routes }) {
                     <div className="flex flex-row justify-between">
                         <h1 className="text-[#000] text-[16px] font-bold">{route.route.title|| "Кавказские горы - пешая тропа"}</h1>
                         <div className="flex flex-row gap-[1em]">
-                            <a className="text-[#6874f9] font-light" href="">Редактировать</a>
+                            <a className="text-[#6874f9] font-light" href="" onClick={(e) => {
+                                e.preventDefault()
+                                onEditRoute(route)
+                            }
+                            }>Редактировать</a>
                             <a className="text-[#6874f9] font-light" href="">На карте</a>
                         </div>
                     </div>
@@ -41,10 +45,9 @@ export default function NoneRoutesLK({ routes }) {
                             </div>
                         </div>
                     </div>
-                    {console.log("пипап",route.route.photos[0].photo_path)}
-                    {route.route.photos.map((photo) => (
-                        <div className="w-[100%] h-[150px] relative">
-                            <Image src={`http://localhost:8082${photo.photo_path}`} alt="Route Image" layout="fill" objectFit="cover"/>
+                    {route.route.photos.map((photo,index) => (
+                        <div key={index} className="w-[100%] h-[150px] relative">
+                            <Image src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${photo.photo_path}`} alt="Route Image" layout="fill" objectFit="cover"/>
                         </div>
                     )
                     )}
