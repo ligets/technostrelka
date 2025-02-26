@@ -1,6 +1,5 @@
 'use client'
 import {useState} from "react";
-
 export default function RedactorRoutesLK() {
 
     const [isModalOpen, setIsModalOpen] = useState(false);//открытие закрытие окна редактирования маршрута

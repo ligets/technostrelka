@@ -67,4 +67,20 @@ export const useFormCreateRoutes = create((set) => ({
     set((state) => ({
       routeInfo: { ...state.routeInfo, [key]: value },
     })),
+
+  // Функция для очистки всех данных
+  clearAllData: () =>
+    set(() => ({
+      step: 1,
+      start: [],
+      points: [],
+      descriptions: {},
+      routeInfo: {
+        title: "",
+        description: "",
+        type: "Пеший",
+        media: [],
+        isPublic: false,
+      },
+    })),
 }));

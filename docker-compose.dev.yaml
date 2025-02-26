@@ -42,73 +42,71 @@ services:
             - dev
 
     auth_service:
-       build:
-           context: ./backend/account/
-       container_name: auth_technostrelka
-       ports:
-           - "8081:8081"
-       depends_on:
-           - rabbitmq
-           - postgres
-        #    - redis
-       env_file:
-           - ./backend/account/.env
-       networks:
-           - dev
+        build:
+            context: ./backend/account/
+        container_name: auth_technostrelka
+        ports:
+            - "8081:8081"
+        depends_on:
+            - rabbitmq
+            - postgres
+            #    - redis
+        environment:
+            - JWT_ACCESS_TOKEN_EXPIRE_MINUTES=15
+            - JWT_REFRESH_TOKEN_EXPIRE_DAYS=30
 
-    notification_service:
-       build:
-           context: ./backend/notification/
-       container_name: notification_technostrelka
-       ports:
-           - "8083:8083"
-       depends_on:
-           - rabbitmq
-           - postgres
-        #    - redis
-       env_file:
-           - ./backend/notification/.env
-       networks:
-           - dev
+            - POSTGRES_HOST=postgres
+            - POSTGRES_PORT=5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=account_db
 
-#    python-example:
+            - RABBITMQ_HOST=rabbitmq
+            - RABBITMQ_USER=guest
+            - RABBITMQ_PASSWORD=guest
+        networks:
+            - dev
+
+#    notification_service:
 #        build:
-#            context: ./backend/example/
-#        container_name: example_service
+#            context: ./backend/notification/
+#        container_name: notification_technostrelka
 #        ports:
-#            - "8081:8081"
+#            - "8083:8083"
 #        depends_on:
 #            - rabbitmq
 #            - postgres
-#            - redis
-#        env_file:
-#            - ./backend/example/.env
-#        volumes:
-#            - .:/app
-#        command: uvicorn src/main.py:app --host 0.0.0.0 --port 8081 --reload
+#            #    - redis
+#        environment:
+#            - POSTGRES_HOST=postgres
+#            - POSTGRES_PORT=5432
+#            - POSTGRES_USER=postgres
+#            - POSTGRES_PASSWORD=postgres
+#            - POSTGRES_DB=account_db
+#
+#            - RABBITMQ_HOST=rabbitmq
+#            - RABBITMQ_USER=guest
+#            - RABBITMQ_PASSWORD=guest
 #        networks:
 #            - dev
 
-    # app:
-    #     build: ./backend/accounts/
-    #     container_name: accounts_app
-    #     restart: always
-    #     volumes:
-    #         - avatars:/app/uploads/avatars
-    #     depends_on:
-    #         - postgres
-    #         - rabbitmq
-    #     environment:
-    #         SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
-    #         SPRING_DATASOURCE_USERNAME: postgres
-    #         SPRING_DATASOURCE_PASSWORD: postgres
-    #         SPRING_RABBITMQ_HOST: rabbitmq
-    #         SPRING_RABBITMQ_USERNAME: guest
-    #         SPRING_RABBITMQ_PASSWORD: guest
-    #     ports:
-    #         - "8081:8081"
-    #     networks:
-    #         - dev
+    #    python-example:
+    #        build:
+    #            context: ./backend/example/
+    #        container_name: example_service
+    #        ports:
+    #            - "8081:8081"
+    #        depends_on:
+    #            - rabbitmq
+    #            - postgres
+    #            - redis
+    #        env_file:
+    #            - ./backend/example/.env
+    #        volumes:
+    #            - .:/app
+    #        command: uvicorn src/main.py:app --host 0.0.0.0 --port 8081 --reload
+    #        networks:
+    #            - dev
 
 networks:
     dev:

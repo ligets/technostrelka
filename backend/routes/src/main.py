@@ -8,6 +8,7 @@ import asyncio
 from fastapi import FastAPI
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -37,6 +38,9 @@ app = FastAPI(
     docs_url='/ui-swagger',
     lifespan=lifespan
 )
+
+
+app.mount("/media", StaticFiles(directory="uploads"), name="media")
 
 
 app.include_router(

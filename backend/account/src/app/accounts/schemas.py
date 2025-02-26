@@ -9,7 +9,7 @@ class RoleSchema(BaseModel):
 
 
 class UserBase(BaseModel):
-    email: str
+    email: EmailStr
 
 
 class UserDb(BaseModel):

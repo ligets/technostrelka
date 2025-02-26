@@ -5,8 +5,139 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2c562a08-7e46-4174-8981-0e99d1b6dd8f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/src/alembic/versions/2025_02_26_0938-443f67945e07_add_comments.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/src/alembic/versions/2025_02_26_0939-78f3761affaa_add_comments.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/src/alembic/versions/2025_02_26_1030-88b21d3ac853_edit_photo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/src/alembic/versions/2025_02_26_1119-0da8676632ea_edit.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/src/alembic/versions/2025_02_26_1235-d18fad59a28a_add_saved.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/src/app/comments/dao.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/src/app/comments/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/src/app/comments/router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/src/app/comments/schemas.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/src/app/comments/service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/src/app/routes/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/02b0f335-7a51-4247-8464-79d4f330b82d.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/03504224-23cc-4855-9b1e-2cf9d322e1f8.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/05368f8f-f980-46e9-b81c-6acf909bd01d.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/05a4d77e-5a75-4b2b-ab55-f7afe4488310.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/083e9db9-f209-4068-b1fa-dd1a4e47dc57.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/08b0dad8-8127-4564-922e-94b9e3b306ae.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/0a9588bc-58a2-4d4e-a42a-032cfa2289e3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/0ded6a59-49ef-4b6c-aaeb-deebcf1f4816.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/0e20ae4c-776d-45f8-be9a-17ba580a7d77.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/116465bc-ac58-44db-abc1-4dec5210a9cd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/15b7aae0-9e6c-40bc-9b68-c6ae81f44072.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/1cafa0e4-a326-481b-87fe-db884ce476ec.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/20f15c49-31b7-446f-b519-b3407fc20bea.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/22418892-ff96-4f9e-a7fe-8bcadc07feb1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/2366e595-5709-43be-91fc-3faddd519369.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/23d868f3-575c-4e40-bb84-492351367771.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/2467737f-86ce-45e8-ac85-08605fd351b9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/268d1d72-7fb2-4144-8bb7-747123eaef0b.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/2aeac46b-1363-49a1-bbed-9501c4189b85.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/2d363485-5e67-44bf-b935-656c894cb969.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/389a28dc-7e1e-47be-ab89-cac78e1dfbc6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/39b98fe2-fe5f-49ed-9a86-32b94f67c571.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/40cdbf95-789c-4a18-a5ac-0c8f649340ea.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/56615135-9aa3-4cf8-a168-4b8a0ae7bff9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/5d3f74b6-a720-4adf-a0c3-3d024318b0ca.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/5d7a3085-2d52-4652-93c6-163f87084ee4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/5ea33490-5a69-4b7f-99d0-d69133b9c17f.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/691ba6ad-a3f7-4763-b1fb-5412062bfcbd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/6ac8747a-f414-43e1-af36-be978cfc1490.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/6d04b914-5500-4a70-9bf1-fa281d4ae141.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/6e1fd460-e3e8-484d-9dea-a1d34ba75210.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/76023011-8cc5-4d82-a512-e62db3e3dc0b.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/79109908-942e-4848-b3fd-6296e3276e74.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/7bb22714-1c91-4c09-9860-051cc43bc81e.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/7c64ca56-54b8-42a5-a281-e35413e1e2c0.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/7c7ce1ba-b6ee-49b3-850c-39b5bc5b2c47.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/7c87583d-990c-433a-8090-a02727466311.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/7d4cbc03-baa4-4889-8718-d4b698afc15c.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/8722e272-8ebb-4d0d-94ba-954f006ff0da.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/87ffed1f-6d21-4a5e-a3ee-ab6dfa693a4e.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/8843e5fb-03e1-4733-af6f-08d1db43e335.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/8fa595ce-f7ae-48c4-848d-e5f6f7dc964a.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/919b44d6-5b0e-4ab2-9564-bac9dd06bbfc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/91ba0065-8dc5-48f7-8e81-bf911848e830.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/94c7a48e-fab0-4952-a409-db8f43967341.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/953acd13-9c0a-4a9d-9cc4-b5219447b988.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/9791dadf-2d39-41fd-8972-e139c596163c.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/9a3a480b-19a4-47d0-a9fe-49f6a856c5e3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/9b720016-0b15-45e4-aefc-67a6fc792431.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/9c3d73f1-1b63-4d63-8911-1fdb476c3e50.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/a0ce2263-363f-4cf3-bc1b-1a461a8e665a.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/a2c9367f-dc56-49d9-9264-dd5e3695f594.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/a3e449a6-3bd9-4124-a0a7-95497ce4d61d.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/a86cae69-612f-4fbd-acda-e9ab5178187f.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/aa709cd2-8814-4b08-836e-c34c3f563482.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/ac58a2b2-e97b-4aca-a467-84e9c58bc1aa.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/af93e771-0b34-4297-85c8-23f72ba2d5af.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/b12347e2-9153-4c4e-8c22-2e7a0c9896d4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/b14d1352-c405-4f5b-8eb0-1266eee5f45c.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/b5f71e0a-5907-450a-b456-28b10e754d46.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/b68db92a-f862-49b5-b25c-d5d85a99b576.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/bfbf30be-c537-473c-b5a9-e4e3d5b31e37.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/c31c137d-bca5-4a40-b840-8fa0520399d3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/c852b0a9-fe3b-4651-8758-48136fdb10c9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/c8715c1c-ac15-4456-879c-4014edac34d6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/c8e04b9d-4075-4203-b835-85bd7ec9990c.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/c981172f-1f89-479b-bd82-a2a53343f479.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/d2508e4a-46fd-4427-8c01-4fe7612334d0.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/d2c34824-7389-446f-a5ec-06fb08cba8db.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/d54ced2a-8ffd-4e9a-8df3-1f6691d0fd7b.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/d65bd1dc-ac36-48fe-a1e3-756ec1b1a414.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/da0d5959-9ecf-4e7b-b360-0bf119c98f16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/daf3effc-5c9a-4ad1-bffe-ec269e8d2e2a.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/dd36a767-117a-4995-9641-c9f327ff6882.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/e044cae8-3d43-4988-86e4-3af13d4344d9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/e20aa380-43f9-4b80-8137-7e1c94da405b.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/e60f12c9-22c3-452a-ae7d-ddf953900865.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/ea534b59-ef1f-44f1-aec0-041ca5bbf61b.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/ebad974f-5ab2-4709-b3f3-729bc8ed41dc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/eeed0231-9a1c-4dcb-a95c-eb96271292f0.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/eef254fd-995d-466d-84a9-ae9271f6200a.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/ef2514c4-da25-4ff5-b439-0102945a996a.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/ef97c66a-6519-4e48-b156-2ea21470084f.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/f1450d77-b26e-498a-824c-fe7a26e10558.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/f2b968cd-b6c1-48db-b5f9-5e0a0656f05d.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/f39f314d-094e-4350-99b4-8a18b7219798.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/f3f050b8-5cdb-4c9f-8573-aae017e655a5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/f6589f2c-b1c7-4c91-ad72-d116a13f85e0.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/f85e34c0-1e55-4ed0-8962-9e24e54e16af.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/fad2aabf-f7a3-4858-9489-84254fa3b011.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/uploads/fb6a909d-8266-452f-9108-9097cfa54a10.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/complite/compliteStep.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/step1/searchAdress.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/step2/listAndMap.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/step4/listAndModel.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/stepNavigation.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/account/src/app/accounts/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/account/src/app/accounts/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/account/src/app/authentication/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/account/src/app/authentication/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/.env" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/src/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/src/alembic/env.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/src/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/src/app/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/src/app/routes/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/src/app/routes/dao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/src/app/routes/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/src/app/routes/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/src/app/routes/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/src/app/routes/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/src/app/routes/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/src/app/routes/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/src/app/routes/service.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/src/app/routes/service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/src/app/types/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/src/app/comments/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/src/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/src/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/src/dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/src/dependencies.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.dev.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.dev.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/authorization/login/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/authorization/login/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/Map/YandexMapRedactor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/step2/YandexMapRedactor.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/Map/create4.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/Map/main_descrition_route.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/step3/main_descrition_route.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/components/yourRoutesLK/redactorRoutesLK.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/yourRoutesLK/redactorRoutesLK.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/store/formCreateRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/store/formCreateRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/init.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,22 +158,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last.edited.regexp&quot;: &quot;Sample Text&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Kostya/Desktop/технострелка 2025/frontend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;discord-application&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Merging master",
+    "last.edited.regexp": "Sample Text",
+    "last_opened_file_path": "C:/Users/Kostya/Desktop/технострелка 2025/frontend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "discord-application",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -102,7 +233,7 @@
       <workItem from="1740505225098" duration="6070000" />
       <workItem from="1740592079679" duration="1482000" />
       <workItem from="1740593580945" duration="105000" />
-      <workItem from="1740593698712" duration="1390000" />
+      <workItem from="1740593698712" duration="1540000" />
     </task>
     <servers />
   </component>
