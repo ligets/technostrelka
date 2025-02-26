@@ -1,4 +1,5 @@
 import uuid
+from typing import Union
 
 from fastapi import HTTPException
 from sqlalchemy import and_
@@ -33,7 +34,8 @@ class RouteService:
 
     @classmethod
     async def get_routes(cls, session: AsyncSession):
-        return await RouteDAO.find_all(session, [and_(RouteModel.is_public == True, RouteModel.status == RouteStatus.APPROVED)])
+        return await RouteDAO.find_all(session,
+                                       [and_(RouteModel.is_public == True, RouteModel.status == RouteStatus.APPROVED)])
 
     @classmethod
     async def get_routes_user(cls, session: AsyncSession, user: dict):
@@ -57,3 +59,33 @@ class RouteService:
     @classmethod
     async def get_moderation_queue(cls, session: AsyncSession):
         return await RouteDAO.find_all(session, RouteModel.status == RouteStatus.MODERATION)
+
+    @classmethod
+    async def edit_status_route(
+            cls,
+            session: AsyncSession,
+            status: Union[RouteStatus.APPROVED, RouteStatus.REJECTED],
+            route_id: uuid.UUID
+    ):
+        update_route = await RouteDAO.update(
+            session,
+            and_(RouteModel.id == route_id, RouteModel.status == RouteStatus.MODERATION),
+            obj_in={"status": status}
+        )
+        if not update_route:
+            raise HTTPException(status_code=404, detail="Route not found or status is not moderation")
+        return update_route
+
+    @classmethod
+    async def delete_route_by_id(
+            cls,
+            session: AsyncSession,
+            user: dict,
+            route_id: uuid.UUID
+    ):
+        route = await RouteDAO.find_one_or_none(session, RouteModel.id == route_id)
+        if not route:
+            raise HTTPException(status_code=404, detail="Route not found")
+        if route.owner_id != uuid.UUID(user.get("sub")) and user.get("role") != "Admin":
+            raise HTTPException(status_code=403, detail="Access denied")
+        return await RouteDAO.delete(session, RouteModel.id == route_id)
