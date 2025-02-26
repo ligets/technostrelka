@@ -8,7 +8,7 @@ import RedactorRoutesLK from "@/app/lk/yourRoutes/components/redactorRoutesLK";
 
 export default function YourRoutes() {
     const [routes, setRoutes] = useState([]);
-    const [selectedRoute,setSelectedRoute] = useState([])
+    const [selectedRoute, setSelectedRoute] = useState(null);
     const [loading, setLoading] = useState(true); // Для отображения состояния загрузки
     const [error, setError] = useState(null); // Для обработки ошибок
 
@@ -49,16 +49,16 @@ export default function YourRoutes() {
 
     return (
         <>  
-                
-            {routes.length === 0 ? (
-                // Если нет маршрутов
-                <NoneRoutesLK />
+            {selectedRoute ? (
+                <RedactorRoutesLK route={selectedRoute} />
             ) : (
-                // Если есть маршруты
-                <CartRoutesLK routes={routes} />
+                routes.length === 0 ? (
+                    <NoneRoutesLK />
+                ) : (
+                    <CartRoutesLK routes={routes} onEditRoute={setSelectedRoute} />
+                )
             )}
             
-            {/* <RedactorRoutesLK /> */}
         </>
     );
 }
