@@ -3,6 +3,7 @@ import uuid
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.app.routes.models import RouteStatus
 from src.app.routes.schemas import RouteCreate
 from src.app.routes.service import RouteService
 from src.database import db
@@ -48,8 +49,25 @@ async def get_moderation_queue(
         user: dict = Depends(get_current_admin),
         session: AsyncSession = Depends(db.get_async_session)
 ):
-    # TODO document why this method is empty
     return await RouteService.get_moderation_queue(session)
+
+
+@router.post("/{id}/approve")
+async def approve_route(
+        id: uuid.UUID,
+        user: dict = Depends(get_current_admin),
+        session: AsyncSession = Depends(db.get_async_session)
+):
+    return await RouteService.edit_status_route(session, RouteStatus.APPROVED, id)
+
+
+@router.post("/{id}/reject")
+async def reject_route(
+        id: uuid.UUID,
+        user: dict = Depends(get_current_admin),
+        session: AsyncSession = Depends(db.get_async_session)
+):
+    return await RouteService.edit_status_route(session, RouteStatus.REJECTED, id)
 
 
 @router.get("/{id}")
@@ -58,12 +76,6 @@ async def get_route_by_id(
         session: AsyncSession = Depends(db.get_async_session)
 ):
     return await RouteService.get_route_by_id(session, id)
-
-
-# @router.get("/{id}/small")
-# async def get_small_route_by_id():
-#     # TODO document why this method is empty
-#     pass
 
 
 @router.get("/{id}/points")
@@ -87,6 +99,9 @@ async def patch_route_by_id():
 
 
 @router.delete("/{id}")
-async def delete_route_by_id():
-    # TODO document why this method is empty
-    pass
+async def delete_route_by_id(
+        id: uuid.UUID,
+        user: dict = Depends(get_current_user),
+        session: AsyncSession = Depends(db.get_async_session)
+):
+    return await RouteService.delete_route_by_id(session, user, id)
