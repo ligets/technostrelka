@@ -40,7 +40,7 @@ services:
         env_file:
             - ./backend/account/.env
         networks:
-            - dev
+            - work
 
     notification_service:
         build:
@@ -55,7 +55,7 @@ services:
         env_file:
             - ./backend/notification/.env
         networks:
-            - dev
+            - work
 
     route_service:
         build:
@@ -72,7 +72,7 @@ services:
         environment:
             - POSTGRES_HOST=postgres
         networks:
-            - dev
+            - work
 
 
 #    python-example:
