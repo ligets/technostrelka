@@ -1,9 +1,9 @@
 import uuid
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class CommentCreate(BaseModel):
     route_id: uuid.UUID
     text: str
-    rating:
+    rating: int = Field(..., ge=1, le=5)

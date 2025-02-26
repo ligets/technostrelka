@@ -9,7 +9,7 @@ from src.app.routes.models import RouteType, RouteStatus
 
 class PointCreate(BaseModel):
     name: str
-    description: str
+    description: Optional[str] = None
     coord_x: float
     coord_y: float
     photo: str
