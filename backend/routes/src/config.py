@@ -1,8 +1,12 @@
+from pathlib import Path
+
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import logging
 
 load_dotenv()
+
+BaseDir = Path(__file__).parent.parent
 
 
 class Settings(BaseSettings):
@@ -35,6 +39,8 @@ class Settings(BaseSettings):
         return f"postgresql+asyncpg://{self.POSTGRES_TEST_USER}:{self.POSTGRES_TEST_PASSWORD}@{self.POSTGRES_TEST_HOST}:{self.POSTGRES_TEST_PORT}/{self.POSTGRES_TEST_DB}"
 
     db_echo: bool = False
+
+    photos_dir: Path = BaseDir / "uploads"
 
     model_config = SettingsConfigDict(env_file='.env')
 

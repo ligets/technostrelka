@@ -1,12 +1,22 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.app.routes.schemas import RouteCreate
+from src.app.routes.service import RouteService
+from src.database import db
+from src.dependencies import get_current_user
 
 router = APIRouter()
 
 
 @router.post("/", status_code=201)
-async def create_routes():
+async def create_routes(
+        data: RouteCreate,
+        user: dict = Depends(get_current_user),
+        session: AsyncSession = Depends(db.get_async_session)
+):
     # TODO document why this method is empty
-    pass
+    return await RouteService.create_route(data, user, session)
 
 
 @router.get("/")

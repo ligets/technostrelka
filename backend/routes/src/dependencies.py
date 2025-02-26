@@ -4,10 +4,9 @@ from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 import jwt
 
-from src.rabbitMq.timetable import RabbitMQClient
 from src.rabbitMq.token import RabbitMQClientRPC
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="http://localhost:8080/api/Authentication/SignIn")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="http://localhost:8081/api/AccService/Authentication/SignIn")
 
 
 async def validate_token(token: str = Depends(oauth2_scheme)):
@@ -32,7 +31,4 @@ async def get_current_admin(user: dict = Depends(get_current_user)):
     return user
 
 
-async def delete_timetable_hospital(hospital_id: uuid.UUID):
-    rabbitmq = RabbitMQClient()
-    await rabbitmq.call(hospital_id)
 
