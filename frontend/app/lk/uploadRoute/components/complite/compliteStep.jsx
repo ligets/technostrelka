@@ -5,6 +5,7 @@ import { useFormCreateRoutes } from "@/store/formCreateRoutes";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // Хук для навигации
 
+
 export default function CompliteStep() {
     const { points, routeInfo,clearAllData } = useFormCreateRoutes();
     const router = useRouter();  // Хук для навигации
