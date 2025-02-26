@@ -10,7 +10,7 @@ services:
         environment:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
-            POSTGRES_DB: volga
+            POSTGRES_DB: postgres
         networks:
             - work
 
@@ -37,25 +37,36 @@ services:
             - rabbitmq
             - postgres
             #    - redis
-        env_file:
-            - ./backend/account/.env
+        environment:
+            - JWT_ACCESS_TOKEN_EXPIRE_MINUTES=15
+            - JWT_REFRESH_TOKEN_EXPIRE_DAYS=30
+
+            - POSTGRES_HOST=postgres
+            - POSTGRES_PORT=5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=account_db
+
+            - RABBITMQ_HOST=rabbitmq
+            - RABBITMQ_USER=guest
+            - RABBITMQ_PASSWORD=guest
         networks:
             - work
 
-    notification_service:
-        build:
-            context: ./backend/notification/
-        container_name: notification_technostrelka
-        ports:
-            - "8083:8083"
-        depends_on:
-            - rabbitmq
-            - postgres
-            #    - redis
-        env_file:
-            - ./backend/notification/.env
-        networks:
-            - work
+#    notification_service:
+#        build:
+#            context: ./backend/notification/
+#        container_name: notification_technostrelka
+#        ports:
+#            - "8083:8083"
+#        depends_on:
+#            - rabbitmq
+#            - postgres
+#            #    - redis
+#        env_file:
+#            - ./backend/notification/.env
+#        networks:
+#            - work
 
     route_service:
         build:
@@ -71,8 +82,14 @@ services:
             - ./backend/routes/.env
         environment:
             - POSTGRES_HOST=postgres
+            - POSTGRES_PORT=5432
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=routes_db
+
+            - RABBITMQ_HOST=rabbitmq
+            - RABBITMQ_USER=guest
+            - RABBITMQ_PASSWORD=guest
         networks:
             - work
 
