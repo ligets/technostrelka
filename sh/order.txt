@@ -1,0 +1,2 @@
+./sh/install-docker.sh
+./sh/build-docker.sh
