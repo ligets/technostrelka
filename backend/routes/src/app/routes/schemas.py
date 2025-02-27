@@ -19,6 +19,7 @@ class RouteCreate(BaseModel):
     title: str
     description: str
     type: RouteType
+    distance: float
     photos: conlist(str, min_length=1, max_length=3)
     is_public: bool
     points: conlist(PointCreate, min_length=2)
@@ -34,6 +35,7 @@ class RouteUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     type: Optional[RouteType] = None
+    distance: Optional[float] = None
     is_public: Optional[bool] = None
     photos: Optional[conlist(str, min_length=1, max_length=3)] = None
 
