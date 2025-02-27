@@ -90,17 +90,17 @@ async def delete_user_by_id(
     await UserService.delete_user(id, session)
 
 
-@router.post('/asd')
-async def asd(
-    file: UploadFile = File(...)
-):
-    file_bytes = await file.read()
-    object_name = file.filename
-    s3_client = S3Client(
-        access_key="06d86f59c8af4747b16f52627951982f",
-        secret_key="507b17133a4846658aa93e73b8a72921",
-        endpoint_url="https://s3.storage.selcloud.ru",
-        bucket_name="mihest-public"
-    )
-    await s3_client.upload_file(file=file_bytes, object_name=object_name)
+# @router.post('/asd')
+# async def asd(
+#     file: UploadFile = File(...)
+# ):
+#     file_bytes = await file.read()
+#     object_name = file.filename
+#     s3_client = S3Client(
+#         access_key="06d86f59c8af4747b16f52627951982f",
+#         secret_key="507b17133a4846658aa93e73b8a72921",
+#         endpoint_url="https://s3.storage.selcloud.ru",
+#         bucket_name="mihest-public"
+#     )
+#     await s3_client.upload_file(file=file_bytes, object_name=object_name)
 
