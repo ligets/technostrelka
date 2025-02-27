@@ -28,17 +28,17 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
     // Создаем новый маршрут
     try {
       routeRef.current = new window.ymaps.multiRouter.MultiRoute(
-        {
-          referencePoints: points.map((p) => p.coords),
-          params: { routingMode: "auto" },
-        },
-        {
-          wayPointVisible: false,
-          boundsAutoApply: true,
-          routeActiveStrokeColor: "#FF0000",
-          routeActiveStrokeWidth: 6,
-          routeStrokeStyle: "solid",
-        }
+          {
+            referencePoints: points.map((p) => p.coords),
+            params: { routingMode: "auto" },
+          },
+          {
+            wayPointVisible: false,
+            boundsAutoApply: true,
+            routeActiveStrokeColor: "#FF0000",
+            routeActiveStrokeWidth: 6,
+            routeStrokeStyle: "solid",
+          }
       );
 
       // Обработка успешного построения маршрута
@@ -109,67 +109,67 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
   }, [center, zoom]);
 
   const addMarker = useCallback(
-    (coords) => {
-      if (!mapInstance.current) return;
+      (coords) => {
+        if (!mapInstance.current) return;
 
-      const id = Date.now().toString();
-      const placemark = new window.ymaps.Placemark(
-        coords,
-        {
-          hintContent: "Новая точка",
-          balloonContentHeader: "Введите название точки",
-          balloonContentBody: `
-            <input id="point-name-${id}" type="text" placeholder="Название" style="width: 100%; padding: 5px;"/>
-            <button id="save-point-${id}" style="width: 100%; padding: 5px; background-color: blue; color: white; border: none; cursor: pointer; margin-top: 5px;">Сохранить</button>
-            <button id="delete-point-${id}" style="width: 100%; padding: 5px; background-color: red; color: white; border: none; cursor: pointer; margin-top: 5px;">Удалить</button>
-          `,
-        },
+        const id = Date.now().toString();
+        const placemark = new window.ymaps.Placemark(
+            coords,
+            {
+              hintContent: "Новая точка",
+              balloonContentHeader: "Введите название точки",
+              balloonContentBody:
+                  `<input id="point-name-${id}" type="text" placeholder="Название" style="width: 100%; padding: 5px;"/>
+        <button id="save-point-${id}" style="width: 100%; padding: 5px; background-color: blue; color: white; border: none; cursor: pointer; margin-top: 5px;">Сохранить</button>
+        <button id="delete-point-${id}" style="width: 100%; padding: 5px; background-color: red; color: white; border: none; cursor: pointer; margin-top: 5px;">Удалить</button>`
+            ,
+      },
         {
           draggable: true,
-          preset: "islands#redDotIcon",
+              preset: "islands#redDotIcon",
         }
       );
 
-      placemark.events.add("dragend", (e) => {
-        const newCoords = e.get("target").geometry.getCoordinates();
-        updatePoint(id, { coords: newCoords });
-      });
+        placemark.events.add("dragend", (e) => {
+          const newCoords = e.get("target").geometry.getCoordinates();
+          updatePoint(id, { coords: newCoords });
+        });
 
-      placemark.events.add("balloonopen", () => {
-        setTimeout(() => {
-          const saveBtn = document.getElementById(`save-point-${id}`);
-          const deleteBtn = document.getElementById(`delete-point-${id}`);
+        placemark.events.add("balloonopen", () => {
+          setTimeout(() => {
+            const saveBtn = document.getElementById(`save-point-${id}`);
+            const deleteBtn = document.getElementById(`delete-point-${id}`);
 
-          if (saveBtn) {
-            saveBtn.addEventListener("click", () => {
-              const nameInput = document.getElementById(`point-name-${id}`);
-              const name = nameInput ? nameInput.value : "Без названия";
+            if (saveBtn) {
+              saveBtn.addEventListener("click", () => {
+                const nameInput = document.getElementById(`point-name-${id}`);
+                const name = nameInput ? nameInput.value : "Без названия";
 
-              updatePoint(id, { name });
+                updatePoint(id, { name });
 
-              placemark.properties.set({
-                hintContent: name,
-                balloonContentHeader: name,
+                placemark.properties.set({
+                  hintContent: name,
+                  balloonContentHeader: name,
+                });
+
+                placemark.balloon.close();
               });
+            }
 
-              placemark.balloon.close();
-            });
-          }
+            if (deleteBtn) {
+              deleteBtn.addEventListener("click", () => {
+                removePoint(id);
+                removePointFromMap(id);
+              });
+            }
+          }, 500);
+        });
 
-          if (deleteBtn) {
-            deleteBtn.addEventListener("click", () => {
-              removePoint(id);
-              removePointFromMap(id);
-            });
-          }
-        }, 500);
-      });
-
-      mapInstance.current.geoObjects.add(placemark);
-      markersRef.current[id] = placemark;
-      addPoint({ id, coords });
-    },
-    [addPoint, updatePoint, removePoint]
+        mapInstance.current.geoObjects.add(placemark);
+        markersRef.current[id] = placemark;
+        addPoint({ id, coords });
+      },
+      [addPoint, updatePoint, removePoint]
   );
 
   const removePointFromMap = (id) => {
@@ -188,9 +188,9 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
   }, [points]);
 
   return (
-    <div className="w-[100%] h-[100%] relative">
-      <div ref={mapRef} className="w-full h-full" />
-    </div>
+      <div className="w-[100%] h-[100%] relative">
+        <div ref={mapRef} className="w-full h-full" />
+      </div>
   );
 };
 

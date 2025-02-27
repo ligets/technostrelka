@@ -7,13 +7,18 @@ export default function VerifyCodeModal({ closeModal }) {
     const [error, setError] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const [timer, setTimer] = useState(60);
+    const [isClient, setIsClient] = useState(false); // Для проверки, что мы на клиенте
+
+    useEffect(() => {
+        setIsClient(true); // Устанавливаем флаг, что мы на клиенте
+    }, []);
 
     // Таймер
     useEffect(() => {
         if (timer > 0) {
             const interval = setInterval(() => {
                 setTimer((prev) => prev - 1);
-            }, 1);
+            }, 1000); // Исправляем на 1000, чтобы таймер шел правильно
             return () => clearInterval(interval);
         }
     }, [timer]);
@@ -40,6 +45,10 @@ export default function VerifyCodeModal({ closeModal }) {
             alert("Код верный!");
         }
     };
+
+    if (!isClient) {
+        return null; // Не рендерим компонент до тех пор, пока не узнаем, что на клиенте
+    }
 
     return (
         <div
