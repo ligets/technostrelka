@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import YandexMap from "@/components/Map/YandexMapRoutesPaths";
 import Image from "next/image"; // Добавьте импорт Image, если используете Next.js Image
+import { useRouter } from "next/navigation"; // Хук для навигации
 
 const getUserLocation = () => {
     return new Promise((resolve, reject) => {
@@ -42,6 +43,7 @@ const sortRoutesByDistance = (routes, userCoords) => {
 };
 
 export default function RoutesPaths() {
+    const router = useRouter();  // Хук для навигации
     const [routeFull, setRouteFull] = useState([]);
     const [sortedRoutes, setSortedRoutes] = useState([]);
     const [selectedRoute, setSelectedRoute] = useState([]);
@@ -114,7 +116,7 @@ export default function RoutesPaths() {
                                         <h1 className="text-[#000] text-[11px] font-light">{route.route.type} туризм</h1>
                                         <a className="text-[#000] text-[11px] font-light" href="#" onClick={(e) => {
                                             e.preventDefault();
-                                            console.log("Сохранить маршрут");
+                                            router.push(`/routesPaths/${route.route.id}`)
                                         }}>Подробнее о маршруте</a>
                                         <button
                                             className="text-[#000] text-[11px] font-light"

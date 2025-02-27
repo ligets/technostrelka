@@ -1,20 +1,42 @@
+"use client"
+import axios from "axios";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useEffect,useState } from "react"
 
-export default function routePath() {
+export default function routePath(){
+    const [route,setRoute] = useState(null); 
+    const pathname = usePathname();
+    const segments = pathname.split("/"); // Разбиваем URL по "/"
+    const routeId = segments[segments.length - 1]; // Берем последний элемент
+
+    useEffect(() => {
+        if (routeId) {
+            axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES}${routeId}`)
+                .then((response) => {
+                    setRoute(response.data);
+                    console.log("Данные маршрута:", response.data);
+                })
+                .catch(error => console.error("Ошибка загрузки маршрута:", error));
+        }
+    }, [routeId]); // Добавляем зависимость, чтобы запрос отправлялся при изменении routeId
+
+    if (!route) return <div>Загрузка...</div>;
+
     return (
         <div className="flex flex-row gap-[2em] w-[100%] justify-between ">
             <div className="flex flex-col gap-[2em] w-[65%]">
                 <div className="flex flex-col gap-[1em] w">
                     <div className="flex flex-row items-center gap-[4em]">
-                        <h1 className="text-[#000] text-[25px] font-semibold">Кавказские горы - пешая тропа </h1>
-                        <a className="text-[#6874f9] text-[16px] font-semibold" href="">2 комментария</a>
+                        <h1 className="text-[#000] text-[25px] font-semibold"></h1>
+                        <a className="text-[#6874f9] text-[16px] font-semibold" href="">{route.title}</a>
                         <div className="flex justify-between flex-row items-center">
                             <Image src="/Star.png" alt="" width={17} height={16}/>
-                            <h1 className="text-[#000] font-bold text-[17px]">4.5</h1>
+                            <h1 className="text-[#000] font-bold text-[17px]">{route.rating || 0}</h1>
                         </div>
                     </div>
                     <div className="flex flex-row gap-[1em]">
-                        <button className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]" >Отзыв</button>
+                        <button className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Отзыв</button>
                         <button className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Поделиться</button>
                         <button className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Сохранить</button>
                     </div>
@@ -37,21 +59,23 @@ export default function routePath() {
                 <div className="flex flex-col gap-[1em]">
                     <h1 className="text-[#4e4e4e] text-[25px] font-semibold">Описание маршрута</h1>
                     <p className="text-[25px] text-[#000] font-light">
-                    Маршрут из города Пермь в горы. Маршрут не сложный, идёт по приятной лесной тропе, иногда выходит на скалы. Есть развилка, одна часть пути идёт по огородам 
-                    (которая на карте записана), вторая по низу вдоль моря. Вторая дольше а два раза но живописней. А в общем хороший маршрут.
+                    {route.description}
                     </p>
                 </div>
 
                 <div className="flex flex-col gap-[1em]">
                     <h1 className="text-[#4e4e4e] text-[25px] font-semibold">Описание маршрута</h1>
-                    <div>
-                        <div className="w-[100%] border-[1px] border-[#8d8d8d]  rounded-[10px]">
+                    <div className="flex flex-col items-center gap-[1em]">
+                        {route.points.map((point) => (
+                            <div className="w-[100%] border-[1px] border-[#8d8d8d]  rounded-[10px]">
                             <div className="flex flex-row justify-between items-center p-[1em]">
                                 <h1 className="text-[18px] font-extrabold text-[#000]">Маршрутная точка</h1>
-                                <h1 className="text-[25px] font-extrabold text-[#000]">Название</h1>
+                                <h1 className="text-[25px] font-extrabold text-[#000]">{point.name}</h1>
                             </div>
-                            <img src="" alt="" className="w-[100%] h-[200px] rounded-b-lg "/>
+                            
                         </div>
+                        ))}
+
                     </div>
                 </div>
             </div>
@@ -76,7 +100,6 @@ export default function routePath() {
                                 <h1 className="text-[#000] font-bold text-[16px]">4.5</h1>
                             </div>
                             <h1 className="text-[#000] text-[16px] font-semibold">15 маршрутов</h1>
-                            <h1 className="text-[#000] text-[16px] font-semibold">1000 км</h1>
                         </div>
                         <div className="border-[1px] border-[#d9d9d9] w-[100%]"></div>
                         <a className="text-[#8d8d8d] text-[14px] font-light" href="">Другие маршруты этого автора</a>
@@ -85,20 +108,12 @@ export default function routePath() {
                         <h1 className="text-[#000] text-[18px] font-semibold">Статистика маршрута</h1>
                         <div className="flex flex-col items-start gap-[1em]">
                             <div className="flex flex-col items-start gap-[0.1em]">
-                                <h1 className="text-[#696868] text-[14px] font-light">Рассddddddddтояние</h1>
-                                <p className="text-[#000] text-[14px] font-light">10.72 км</p>
-                            </div>
-                            <div className="flex flex-col items-start gap-[0.1em]">
-                                <h1 className="text-[#696868] text-[14px] font-light">Высота</h1>
-                                <p className="text-[#000] text-[14px] font-light">10.72 км</p>
+                                <h1 className="text-[#696868] text-[14px] font-light">Расстояние</h1>
+                                <p className="text-[#000] text-[14px] font-light">{route.distance} км</p>
                             </div>
                             <div className="flex flex-col items-start gap-[0.1em]">
                                 <h1 className="text-[#696868] text-[14px] font-light">Тип маршрута</h1>
-                                <p className="text-[#000] text-[14px] font-light">10.72 км</p>
-                            </div>
-                            <div className="flex flex-col items-start gap-[0.1em]"> 
-                                <h1 className="text-[#696868] text-[14px] font-light">Время в пути</h1>
-                                <p className="text-[#000] text-[14px] font-light">10.72 км</p>
+                                <p className="text-[#000] text-[14px] font-light">{route.type}</p>
                             </div>
                             <div className="flex flex-col items-start gap-[0.1em]">
                                 <h1 className="text-[#696868] text-[14px] font-light">Загруженно</h1>
