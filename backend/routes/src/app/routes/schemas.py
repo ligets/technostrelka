@@ -55,5 +55,6 @@ class RouteUpdateDB(RouteUpdate):
 
 
 class FilterParams(BaseModel):
+    title: Optional[str] = None
     type: Optional[RouteType] = None
 
