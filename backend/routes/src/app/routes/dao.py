@@ -61,7 +61,13 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, RouteUpdateDB]):
         stmt = (
             select(cls.model, func.avg(CommentModel.rating).label("rating"))
             .outerjoin(CommentModel, CommentModel.route_id == cls.model.id)
-            .options(selectinload(cls.model.photos))
+            .options(
+                selectinload(RouteModel.points),
+                selectinload(RouteModel.photos),
+                selectinload(RouteModel.comments).options(
+                        selectinload(CommentModel.answers)
+                    )
+            )
             .filter(*filters)
             .filter_by(**filter_by)
             .group_by(cls.model.id)
