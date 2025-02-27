@@ -55,7 +55,7 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, RouteUpdateDB]):
             session: AsyncSession,
             *filters,
             offset: int = 0,
-            limit: int = 100,
+            limit: int = 10000,
             **filter_by
     ):
         stmt = (
@@ -65,8 +65,8 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, RouteUpdateDB]):
                 selectinload(RouteModel.points),
                 selectinload(RouteModel.photos),
                 selectinload(RouteModel.comments).options(
-                        selectinload(CommentModel.answers)
-                    )
+                    selectinload(CommentModel.answers)
+                )
             )
             .filter(*filters)
             .filter_by(**filter_by)
@@ -84,7 +84,7 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, RouteUpdateDB]):
             user_id: uuid.UUID,
             *filters,
             offset: int = 0,
-            limit: int = 100,
+            limit: int = 10000,
             **filter_by
     ):
 

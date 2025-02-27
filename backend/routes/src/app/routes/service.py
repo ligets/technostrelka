@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app.routes.dao import RouteDAO, PointDAO
 from src.app.routes.models import RouteStatus, RouteModel, PointModel
-from src.app.routes.schemas import RouteCreate, RouteCreateDB, RouteUpdateDB, RouteUpdate
+from src.app.routes.schemas import RouteCreate, RouteCreateDB, RouteUpdateDB, RouteUpdate, FilterParams
 from src.app.routes.utils import upload_photo
 
 
@@ -33,17 +33,36 @@ class RouteService:
         return await RouteDAO.add(session, route)
 
     @classmethod
-    async def get_routes(cls, session: AsyncSession):
-        return await RouteDAO.find_all(session,
-                                       and_(RouteModel.is_public == True, RouteModel.status == RouteStatus.APPROVED))
+    async def get_routes(cls, session: AsyncSession, filter_by: FilterParams):
+        filters = [
+            RouteModel.is_public == True,
+            RouteModel.status == RouteStatus.APPROVED
+        ]
+
+        if filter_by.type:
+            filters.append(RouteModel.type == filter_by.type)
+
+        return await RouteDAO.find_all(session, *filters)
 
     @classmethod
-    async def get_routes_user(cls, session: AsyncSession, user: dict):
-        return await RouteDAO.find_all(session, RouteModel.owner_id == user.get("sub"))
+    async def get_routes_user(cls, session: AsyncSession, filter_by: FilterParams, user: dict):
+        filters = [
+            RouteModel.owner_id == user.get("sub")
+        ]
+
+        if filter_by.type:
+            filters.append(RouteModel.type == filter_by.type)
+
+        return await RouteDAO.find_all(session, *filters)
 
     @classmethod
-    async def get_routes_user_saved(cls, session: AsyncSession, user: dict):
-        return await RouteDAO.find_all_saved(session, user_id=user.get("sub"))
+    async def get_routes_user_saved(cls, session: AsyncSession, filter_by: FilterParams, user: dict):
+        filters = []
+
+        if filter_by.type:
+            filters.append(RouteModel.type == filter_by.type)
+
+        return await RouteDAO.find_all_saved(session, user_id=user.get("sub"), *filters)
 
     @classmethod
     async def get_route_by_id(cls, session: AsyncSession, route_id: uuid.UUID):

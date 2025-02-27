@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app.routes.models import RouteStatus
-from src.app.routes.schemas import RouteCreate, RouteUpdateDB, RouteUpdate
+from src.app.routes.schemas import RouteCreate, RouteUpdate, FilterParams
 from src.app.routes.service import RouteService
 from src.database import db
 from src.dependencies import get_current_user, get_current_admin
@@ -23,25 +23,28 @@ async def create_routes(
 
 @router.get("/")
 async def get_routes(
+        filter_by: FilterParams = Depends(),
         session: AsyncSession = Depends(db.get_async_session)
 ):
-    return await RouteService.get_routes(session)
+    return await RouteService.get_routes(session, filter_by)
 
 
 @router.get("/user")
 async def get_routes_user(
         user: dict = Depends(get_current_user),
+        filter_by: FilterParams = Depends(),
         session: AsyncSession = Depends(db.get_async_session)
 ):
-    return await RouteService.get_routes_user(session, user)
+    return await RouteService.get_routes_user(session, filter_by, user)
 
 
 @router.get("/user/saved")
 async def get_routes_user_saved(
         user: dict = Depends(get_current_user),
+        filter_by: FilterParams = Depends(),
         session: AsyncSession = Depends(db.get_async_session)
 ):
-    return await RouteService.get_routes_user_saved(session, user)
+    return await RouteService.get_routes_user_saved(session, filter_by, user)
 
 
 @router.get("/moderation")
