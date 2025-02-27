@@ -6,9 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="2c562a08-7e46-4174-8981-0e99d1b6dd8f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.dev.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.dev.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/admin/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/admin/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/complite/compliteStep.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/complite/compliteStep.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/step2/YandexMapRedactor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/step2/YandexMapRedactor.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/stepNavigation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/stepNavigation.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/routesNear/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routesNear/page.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,22 +31,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last.edited.regexp&quot;: &quot;Sample Text&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Kostya/Desktop/технострелка 2025/frontend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;discord-application&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "last.edited.regexp": "Sample Text",
+    "last_opened_file_path": "C:/Users/Kostya/Desktop/технострелка 2025/frontend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "discord-application",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -106,7 +108,8 @@
       <workItem from="1740593580945" duration="105000" />
       <workItem from="1740593698712" duration="7002000" />
       <workItem from="1740605172772" duration="2012000" />
-      <workItem from="1740638808888" duration="5846000" />
+      <workItem from="1740638808888" duration="11432000" />
+      <workItem from="1740673636423" duration="2083000" />
     </task>
     <servers />
   </component>

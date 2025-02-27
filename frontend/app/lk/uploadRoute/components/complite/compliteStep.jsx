@@ -46,7 +46,7 @@ export default function CompliteStep() {
         description: routeInfo.description,
         type: routeInfo.type,
         photos: routeInfo.media, // Массив ссылок на фото маршрута
-        is_public: routeInfo.isPublic,
+        is_public: !routeInfo.isPublic,
         points: points.map((point) => {
             const pointData = {
                 name: point.name,
