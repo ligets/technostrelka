@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
-const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) => {
+const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
 
@@ -37,22 +37,7 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes = [] }) 
 
         // Создание маршрута
         const multiRoute = new window.ymaps.multiRouter.MultiRoute(
-          {
-            referencePoints: [
-              [55.751244, 37.618423],
-              [55.7485, 37.605],
-              [55.742, 37.590],
-            ],
-            params: {
-              routingMode: "auto",    // auto, pedestrian, masstransit
-              avoidTrafficJams: true,
-            },
-          },
-          {
-            boundsAutoApply: true,
-            routeActiveStrokeColor: "#FF0000",
-            routeActiveStrokeWidth: 6,
-          }
+          routes
         );
 
         const metaTag = document.querySelector('meta[name="referrer"]');
