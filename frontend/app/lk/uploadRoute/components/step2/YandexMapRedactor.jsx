@@ -9,7 +9,7 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
   const routeRef = useRef(null);
   const markersRef = useRef({});
 
-  const { points, setPoints, addPoint, updatePoint, removePoint } = useFormCreateRoutes();
+  const { points,setDistance,routeInfo, setPoints, addPoint, updatePoint, removePoint } = useFormCreateRoutes();
 
   // Функция для обновления маршрута
   const updateRoute = useCallback(() => {
@@ -46,7 +46,9 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
         const activeRoute = routeRef.current.getActiveRoute();
         if (activeRoute) {
           const distance = activeRoute.properties.get("distance").value / 1000; // Преобразуем в километры
+          setDistance(distance.toFixed(2))
           console.log(`Расстояние маршрута: ${distance.toFixed(2)} км`);
+          console.log("БАКУГАН",routeInfo)
         }
       });
 

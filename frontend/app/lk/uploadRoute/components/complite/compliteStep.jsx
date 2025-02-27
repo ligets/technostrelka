@@ -20,7 +20,8 @@ export default function CompliteStep() {
         routeInfo.title.trim() !== "" &&
         routeInfo.description.trim() !== "" &&
         routeInfo.type.trim() !== "" &&
-        routeInfo.media.length > 0;
+        routeInfo.media.length > 0 &&
+        routeInfo.distance !== 0;
 
     // Проверка: у всех точек должно быть название и фото
     const arePointsComplete = points.every((point) => 
@@ -47,6 +48,7 @@ export default function CompliteStep() {
         type: routeInfo.type,
         photos: routeInfo.media, // Массив ссылок на фото маршрута
         is_public: !routeInfo.isPublic,
+        distance:routeInfo.distance,
         points: points.map((point) => {
             const pointData = {
                 name: point.name,

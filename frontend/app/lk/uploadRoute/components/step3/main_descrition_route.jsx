@@ -125,6 +125,35 @@ export default function DescriptionRoute() {
                     >
                         <h1 className="text-[#000] text-[10px] font-light">{type}</h1>
                     </div>
+                    {isModalOpen && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                        <div className="bg-white p-6 rounded-lg w-[30%]">
+                            <button 
+                            className="absolute top-2 right-2 text-xl font-bold cursor-pointer"
+                            onClick={() => setIsModalOpen(false)}
+                            >
+                            &times;
+                            </button>
+                            <h2 className="text-lg font-semibold mb-4">Выберите тип маршрута</h2>
+                            <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
+                            {listExpenditions.map((expedition) => (
+                                <button
+                                key={expedition}
+                                className={`p-2 border rounded-lg text-center text-black hover:bg-gray-200 ${
+                                    type === expedition ? "bg-blue-500 text-white" : "bg-gray-100"
+                                }`}
+                                onClick={() => {
+                                    setType(expedition);
+                                    setIsModalOpen(false);
+                                }}
+                                >
+                                {expedition}
+                                </button>
+                            ))}
+                            </div>
+                        </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Фото */}

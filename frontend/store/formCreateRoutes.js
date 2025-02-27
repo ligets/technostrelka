@@ -13,12 +13,18 @@ export const useFormCreateRoutes = create((set) => ({
     type: "Пеший",
     media: [],
     isPublic: false,
+    distance:0,
   },
 
   // Методы
   setStep: (step) => set(() => ({ step })),
 
   setStart: (start) => set(() => ({ start })),
+
+  setDistance: (distance) =>
+    set((state) => ({
+      routeInfo: { ...state.routeInfo, distance },
+    })),
 
   addPoint: (point) =>
     set((state) => {
