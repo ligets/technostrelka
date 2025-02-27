@@ -57,8 +57,7 @@ export default function RootLayout({ children }) {
             try {
                 const token = document.cookie.split('; ').find(row => row.startsWith('access_token='));
                 if (!token) {
-                    console.error('Токен не найден');
-                    setError('Токен не найден');
+                    console.log('Токен не найден');
                     return;
                 }
 

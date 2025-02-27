@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
+import Image from 'next/image';
 
 export default function RedactorRoutesLK({ route }) {
 
@@ -151,7 +152,7 @@ export default function RedactorRoutesLK({ route }) {
                         {/* Старые фото (с сервера) */}
                         {existingMedia.map((img, index) => (
                             <div key={img.id} className="relative">
-                                <img src={img.url} alt="Фото" className="w-full rounded-lg shadow-md" />
+                                <Image src={img.url} alt="Фото" width={full} height={300}/>
                                 <button 
                                     className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
                                     onClick={() => removeMediaFile(index, true)}
@@ -164,7 +165,7 @@ export default function RedactorRoutesLK({ route }) {
                         {/* Новые загруженные фото */}
                         {newMedia.map((base64, index) => (
                             <div key={index} className="relative">
-                                <img src={base64} alt="Фото" className="w-full rounded-lg shadow-md" />
+                                <Image src={base64} alt="Фото" width={full} height={300}/> 
                                 <button 
                                     className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
                                     onClick={() => removeMediaFile(index, false)}
