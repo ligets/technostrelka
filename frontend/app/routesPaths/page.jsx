@@ -1,7 +1,9 @@
-import YandexMap from "@/components/Map/YandexMapRoutesPaths";
-import { DnaIcon } from "lucide-react";
-import Image from "next/image";
+"use client"
 
+import YandexMap from "@/components/Map/YandexMapRoutesPaths";
+import { useEffect, useState } from "react";
+import axios from "axios"
+    
 export default function RoutesPaths() {
     // просто некий набор точек хз как с бека будут приходить пути,потом переделаем если что 
     const routes = [
@@ -22,8 +24,13 @@ export default function RoutesPaths() {
           transportType: "pedestrian",
         },
       ];
-      
-      
+    
+    useEffect(() => {
+        const response = axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES}/1`)
+        console.log(response.data)
+        
+    }, []);
+    
     return (
         <div className="absolute top-[80px] left-0 flex w-[100%]  h-[100%]">
             <div className="flex flex-col gap-[1em] w-[35%] h-[100%] bg-[#F4F4F4] p-6 ">
@@ -80,7 +87,6 @@ export default function RoutesPaths() {
                             </div>
                         </div>
                     </div>
-                    <img src="/lk_path.png" alt="" className="w-[30%] h-[100%] rounded-r-[30px] rounded-l-none"/>
                 </div>
 
                 </div>
