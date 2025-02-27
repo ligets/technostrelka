@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2c562a08-7e46-4174-8981-0e99d1b6dd8f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/layout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.dev.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.dev.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/step2/YandexMapRedactor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/step2/YandexMapRedactor.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/stepNavigation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/lk/uploadRoute/components/stepNavigation.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +106,7 @@
       <workItem from="1740593580945" duration="105000" />
       <workItem from="1740593698712" duration="7002000" />
       <workItem from="1740605172772" duration="2012000" />
-      <workItem from="1740638808888" duration="3534000" />
+      <workItem from="1740638808888" duration="5846000" />
     </task>
     <servers />
   </component>

@@ -105,7 +105,6 @@ export default function StepNavigation() {
                             </div>
                         </div>
             }
-            {/* Заголовок с текущим шагом */}
             
         </>
     );

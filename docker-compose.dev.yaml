@@ -90,7 +90,7 @@ services:
             - RABBITMQ_USER=guest
             - RABBITMQ_PASSWORD=guest
         networks:
-            - work
+            - dev
 
 #    notification_service:
 #        build:
