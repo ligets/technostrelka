@@ -44,7 +44,7 @@ const sortRoutesByDistance = (routes, userCoords) => {
 export default function RoutesPaths() {
     const [routeFull, setRouteFull] = useState([]);
     const [sortedRoutes, setSortedRoutes] = useState([]);
-    const [selectedRoute, setSelectedRoute] = useState(null);
+    const [selectedRoute, setSelectedRoute] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -78,7 +78,6 @@ export default function RoutesPaths() {
             })
             .catch(error => {
                 console.log("Ошибка при получении местоположения пользователя:", error);
-                // Устанавливаем дефолтные координаты, если геолокация недоступна
                 setUserLocation({ latitude: 55.751244, longitude: 37.618423 }); // Москва
                 setError("Не удалось получить местоположение. Используются дефолтные координаты.");
             })
@@ -86,29 +85,12 @@ export default function RoutesPaths() {
     }, []);
 
     // Преобразуем selectedRoute в нужный формат
-    const formattedRoute = selectedRoute && selectedRoute.points
-        ? selectedRoute.points.map(point => ({
-            type: "wayPoint",
-            point: [point.coord_y, point.coord_x], // Обратите внимание на порядок координат (y, x)
-        }))
-        : [];
-
-    // Дополнительная отладка
-    useEffect(() => {
-        console.log("routeFull:", routeFull);
-    }, [routeFull]);
-
-    useEffect(() => {
-        console.log("sortedRoutes:", sortedRoutes);
-    }, [sortedRoutes]);
-
-    useEffect(() => {
-        console.log("selectedRoute:", selectedRoute);
-    }, [selectedRoute]);
-
-    useEffect(() => {
-        console.log("formattedRoute:", formattedRoute);
-    }, [formattedRoute]);
+    function formattedRoute(points) {
+        return points.map(point => ([
+            point.coord_x, // широта
+            point.coord_y  // долгота
+        ]));
+    }
 
     if (loading) {
         return <div>Загрузка...</div>;
@@ -133,12 +115,13 @@ export default function RoutesPaths() {
                                         <a className="text-[#000] text-[11px] font-light" href="#" onClick={(e) => {
                                             e.preventDefault();
                                             console.log("Сохранить маршрут");
-                                        }}>Сохранить маршрут</a>
+                                        }}>Подробнее о маршруте</a>
                                         <button
                                             className="text-[#000] text-[11px] font-light"
                                             onClick={() => {
-                                                setSelectedRoute(route.route;
-                                                console.log("Выбранный маршрут:", route.route);
+                                                const formattedPoints = formattedRoute(route.route.points); // Конвертируем points
+                                                setSelectedRoute(formattedPoints);  // Обновляем выбранный маршрут
+                                                console.log("Выбранный маршрут:", formattedPoints);
                                             }}>
                                             Показать на карте
                                         </button>
@@ -169,7 +152,7 @@ export default function RoutesPaths() {
                     ))
                     : <h1>Нет доступных маршрутов</h1>}
             </div>
-            <YandexMap center={[55.751244, 37.618423]} zoom={10} routes={formattedRoute} />
+            <YandexMap center={[55.751244, 37.618423]} zoom={10} routes={selectedRoute} />
         </div>
     );
 }
