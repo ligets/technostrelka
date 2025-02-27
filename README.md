@@ -18,10 +18,10 @@
 
 ```shell
 sudo apt install git
-sudo mkdir technostrelka
+sudo mkdir /technostrelka
 sudo git clone http://github.com/ligets/technostrelka /technostrelka
 cd /technostrelka
-sudo chmod +x ./install-docker.sh
-sudo ./install-docker.sh
+sudo chmod +x ./run.sh
+sudo ./run.sh
 sudo docker compose up --build -d
 ```
