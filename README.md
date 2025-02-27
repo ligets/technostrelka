@@ -49,10 +49,14 @@ sudo ./run.sh
 * __web-панель rabbitMQ__ - http://localhost:15672/ (данные для входа: логин guest, пароль guest)
 * __figma__ - [КЛИКАБЕЛЬНО!!!](https://www.figma.com/design/9fhhrJkNBst6rEiaaPSbkm/Technostrelka?node-id=1-2&t=FKHjwP4Ir8WqFCho-1)
 
-
-
-### Команды для запуска проекты с разными сборками
 ---
+
+## Команды для запуска проекты с разными сборками
+#### Примечание! Перед использованием этих команд остановите прошлый контейнер командой ```docker compose down```
+
+
+
+
 
 Запуск docker-compose.yaml для production для минимальной сборки
 ```shell
