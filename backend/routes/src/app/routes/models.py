@@ -44,6 +44,7 @@ class RouteModel(Base):
     type: Mapped[RouteType] = mapped_column(SQLAlchemyEnum(RouteType), nullable=False)
     is_public: Mapped[bool] = mapped_column(Boolean, nullable=False)
     status: Mapped[RouteStatus] = mapped_column(SQLAlchemyEnum(RouteStatus), nullable=False)
+    # distance: Mapped
     owner_id: Mapped[uuid.UUID] = mapped_column(UUID, nullable=False)
 
     points: Mapped[list["PointModel"]] = relationship(
