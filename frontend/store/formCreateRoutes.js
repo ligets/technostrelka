@@ -21,13 +21,18 @@ export const useFormCreateRoutes = create((set) => ({
   setStart: (start) => set(() => ({ start })),
 
   addPoint: (point) =>
-    set((state) => ({
-      points: [...state.points, point],
-      descriptions: {
-        ...state.descriptions,
-        [point.id]: { name: "", description: "", photos: [] },
-      },
-    })),
+    set((state) => {
+      // Проверяем, существует ли уже точка с таким ID
+      if (state.points.some((p) => p.id === point.id)) return state;
+  
+      return {
+        points: [...state.points, point],
+        descriptions: {
+          ...state.descriptions,
+          [point.id]: { name: "", description: "", photos: [] },
+        },
+      };
+    }),
 
   updatePoint: (id, updatedData) =>
     set((state) => ({

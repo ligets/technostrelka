@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useCallback } from "react";
 import { useFormCreateRoutes } from "@/store/formCreateRoutes";
+import { v4 as uuidv4 } from "uuid";
 
 const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
   const mapRef = useRef(null);
@@ -12,20 +13,19 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
 
   // Функция для обновления маршрута
   const updateRoute = useCallback(() => {
+    console.log("Обновление маршрута, точки:", points);
+
     if (!mapInstance.current || points.length < 2) return;
 
-    // Проверяем, что ymaps и multiRouter загружены
     if (!window.ymaps || !window.ymaps.multiRouter) {
       console.error("Yandex Maps multiRouter API не загружен.");
       return;
     }
 
-    // Удаляем старый маршрут, если он существует
     if (routeRef.current) {
       mapInstance.current.geoObjects.remove(routeRef.current);
     }
 
-    // Создаем новый маршрут
     try {
       routeRef.current = new window.ymaps.multiRouter.MultiRoute(
         {
@@ -41,25 +41,21 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
         }
       );
 
-      // Обработка успешного построения маршрута
       routeRef.current.model.events.add("requestsuccess", () => {
         if (!routeRef.current || !routeRef.current.getRoutes) return;
-        const routes = routeRef.current.getRoutes();
-        if (Array.isArray(routes)) {
-          routes.forEach((route) => {
-            route.options.set({ balloonLayout: null });
-          });
+        const activeRoute = routeRef.current.getActiveRoute();
+        if (activeRoute) {
+          const distance = activeRoute.properties.get("distance").value / 1000; // Преобразуем в километры
+          console.log(`Расстояние маршрута: ${distance.toFixed(2)} км`);
         }
       });
 
-      // Добавляем маршрут на карту
       mapInstance.current.geoObjects.add(routeRef.current);
     } catch (error) {
       console.error("Ошибка при создании маршрута:", error);
     }
   }, [points]);
 
-  // Обновляем маршрут при изменении точек
   useEffect(() => {
     updateRoute();
   }, [points, updateRoute]);
@@ -95,6 +91,14 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
           const coords = e.get("coords");
           addMarker(coords);
         });
+
+        // Восстанавливаем точки на карте при загрузке
+        points.forEach((point) => {
+          if (!markersRef.current[point.id]) {
+            addMarker(point.coords, point.id, point.name);
+            updateRoute()
+          }
+        });
       }
     };
 
@@ -109,20 +113,18 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
   }, [center, zoom]);
 
   const addMarker = useCallback(
-    (coords) => {
-      if (!mapInstance.current) return;
+    (coords, id = uuidv4(), name = "") => {
+      if (!mapInstance.current || markersRef.current[id]) return;
 
-      const id = Date.now().toString();
       const placemark = new window.ymaps.Placemark(
         coords,
         {
-          hintContent: "Новая точка",
-          balloonContentHeader: "Введите название точки",
+          hintContent: name,
+          balloonContentHeader: name,
           balloonContentBody: `
-            <input id="point-name-${id}" type="text" placeholder="Название" style="width: 100%; padding: 5px;"/>
+            <input id="point-name-${id}" type="text" placeholder="Название" value="${name}" style="width: 100%; padding: 5px;"/>
             <button id="save-point-${id}" style="width: 100%; padding: 5px; background-color: blue; color: white; border: none; cursor: pointer; margin-top: 5px;">Сохранить</button>
-            <button id="delete-point-${id}" style="width: 100%; padding: 5px; background-color: red; color: white; border: none; cursor: pointer; margin-top: 5px;">Удалить</button>
-          `,
+            <button id="delete-point-${id}" style="width: 100%; padding: 5px; background-color: red; color: white; border: none; cursor: pointer; margin-top: 5px;">Удалить</button>`,
         },
         {
           draggable: true,
@@ -143,13 +145,13 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
           if (saveBtn) {
             saveBtn.addEventListener("click", () => {
               const nameInput = document.getElementById(`point-name-${id}`);
-              const name = nameInput ? nameInput.value : "Без названия";
+              const newName = nameInput ? nameInput.value : "";
 
-              updatePoint(id, { name });
+              updatePoint(id, { name: newName });
 
               placemark.properties.set({
-                hintContent: name,
-                balloonContentHeader: name,
+                hintContent: newName,
+                balloonContentHeader: newName,
               });
 
               placemark.balloon.close();
@@ -167,7 +169,7 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
 
       mapInstance.current.geoObjects.add(placemark);
       markersRef.current[id] = placemark;
-      addPoint({ id, coords });
+      addPoint({ id, coords, name });
     },
     [addPoint, updatePoint, removePoint]
   );
@@ -180,15 +182,37 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 17 }) => {
   };
 
   useEffect(() => {
+    // Удаляем с карты точки, которые были удалены из состояния
     Object.keys(markersRef.current).forEach((id) => {
       if (!points.find((point) => point.id === id)) {
         removePointFromMap(id);
       }
     });
-  }, [points]);
+  
+    // Восстанавливаем точки, если они не были добавлены
+    let needUpdateRoute = false;
+    points.forEach((point) => {
+      if (!markersRef.current[point.id]) {
+        addMarker(point.coords, point.id, point.name);
+        needUpdateRoute = true;
+      }
+    });
+  
+    // Если восстановили точки, обновляем маршрут
+    if (needUpdateRoute) {
+      updateRoute();
+    }
+  }, [points, updateRoute]);
+
+  useEffect(() => {
+    if (routeRef.current && mapInstance.current) {
+      console.log("Пересоздание маршрута после возврата на шаг");
+      mapInstance.current.geoObjects.add(routeRef.current);
+    }
+  }, []);
 
   return (
-    <div className="w-[100%] h-[100%] relative">
+    <div className="w-[100%] h-[500px] relative">
       <div ref={mapRef} className="w-full h-full" />
     </div>
   );

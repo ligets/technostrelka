@@ -83,7 +83,7 @@ export default function DescriptionRoute() {
                             placeholder="Введите название маршрута"
                             value={title} 
                             onChange={(e) => setTitle(e.target.value)} 
-                            className="w-full border border-gray-400 rounded-lg h-[36px] px-2 outline-none"
+                            className="w-full border border-gray-400 rounded-lg h-[36px] px-2 text-gray-400 outline-none"
                         />
                         {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
                     </div>
@@ -94,7 +94,7 @@ export default function DescriptionRoute() {
                     <label className="text-[#8d8d8d] text-[16px] font-semibold">Описание</label>
                     <div className="w-[70%]">
                         <textarea 
-                            className="w-full border border-gray-400 rounded-lg h-[10em] px-2 outline-none resize-none"
+                            className="w-full border border-gray-400 rounded-lg h-[10em] px-2 outline-none text-gray-400 resize-none"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         />
@@ -150,8 +150,8 @@ export default function DescriptionRoute() {
                     {media.length > 0 && (
                         <div className="mt-4 grid grid-cols-3 gap-4">
                             {media.map((base64, index) => (
-                                <div key={index} className="relative">
-                                    <img src={base64} alt="Фото" className="w-full rounded-lg shadow-md" />
+                                <div key={index} className="relative ">
+                                    <img src={base64} alt="Фото" className="rounded-lg shadow-md" />
                                     <button className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full" onClick={(e) => removeMediaFile(e, index)}>✕</button>
                                 </div>
                             ))}
@@ -160,7 +160,7 @@ export default function DescriptionRoute() {
                 </div>
 
                 {/* Кнопка принятия */}
-                <button type="button" className="px-6 py-3 text-white bg-[#6874f9] rounded-lg font-semibold" onClick={handleSubmit}>Принять</button>
+                <button type="button" className="px-6 py-3 text-white bg-[#6874f9] rounded-lg font-semibold" onClick={handleSubmit}>Дальше</button>
             </form>
         </div>
     );

@@ -99,11 +99,11 @@ export default function ListAndModel() {
             {/* Модальное окно редактирования поинта */}
             {editingPoint && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-6 rounded-lg w-[50%]">
-                        <h2 className="text-lg font-semibold mb-4">Редактирование точки</h2>
+                    <div className="bg-white p-6 rounded-lg w-[30%]">
+                        <h2 className="text-[#000] font-semibold mb-4">Редактирование точки</h2>
 
                         {/* Название */}
-                        <label className="text-sm font-semibold">Название *</label>
+                        <label className="text-sm text-[#000] font-semibold">Название(Обязательно)</label>
                         <input
                             type="text"
                             value={editingPoint.name || ""}
@@ -111,25 +111,25 @@ export default function ListAndModel() {
                                 setEditingPoint({ ...editingPoint, name: e.target.value });
                                 setError(""); // Очистка ошибки при изменении
                             }}
-                            className="w-full border rounded-lg p-2 mb-2"
+                            className="w-full border-[#000] text-[#000] border rounded-lg p-2 mb-2"
                         />
                         {error && <p className="text-red-500 text-sm">{error}</p>}
                         
 
                         {/* Описание */}
-                        <label className="text-sm font-semibold">Описание</label>
+                        <label className="text-sm text-[#000]  font-semibold">Описание(Необязательно)</label>
                         <textarea
                             value={editingPoint.description || ""}
                             onChange={(e) => setEditingPoint({ ...editingPoint, description: e.target.value })}
-                            className="w-full border rounded-lg p-2 mb-4"
+                            className="w-full border-[#000] text-[#000] border rounded-lg p-2 mb-4 h-[200px]  resize"
                         />
 
 
                         {/* Фото */}
-                        <label className="text-sm font-semibold">Фото *</label>
-                        <div className="w-full p-4 bg-gray-100 rounded-lg shadow-md mb-4">
+                        <label className="text-sm text-[#000] font-semibold">Фото (Обязательно)</label>
+                        <div className="w-[50%] p-4 bg-gray-100 rounded-lg shadow-md mb-4 ">
                             {editingPoint.photo ? (
-                                <div className="relative">
+                                <div className="relative ">
                                     <img
                                         src={editingPoint.photo}
                                         alt="Фото"
