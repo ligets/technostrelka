@@ -41,6 +41,8 @@ class RouteService:
 
         if filter_by.type:
             filters.append(RouteModel.type == filter_by.type)
+        if filter_by.title:
+            filters.append(RouteModel.title.ilike(f"%{filter_by.title}%"))
 
         return await RouteDAO.find_all(session, *filters)
 
@@ -52,6 +54,8 @@ class RouteService:
 
         if filter_by.type:
             filters.append(RouteModel.type == filter_by.type)
+        if filter_by.title:
+            filters.append(RouteModel.title.ilike(f"%{filter_by.title}%"))
 
         return await RouteDAO.find_all(session, *filters)
 
@@ -61,6 +65,8 @@ class RouteService:
 
         if filter_by.type:
             filters.append(RouteModel.type == filter_by.type)
+        if filter_by.title:
+            filters.append(RouteModel.title.ilike(f"%{filter_by.title}%"))
 
         return await RouteDAO.find_all_saved(session, user_id=user.get("sub"), *filters)
 
