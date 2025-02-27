@@ -157,7 +157,7 @@ export default function RedactorRoutesLK({ route }) {
                         className="flex flex-col items-center justify-center w-20 h-20 bg-[#d9d9d9] rounded-[5px] cursor-pointer"
                         onClick={() => setIsModalOpen(true)}
                     >
-                        <h1 className="text-[#000] text-[10px] font-light">{type}</h1>
+                        <h1 className="text-[#000] text-[10px] font-light text-center">{type}</h1>
                     </div>
                     {isModalOpen && (
                         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">

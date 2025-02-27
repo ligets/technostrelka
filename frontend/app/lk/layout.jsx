@@ -1,6 +1,7 @@
 'use client';
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export default function LkLayout({ children }) {
     const pathname = usePathname();
@@ -13,15 +14,12 @@ export default function LkLayout({ children }) {
 
     return (
         <div className="flex flex-col w-[92%] h-[94%]">
-            <h1 className="text-[#000] text-[25px] font-bold">Sergeuuuu</h1>
+            <h1 className="text-[#000] text-[25px] font-bold">Личный кабинет</h1>
             <div className="flex flex-row gap-[10%] py-8">
                 <div className="flex flex-col gap-5">
                     <div className="relative">
-                        <img src="" alt="" className="w-[207px] h-[207px] rounded-[10px]"/>
-                        <a className="absolute top-0 right-0 font-semibold text-[#000] text-[13px] p-2"
-                        href="">Изменить</a>
+                        <Image src="/admin-prof.png" alt="" width={207} height={207} />
                     </div>
-                    <p className="text-[#000] text-[16px] font-semibold">2 маршрута</p>
                 </div>
                 <div className="flex flex-col gap-9">
                     <div>
