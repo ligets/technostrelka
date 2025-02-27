@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react";
 import { useFormCreateRoutes } from "@/store/formCreateRoutes";
 import axios from "axios";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 export default function SearchAdress(){
     const [query, setQuery] = useState("");//для поиска
@@ -52,7 +53,7 @@ export default function SearchAdress(){
         if (!query.trim()) return;
 
         axios
-            .get(`https://geocode-maps.yandex.ru/1.x/?apikey=913bd6fa-b6c5-4101-b248-38f0f10e7f1b&geocode=Россия+${encodeURIComponent(query)}&format=json`)
+            .get(`https://geocode-maps.yandex.ru/1.x/?apikey=${process.env.NEXT_PUBLIC_YANDEX_API_KEY}&geocode=Россия+${encodeURIComponent(query)}&format=json`)
             .then((response) => {
                 const items = response.data?.response?.GeoObjectCollection?.featureMember || [];
 

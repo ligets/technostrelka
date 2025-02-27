@@ -34,7 +34,7 @@ export default function ListAndMap(){
             </div>
 
             <button
-            className={`rounded-[10px] py-[0.5em] px-[2em] text-white text-[15px] font-light border-[1px] transition-all duration-300 
+            className={`rounded-[10px] mt-[10px] py-[0.5em] px-[2em] text-white text-[15px] font-light border-[1px] transition-all duration-300 
                         ${points.length >= 3 ? "bg-[#6874f9] border-[#6874f9] hover:bg-transparent hover:text-blue-600" : "bg-gray-400 border-gray-400 cursor-not-allowed"}`}
             onClick={() => setStep(step + 1)}
             disabled={points.length < 3} // Блокируем кнопку, если меньше 3 точек

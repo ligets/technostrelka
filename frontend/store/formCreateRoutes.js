@@ -13,6 +13,7 @@ export const useFormCreateRoutes = create((set) => ({
     type: "Пеший",
     media: [],
     isPublic: false,
+    distance:0,
   },
 
   // Методы
@@ -20,14 +21,24 @@ export const useFormCreateRoutes = create((set) => ({
 
   setStart: (start) => set(() => ({ start })),
 
-  addPoint: (point) =>
+  setDistance: (distance) =>
     set((state) => ({
-      points: [...state.points, point],
-      descriptions: {
-        ...state.descriptions,
-        [point.id]: { name: "", description: "", photos: [] },
-      },
+      routeInfo: { ...state.routeInfo, distance },
     })),
+
+  addPoint: (point) =>
+    set((state) => {
+      // Проверяем, существует ли уже точка с таким ID
+      if (state.points.some((p) => p.id === point.id)) return state;
+  
+      return {
+        points: [...state.points, point],
+        descriptions: {
+          ...state.descriptions,
+          [point.id]: { name: "", description: "", photos: [] },
+        },
+      };
+    }),
 
   updatePoint: (id, updatedData) =>
     set((state) => ({

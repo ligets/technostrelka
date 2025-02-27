@@ -38,7 +38,7 @@ export default function uploadRoute() {
                             {/* ШАГ 2 */}
                             {
                                 step === 2 && (
-                                    <div className="flex w-[100%] h-96 flex-col relative">
+                                    <div className="flex w-[100%]  flex-col relative">
                                         <ListAndMap/>
                                     </div>
                                 )
@@ -46,7 +46,7 @@ export default function uploadRoute() {
                             {/* ШАГ 3 */}
                             {
                                 step === 3 && (
-                                    <div className="flex w-[100%]">
+                                    <div className="flex w-[665px]">
                                         <DescriptionRoute/>
                                     </div>
                                 )

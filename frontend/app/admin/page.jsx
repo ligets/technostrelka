@@ -67,11 +67,7 @@ export default function Admin() {
                                         <div className="flex flex-row gap-[3em]">
                                             <div className="flex flex-col gap-[0.5em] items-start">
                                                 <p className="text-[#000] font-light text-[15px]">Расстояние</p>
-                                                <h1 className="text-[#000] font-bold text-[17px]">{route.distance} км</h1>
-                                            </div>
-                                            <div className="flex flex-col gap-[0.5em] items-start">
-                                                <p className="text-[#000] font-light text-[15px]">Высота</p>
-                                                <h1 className="text-[#000] font-bold text-[17px]">{route.height} м</h1>
+                                                <h1 className="text-[#000] font-bold text-[17px]">{route.route.distance} км</h1>
                                             </div>
                                             <div className="flex flex-col gap-[0.5em] items-start">
                                                 <p className="text-[#000] font-light text-[15px]">Рейтинг</p>
