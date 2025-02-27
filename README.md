@@ -14,3 +14,14 @@
 # ПРИ ЗАПУСКЕ НАДО СДЕЛАТЬ СИДДЭР НА СОЗДАНИЕ 2 ПОЛЬЗОВАТЕЛЕЙ И 1 АДМИНА ИЛИ СДЕЛАТЬ dump.sql 
 
 Ссылка на figma [КЛИКАБЕЛЬНО!!!](https://www.figma.com/design/9fhhrJkNBst6rEiaaPSbkm/Technostrelka?node-id=1-2&t=FKHjwP4Ir8WqFCho-1)
+
+
+```shell
+sudo apt install git
+sudo mkdir technostrelka
+sudo git clone http://github.com/ligets/technostrelka /technostrelka
+cd /technostrelka
+sudo chmod +x ./install-docker.sh
+sudo ./install-docker.sh
+sudo docker compose up --build -d
+```
