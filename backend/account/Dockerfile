@@ -10,9 +10,9 @@ RUN pip3 install poetry
 RUN poetry config virtualenvs.create false \
     && poetry install --only main --no-interaction --no-ansi 
     
-RUN mkdir -p certificates \
-    && openssl genpkey -algorithm RSA -out certificates/private_key.pem -pkeyopt rsa_keygen_bits:2048  \
-    && openssl rsa -pubout -in certificates/private_key.pem -out certificates/public_key.pem
+#RUN mkdir -p certificates \
+##    && openssl genpkey -algorithm RSA -out certificates/private_key.pem -pkeyopt rsa_keygen_bits:2048  \
+##    && openssl rsa -pubout -in certificates/private_key.pem -out certificates/public_key.pem
 
 COPY . .
 

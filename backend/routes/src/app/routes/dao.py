@@ -55,13 +55,19 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, RouteUpdateDB]):
             session: AsyncSession,
             *filters,
             offset: int = 0,
-            limit: int = 100,
+            limit: int = 10000,
             **filter_by
     ):
         stmt = (
             select(cls.model, func.avg(CommentModel.rating).label("rating"))
             .outerjoin(CommentModel, CommentModel.route_id == cls.model.id)
-            .options(selectinload(cls.model.photos))
+            .options(
+                selectinload(RouteModel.points),
+                selectinload(RouteModel.photos),
+                selectinload(RouteModel.comments).options(
+                    selectinload(CommentModel.answers)
+                )
+            )
             .filter(*filters)
             .filter_by(**filter_by)
             .group_by(cls.model.id)
@@ -78,7 +84,7 @@ class RouteDAO(BaseDAO[RouteModel, RouteCreateDB, RouteUpdateDB]):
             user_id: uuid.UUID,
             *filters,
             offset: int = 0,
-            limit: int = 100,
+            limit: int = 10000,
             **filter_by
     ):
 

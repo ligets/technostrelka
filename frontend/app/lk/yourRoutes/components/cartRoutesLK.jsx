@@ -45,6 +45,9 @@ export default function NoneRoutesLK({ routes, onEditRoute }) {
                             </div>
                         </div>
                     </div>
+                    {/* <div className="w-[100%] h-[150px] relative">
+                            <Image src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${route.route.photo[0].photo_path}`} alt="Route Image" layout="fill" objectFit="cover"/>
+                        </div> */}
                     {route.route.photos.map((photo,index) => (
                         <div key={index} className="w-[100%] h-[150px] relative">
                             <Image src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${photo.photo_path}`} alt="Route Image" layout="fill" objectFit="cover"/>

@@ -64,7 +64,7 @@ export async function middleware(request) {
                     const newDecoded = ParseToken(data.access_token);
 
                     // Проверка роли для админ-маршрутов
-                    if (isAdminRoute && newDecoded.role !== "admin") {
+                    if (isAdminRoute && newDecoded.role !== "Admin") {
                         const redirect = NextResponse.redirect(new URL("/", request.url));
                         return redirect;
                     }
@@ -79,7 +79,7 @@ export async function middleware(request) {
             }
 
             // Проверка роли на админ-маршрутах
-            if (isAdminRoute && decoded.role !== "admin") {
+            if (isAdminRoute && decoded.role !== "Admin") {
                 const redirect = NextResponse.redirect(new URL("/", request.url));
                 return redirect;
             }

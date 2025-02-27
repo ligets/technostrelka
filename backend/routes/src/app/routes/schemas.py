@@ -51,3 +51,7 @@ class RouteUpdateDB(RouteUpdate):
     status: RouteStatus
     photos: list[Path]
 
+
+class FilterParams(BaseModel):
+    type: Optional[RouteType] = None
+
