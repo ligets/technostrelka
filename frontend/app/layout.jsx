@@ -86,7 +86,7 @@ export default function RootLayout({ children }) {
         };
         fetchUserData();
     }, []);
-
+    console.log(user)
     return (
         <html lang="en" className={montserrat.variable}>
         <body className="antialiased font-montserrat">
@@ -115,7 +115,7 @@ export default function RootLayout({ children }) {
 
                     <div className="flex gap-2">
                         {isAuthenticated ? (
-                            <div className="flex gap-x-[25%]">
+                            <div className="flex gap-x-[30px]">
                                 <Link href="/lk" className="flex items-center gap-2">
                                     <img
                                         src="/man_lk.png"
@@ -124,6 +124,9 @@ export default function RootLayout({ children }) {
                                     />
                                     <span className="text-black">{user ? user.first_name : 'Гость'}</span>
                                 </Link>
+                                {user.role.name === "Admin" ? (
+                                    <Link href="/admin" className="rounded-[25px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300">Модерация</Link>
+                                ) : ""}
                                 <button
                                     onClick={quit}
                                     className="rounded-[25px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"

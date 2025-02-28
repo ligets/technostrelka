@@ -76,14 +76,14 @@ export default function DescriptionRoute() {
             <form className="flex flex-col gap-10 w-full">
                 {/* Название маршрута */}
                 <div className="flex flex-row items-start justify-between">
-                    <label className="text-[#8d8d8d] text-[16px] font-semibold">Название</label>
+                    <label className="text-black text-[16px] font-semibold">Название</label>
                     <div className="w-[70%]">
                         <input 
                             type="text" 
                             placeholder="Введите название маршрута"
                             value={title} 
                             onChange={(e) => setTitle(e.target.value)} 
-                            className="w-full border border-gray-400 rounded-lg h-[36px] px-2 text-gray-400 outline-none"
+                            className="w-full text-black border border-gray-400 rounded-lg h-[36px] px-2 outline-none"
                         />
                         {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
                     </div>
@@ -91,10 +91,10 @@ export default function DescriptionRoute() {
 
                 {/* Описание маршрута */}
                 <div className="flex flex-row items-start justify-between">
-                    <label className="text-[#8d8d8d] text-[16px] font-semibold">Описание</label>
+                    <label className="text-black text-[16px] font-semibold">Описание</label>
                     <div className="w-[70%]">
                         <textarea 
-                            className="w-full border border-gray-400 rounded-lg h-[10em] px-2 outline-none text-gray-400 resize-none"
+                            className="w-full border border-gray-400 rounded-lg h-[10em] px-2 outline-none text-black resize-none"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         />
@@ -104,7 +104,7 @@ export default function DescriptionRoute() {
 
                 {/* Публичный / Приватный */}
                 <div className="flex flex-row items-start justify-between w-[37%]">
-                    <label className="text-[#8d8d8d] text-[16px] font-semibold">Публичный/Приватный</label>
+                    <label className="text-black text-[16px] font-semibold">Публичный/Приватный</label>
                     <label className="inline-flex items-center cursor-pointer">
                         <input 
                             type="checkbox" 
@@ -118,7 +118,7 @@ export default function DescriptionRoute() {
 
                 {/* Тип маршрута */}
                 <div className="flex flex-row items-start justify-between w-[37%]">
-                    <label className="text-[#8d8d8d] text-[16px] font-semibold">Тип маршрута</label>
+                    <label className="text-[#8d8d8d] text-[16px] font-semibold text-black">Тип маршрута</label>
                     <div 
                         className="flex flex-col items-center justify-center w-20 h-20 bg-[#d9d9d9] rounded-[5px] cursor-pointer"
                         onClick={() => setIsModalOpen(true)}
@@ -157,7 +157,7 @@ export default function DescriptionRoute() {
                 </div>
 
                 {/* Фото */}
-                <label className="text-sm font-semibold">Фото (макс. 3)</label>
+                <label className="text-sm font-semibold text-black">Фото (макс. 3)</label>
                 <div className="w-full p-4 bg-gray-100 rounded-lg shadow-md mb-4">
                     <label
                         htmlFor="fileInput"

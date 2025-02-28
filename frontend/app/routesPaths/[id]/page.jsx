@@ -475,7 +475,7 @@ export default function RoutePath() {
                             <div className="flex flex-row gap-[1em]">
                                 <div className="flex justify-between flex-row items-center">
                                     <Image src="/Star.png" alt="" width={17} height={16}/>
-                                    <h1 className="text-[#000] font-bold text-[17px]">4.5</h1>
+                                    <h1 className="text-[#000] font-bold text-[17px]">{rating}</h1>
                                 </div>
                                 <div className="w-[1px] bg-[#000]"></div>
                                 <h1 className="text-[#000] font-light text-[14px]">{route.comments.length} комментария</h1>
