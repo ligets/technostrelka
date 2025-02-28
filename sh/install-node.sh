@@ -7,7 +7,7 @@ sudo apt update
 sudo apt install -y curl gnupg
 
 # Добавляем официальный репозиторий Node.js
-curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash -
 
 # Устанавливаем Node.js и npm
 sudo apt install -y nodejs
