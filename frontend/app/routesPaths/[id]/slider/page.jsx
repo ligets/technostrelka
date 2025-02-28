@@ -24,11 +24,11 @@ export default function ImageSlider() {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const prevSlide = () => {
-        setCurrentIndex((prev) => (prev === 0 ? imageList.length - 1 : prev - 1));
+        setCurrentIndex((prev) => (prev === 0 ? route.photos.length - 1 : prev - 1));
     };
 
     const nextSlide = () => {
-        setCurrentIndex((prev) => (prev === imageList.length - 1 ? 0 : prev + 1));
+        setCurrentIndex((prev) => (prev === route.photos.length - 1 ? 0 : prev + 1));
     };
 
     const goToSlide = (index) => {
