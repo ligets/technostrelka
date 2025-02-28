@@ -93,19 +93,19 @@ services:
         networks:
             - work
 
-    frontend:
-        build:
-            context: ./frontend/
-        container_name: frontend
-        ports:
-            - "3000:3000"
-        depends_on:
-            - route_service
-            - auth_service
-        env_file:
-            - ./frontend/.env
-        networks:
-            - work
+    # frontend:
+    #     build:
+    #         context: ./frontend/
+    #     container_name: frontend
+    #     ports:
+    #         - "3000:3000"
+    #     depends_on:
+    #         - route_service
+    #         - auth_service
+    #     env_file:
+    #         - ./frontend/.env
+    #     networks:
+    #         - work
 
 #    python-example:
 #        build:
