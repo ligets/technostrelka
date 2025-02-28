@@ -73,7 +73,7 @@ async def reject_route(
     return await RouteService.edit_status_route(session, RouteStatus.REJECTED, id)
 
 
-@router.get("/{id}/save")
+@router.post("/{id}/save")
 async def get_route_by_id(
         id: uuid.UUID,
         user: dict = Depends(get_current_user),
