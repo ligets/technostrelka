@@ -158,4 +158,4 @@ class RouteService:
                 "user_id": uuid.UUID(user.get("sub"))
             }).returning(SavedRouteModel)
         )
-        return await res.scalars().one_or_none()
+        return res.scalars().one_or_none()
