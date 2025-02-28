@@ -4,6 +4,8 @@ import Image from "next/image";
 import YandexMap from "@/components/Map/YandexMapRoutesPaths";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
+
 
 export default function RoutesPaths() {
     const [routeFull, setRouteFull] = useState([]);
