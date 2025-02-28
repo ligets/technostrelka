@@ -282,7 +282,10 @@ export default function RoutePath() {
 
     return (
         <>
-            <div className={`flex flex-row gap-[2em] w-[100%] justify-between ${showCommentModal ? "opacity-50" : ""}`} onClick={() => showCommentModal ? setShowCommentModal(false) : ''}>
+            <div className={`flex flex-row gap-[2em] w-[100%] justify-between ${showCommentModal || showLinkModal ? "opacity-50" : ""}`} onClick={() => {
+                showCommentModal ? setShowCommentModal(false) : ""
+                showLinkModal ? setShowLinkModal(false) : ""
+            }}>
                 <div className="flex flex-col gap-[2em] w-[65%]">
                     <div className="flex flex-col gap-[1em] w">
                         <div className="flex flex-row items-center gap-[4em]">
@@ -300,7 +303,7 @@ export default function RoutePath() {
                             <button onClick={() => setShowLinkModal(true)}
                                 className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Поделиться
                             </button>
-                            <button onclick={() => ToLike}
+                            <button onClick={() => ToLike}
                                 className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Сохранить
                             </button>
 
@@ -380,6 +383,7 @@ export default function RoutePath() {
                 </div>
                 <div className="flex flex-col gap-[1em] w-[20%]">
                     <button
+                        onClick={() => setShowLinkModal(true)}
                         className="rounded-[10px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[18px] font-semibold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300">Отправить
                         маршрут
                     </button>
@@ -506,18 +510,17 @@ export default function RoutePath() {
                 <div
                     className="modal-overlay absolute items-center top-1/3 left-[40%] bg-[#FFFFFF] rounded-[10px] p-[20px] text-black border"
                 >
-                    <div className="modal-content flex-col" onClick={e => e.stopPropagation()}>
+                    <div className="flex gap-4 modal-content flex-col" onClick={e => e.stopPropagation()}>
                         <textarea
                             value={currentUrl}
                             className="border-2 mt-3 border-gray-800 p-3 rounded-xl"
                             rows="4"
                             cols="50"
+                            disabled
                         />
-                        <div className="flex justify-around bg-[#6874F9] text-white rounded-[8px]">
-                            <button onClick={() => setShowLinkModal(false)}
-                                    className="text-white px-4 py-2">Скопировать
-                            </button>
-                        </div>
+                        <button className="bg-[#6874F9] h-[40px] text-white rounded-[8px]" onClick={() => setShowLinkModal(false)}>
+                                Скопировать
+                        </button>
                     </div>
                 </div>
             )}
