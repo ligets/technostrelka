@@ -115,6 +115,7 @@ const convertKMLToKMZ = async (kmlContent, filename) => {
 export default function RoutePath() {
     const [route, setRoute] = useState(null);
     const [showCommentModal, setShowCommentModal] = useState(false);
+    const [showLinkModal, setShowLinkModal] = useState(false);
     const [commentText, setCommentText] = useState('');
     const [mapCenter, setMapCenter] = useState([55.751244, 37.618423]); // Начальный центр карты
     const [mapZoom, setMapZoom] = useState(10); // Начальный зум
@@ -126,6 +127,7 @@ export default function RoutePath() {
     const [selectedStarComment, setSelectedStarComment] = useState(5);
     const [comments, setComments] = useState([]);
     const [rating, setRating] = useState(0);
+    const currentUrl = window.location.href;
 
 
     useEffect(() => {
@@ -141,6 +143,9 @@ export default function RoutePath() {
         setLoading(false)
     }, [routeId]);
 
+    const ToLike = () => {
+
+    }
     const handleAddComment = () => {
         if (!commentText.trim()) {
             alert("Введите текст комментария");
@@ -292,10 +297,10 @@ export default function RoutePath() {
                             <button onClick={() => setShowCommentModal(true)}
                                     className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Отзыв
                             </button>
-                            <button
+                            <button onClick={() => setShowLinkModal(true)}
                                 className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Поделиться
                             </button>
-                            <button
+                            <button onclick={() => ToLike}
                                 className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Сохранить
                             </button>
 
@@ -471,7 +476,7 @@ export default function RoutePath() {
             </div>
             {showCommentModal && (
                 <div
-                    className="modal-overlay absolute items-center top-1/3 left-[40%] bg-[#FFFFFF] rounded-[40px] p-[20px] text-black border"
+                    className="modal-overlay absolute items-center top-1/3 left-[40%] bg-[#FFFFFF] rounded-[10px] p-[20px] text-black border"
                 >
                     <div className="modal-content flex-col" onClick={e => e.stopPropagation()}>
                         <h2>Добавить комментарий</h2>
@@ -492,6 +497,25 @@ export default function RoutePath() {
                             </button>
                             <button onClick={() => setShowCommentModal(false)}
                                     className="text-red-500 px-4 py-2">Закрыть
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showLinkModal && (
+                <div
+                    className="modal-overlay absolute items-center top-1/3 left-[40%] bg-[#FFFFFF] rounded-[10px] p-[20px] text-black border"
+                >
+                    <div className="modal-content flex-col" onClick={e => e.stopPropagation()}>
+                        <textarea
+                            value={currentUrl}
+                            className="border-2 mt-3 border-gray-800 p-3 rounded-xl"
+                            rows="4"
+                            cols="50"
+                        />
+                        <div className="flex justify-around bg-[#6874F9] text-white rounded-[8px]">
+                            <button onClick={() => setShowLinkModal(false)}
+                                    className="text-white px-4 py-2">Скопировать
                             </button>
                         </div>
                     </div>
