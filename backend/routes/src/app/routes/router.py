@@ -74,7 +74,7 @@ async def reject_route(
 
 
 @router.post("/{id}/save")
-async def get_route_by_id(
+async def add_save_route(
         id: uuid.UUID,
         user: dict = Depends(get_current_user),
         session: AsyncSession = Depends(db.get_async_session)
