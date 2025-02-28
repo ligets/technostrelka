@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import { useEffect, useState } from "react";
 import JSZip from "jszip";
 import YandexMap from "@/components/Map/YandexMapRoutesPaths"; // Убедитесь, что путь правильный
@@ -89,6 +89,7 @@ export default function RoutePath() {
     const pathname = usePathname();
     const segments = pathname.split("/"); // Разбиваем URL по "/"
     const routeId = segments[segments.length - 1]; // Берем последний элемент
+    const router = useRouter()
 
     useEffect(() => {
         if (routeId) {
