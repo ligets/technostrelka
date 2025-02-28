@@ -142,8 +142,8 @@ export default function RoutesPaths() {
                                 <div className="flex flex-col gap-[0.5em]">
                                     <div className="flex gap-[1em] items-center justify-between">
                                         <h1 className="text-[#000] text-[11px] font-light">{route.route.type} туризм</h1>
-                                        <div className="flex gap-3">
-                                            <Link className="text-[#000] text-[11px] text-[#6874f9] font-light" href={"/routesPaths/" + route.route.id}>Подробнее о маршруте</Link>
+                                        <div className="flex gap-5">
+                                            <Link className="text-[11px] text-[#6874f9] font-light" href={"/routesPaths/" + route.route.id}>Подробнее<br/>о маршруте</Link>
                                             <button
                                                 className="text-[#6874f9] text-[11px] font-light"
                                                 onClick={() => {

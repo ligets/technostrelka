@@ -518,7 +518,10 @@ export default function RoutePath() {
                             cols="50"
                             disabled
                         />
-                        <button className="bg-[#6874F9] h-[40px] text-white rounded-[8px]" onClick={() => setShowLinkModal(false)}>
+                        <button className="bg-[#6874F9] h-[40px] text-white rounded-[8px]" onClick={async () => {
+                            setShowLinkModal(false)
+                            await navigator.clipboard.writeText(currentUrl);
+                        }}>
                                 Скопировать
                         </button>
                     </div>
