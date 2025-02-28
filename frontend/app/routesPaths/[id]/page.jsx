@@ -193,7 +193,7 @@ export default function RoutePath() {
                     </div>
                 </div>
 
-                <div className="w-[153%] h-[400px] relative">
+                <div className="w-[153%] h-[400px]">
                     <YandexMap center={mapCenter} zoom={mapZoom} routes={route.points.map(point => ([point.coord_x, point.coord_y]))} />
                 </div>
 
