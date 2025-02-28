@@ -129,10 +129,11 @@ class RouteService:
         if route.owner_id != uuid.UUID(user.get("sub")):
             raise HTTPException(status_code=403, detail="Access denied")
 
-        saved_files = []
-        for i, photo in enumerate(data.photos):
-            saved_files.append(await upload_photo(i, photo))
-        del data.photos
+        if data.photos:
+            saved_files = []
+            for i, photo in enumerate(data.photos):
+                saved_files.append(await upload_photo(i, photo))
+            del data.photos
 
         is_public = data.is_public if data.is_public is not None else route.is_public
         status = RouteStatus.MODERATION if is_public else RouteStatus.APPROVED
