@@ -84,12 +84,60 @@ const convertKMLToKMZ = async (kmlContent, filename) => {
 
 export default function RoutePath() {
     const [route, setRoute] = useState(null);
+    const [comments, setComments] = useState([]);
+    const [showCommentModal, setShowCommentModal] = useState(false);
+    const [commentText, setCommentText] = useState('');
     const [mapCenter, setMapCenter] = useState([55.751244, 37.618423]); // Начальный центр карты
     const [mapZoom, setMapZoom] = useState(10); // Начальный зум
     const pathname = usePathname();
     const segments = pathname.split("/"); // Разбиваем URL по "/"
     const routeId = segments[segments.length - 1]; // Берем последний элемент
     const router = useRouter()
+
+    useEffect(() => {
+        if (routeId) {
+            axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES}${routeId}`)
+                .then((response) => {
+                    setRoute(response.data);
+                })
+                .catch(error => console.error("Ошибка загрузки маршрута:", error));
+
+            axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST_COMMENTS}?route_id=${routeId}`)
+                .then((response) => {
+                    setComments(response.data);
+                })
+                .catch(error => console.error("Ошибка загрузки комментариев:", error));
+        }
+    }, [routeId]);
+
+    const handleAddComment = () => {
+        if (!commentText.trim()) {
+            alert("Введите текст комментария");
+            return;
+        }
+
+        const token = document.cookie.split('; ').find(row => row.startsWith('access_token='));
+        if (!token) {
+            console.log('Токен не найден');
+            return;
+        }
+
+        axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST_COMMENTS}`, {
+            headers: {
+                Authorization: `Bearer ${token.split('=')[1]}`,
+            },
+            route_id: routeId,
+            text: commentText,
+            rating: 1 // Можно добавить выбор рейтинга
+        })
+            .then((response) => {
+                setComments([...comments, response.data]);
+                setCommentText('');
+                setShowCommentModal(false);
+                console.log("Комментарий добавлен:", response.data);
+            })
+            .catch(error => console.error("Ошибка добавления комментария:", error));
+    };
 
     useEffect(() => {
         if (routeId) {
@@ -188,9 +236,10 @@ export default function RoutePath() {
                         </div>
                     </div>
                     <div className="flex flex-row gap-[1em]">
-                        <button className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Отзыв</button>
+                        <button onClick={() => setShowCommentModal(true)} className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Отзыв</button>
                         <button className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Поделиться</button>
                         <button className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Сохранить</button>
+
                     </div>
                 </div>
 
@@ -329,10 +378,41 @@ export default function RoutePath() {
                             </div>
                             <div className="w-[1px] bg-[#000]"></div>
                             <h1 className="text-[#000] font-light text-[14px]">2 комментария</h1>
+                            {Array.isArray(comments) && comments.map(comment => (
+                                <div>
+                                    {comment.text} - Рейтинг: {comment.rating}
+                                    <button onClick={() => {
+                                        setSelectedCommentId(comment.id);
+                                        setShowAnswerModal(true);
+                                    }}>Ответить</button>
+                                    {comment.answers && comment.answers.map(answer => (
+                                        <div>{answer.text}</div>
+                                    ))}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
             </div>
+            {showCommentModal && (
+                <div className="modal-overlay absolute items-center top-1/3 left-[40%] bg-[#FFFFFF] rounded-[40px] p-[20px] text-black border" onClick={() => setShowCommentModal(false)}>
+                    <div className="modal-content flex-col" onClick={e => e.stopPropagation()}>
+                        <h2>Добавить комментарий</h2>
+                        <textarea
+                            value={commentText}
+                            onChange={(e) => setCommentText(e.target.value)}
+                            placeholder="Введите ваш комментарий"
+                            rows="4"
+                            cols="50"
+                        />
+                        <div className="flex-col flex">
+                            <button onClick={handleAddComment}>Добавить</button>
+                            <button onClick={() => setShowCommentModal(false)}>Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
+
     );
 }
