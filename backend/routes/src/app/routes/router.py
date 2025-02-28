@@ -84,10 +84,9 @@ async def get_route_by_id(
 @router.get("/{id}")
 async def get_route_by_id(
         id: uuid.UUID,
-        user: dict = Depends(get_current_user),
         session: AsyncSession = Depends(db.get_async_session)
 ):
-    return await RouteService.get_route_by_id(session, id, user)
+    return await RouteService.get_route_by_id(session, id)
 
 
 @router.get("/{id}/points")
