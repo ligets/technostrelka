@@ -163,6 +163,7 @@ export default function RoutePath() {
         })
             .then(response => {
                 console.log('Успешно сохранено:', response.data);
+                alert("Успешно сохранено")
             })
             .catch(error => {
                 console.error("Ошибка:", error.response?.data || error.message);

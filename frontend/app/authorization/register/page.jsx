@@ -47,6 +47,9 @@ export default function Register({ closeModal, setIsLoginForm }) {
 
             document.cookie = `access_token=${response.data.access_token}; path=/; max-age=2592000`;
             document.cookie = `refresh_token=${response.data.refresh_token}; path=/; max-age=2592000`;
+
+            closeModal();
+            window.location.reload();
         } catch (err) {
             console.log(err.response);
             setError("Ошибка при регистрации. Пожалуйста, попробуйте снова.");

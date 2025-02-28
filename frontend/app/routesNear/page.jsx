@@ -132,7 +132,7 @@ export default function RoutesPaths() {
 
     return (
         <div className="absolute top-[80px] left-0 flex w-[100%] h-[100%]">
-            <div className="flex flex-col gap-[1em] w-[35%] h-[100%] bg-[#F4F4F4] p-6">
+            <div className="flex flex-col gap-[1em] w-[35%] h-[100%] bg-[#F4F4F4] p-6 overflow-y-auto">
                 <h1 className="text-[#000] text-[25px] font-bold">{sortedRoutes.length} маршрутов</h1>
                 <div className="bg-[#D9D9D9] w-[100%] h-[2px]"></div>
                 {sortedRoutes.length > 0
