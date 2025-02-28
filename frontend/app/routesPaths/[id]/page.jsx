@@ -151,13 +151,15 @@ export default function RoutePath() {
     }, [routeId]); // Добавляем зависимость, чтобы запрос отправлялся при изменении routeId
 
     useEffect(() => {
+        console.log("1")
         if (route) {
             const points = route.points.map(point => ([point.coord_x, point.coord_y]));
             const bounds = calculateBounds(points);
             const optimalZoom = calculateOptimalZoom(bounds);
-
+            console.log("points", points)
             if (points.length > 0) {
                 setMapCenter(points[0]);
+                console.log("Point", points[0])
                 setMapZoom(optimalZoom);
             }
         }

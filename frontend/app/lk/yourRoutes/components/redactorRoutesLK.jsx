@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 import Image from 'next/image';
+import axios from "axios";
 
 export default function RedactorRoutesLK({ route }) {
 
@@ -26,12 +27,21 @@ export default function RedactorRoutesLK({ route }) {
 
     // Загружаем фото с сервера
     useEffect(() => {
+        console.log(route)
         if (route.route.photos) {
-            const formattedMedia = route.route.photos.map(img => ({
-                id: img.id,
-                url: `${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${img.photo_path}`
-            }));
-            setExistingMedia(formattedMedia);
+            const fetchImages = async () => {
+                const formattedMedia = await Promise.all(route.route.photos.map(async img => {
+                    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${img.photo_path}`);
+                    const blob = await response.blob();
+                    const base64 = await convertBlobToBase64(blob);
+                    return {
+                        id: img.id,
+                        url: base64
+                    };
+                }));
+                setExistingMedia(formattedMedia);
+            };
+            fetchImages();
         }
     }, [route]);
 
@@ -78,7 +88,7 @@ export default function RedactorRoutesLK({ route }) {
     };
 
     // Отправка формы
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!validateForm()) return;
 
         // Преобразуем все изображения в base64 (старые и новые)
@@ -94,8 +104,50 @@ export default function RedactorRoutesLK({ route }) {
             isPublic,
             media: allMedia
         });
+        const dataToSend = {
+            title,
+            description,
+            type,
+            isPublic,
+            media: allMedia
+        };
 
-        // Здесь будет отправка данных на сервер
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES}${route.route.id}`;
+        console.log('Отправляю данные на URL:', url);
+        console.log('Данные для отправки:', dataToSend);
+
+        try {
+            const token = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('access_token='))?.split('=')[1];
+            const response = await axios.patch(url, dataToSend, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                }
+            });
+            console.log('Данные успешно отправлены:', response.data);
+            alert('Данные успешно отправлены!');
+        } catch (error) {
+            console.error('Ошибка при отправке данных:', error);
+            if (error.response) {
+                console.error('Ответ сервера:', error.response.data);
+                console.error('Статус ошибки:', error.response.status);
+                console.error('Заголовки ошибки:', error.response.headers);
+            } else if (error.request) {
+                console.error('Запрос был сделан, но ответ не получен:', error.request);
+            } else {
+                console.error('Произошла ошибка:', error.message);
+            }
+            alert('Ошибка при отправке данных. Попробуйте снова.');
+        }
+    };
+    const convertBlobToBase64 = (blob) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
     };
 
     return (
