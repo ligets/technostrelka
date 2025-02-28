@@ -58,7 +58,7 @@ export default function Admin() {
                         routes.map((route) => {
                             const status = newStatusRoutes[route.route.id] || route.route.status;
                             return (
-                                <div key={route.id} className="flex flex-col gap-7 w-[100%]">
+                                <div key={route.route.id} className="flex flex-col gap-7 w-[100%]">
                                     <div className="flex flex-row justify-between">
                                         <h1 className="text-[#000] text-[16px] font-bold">{route.route.title}</h1>
                                         <a className="text-[#6874f9] font-light" href="#">На карте</a>

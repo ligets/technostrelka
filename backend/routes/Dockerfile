@@ -12,7 +12,7 @@ RUN poetry config virtualenvs.create false \
 
 COPY . .
 
-CMD ["sh", "-c", "poetry run alembic upgrade head && poetry run python src/main.py"]
+CMD ["sh", "-c", "poetry run python src/main.py"]
 
 
 

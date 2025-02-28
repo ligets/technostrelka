@@ -1,97 +1,111 @@
 services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - '5433:5432'
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-    networks:
-      - work
+    postgres:
+        image: postgres:15-alpine
+        container_name: postgres
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+            - ./init_utf8.sql:/docker-entrypoint-initdb.d/init.sql
+        ports:
+            - '5433:5432'
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: postgres
+        networks:
+            - work
 
-  rabbitmq:
-    image: 'rabbitmq:4'
-    container_name: rabbitmq
-    ports:
-      - '5672:5672'
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    networks:
-      - work
+    rabbitmq:
+        image: 'rabbitmq:4'
+        container_name: rabbitmq
+        ports:
+            - '5672:5672'
+        healthcheck:
+            test: rabbitmq-diagnostics -q ping
+            interval: 30s
+            timeout: 10s
+            retries: 5
+        networks:
+            - work
 
-  auth_service:
-      build:
-          context: ./backend/account/
-      container_name: auth_technostrelka
-      ports:
-          - "8081:8081"
-      depends_on:
-          - rabbitmq
-          - postgres
-          #    - redis
-      environment:
-          - JWT_ACCESS_TOKEN_EXPIRE_MINUTES=15
-          - JWT_REFRESH_TOKEN_EXPIRE_DAYS=30
+    auth_service:
+        build:
+            context: ./backend/account/
+        container_name: auth_technostrelka
+        ports:
+            - "8081:8081"
+        depends_on:
+            - rabbitmq
+            - postgres
+            #    - redis
+        environment:
+            - JWT_ACCESS_TOKEN_EXPIRE_MINUTES=15
+            - JWT_REFRESH_TOKEN_EXPIRE_DAYS=30
 
-          - POSTGRES_HOST=postgres
-          - POSTGRES_PORT=5432
-          - POSTGRES_USER=postgres
-          - POSTGRES_PASSWORD=postgres
-          - POSTGRES_DB=account_db
+            - POSTGRES_HOST=postgres
+            - POSTGRES_PORT=5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=account_db
 
-          - RABBITMQ_HOST=rabbitmq
-          - RABBITMQ_USER=guest
-          - RABBITMQ_PASSWORD=guest
-      networks:
-          - work
+            - RABBITMQ_HOST=rabbitmq
+            - RABBITMQ_USER=guest
+            - RABBITMQ_PASSWORD=guest
+        networks:
+            - work
 
-#    notification_service:
-#        build:
-#            context: ./backend/notification/
-#        container_name: notification_technostrelka
-#        ports:
-#            - "8083:8083"
-#        depends_on:
-#            - rabbitmq
-#            - postgres
-#            #    - redis
-#        env_file:
-#            - ./backend/notification/.env
-#        networks:
-#            - work
+    #    notification_service:
+    #        build:
+    #            context: ./backend/notification/
+    #        container_name: notification_technostrelka
+    #        ports:
+    #            - "8083:8083"
+    #        depends_on:
+    #            - rabbitmq
+    #            - postgres
+    #            #    - redis
+    #        env_file:
+    #            - ./backend/notification/.env
+    #        networks:
+    #            - work
 
-  route_service:
-      build:
-          context: ./backend/routes/
-      container_name: routes_technostrelka
-      ports:
-          - "8082:8082"
-      depends_on:
-          - rabbitmq
-          - postgres
-          #    - redis
-      env_file:
-          - ./backend/routes/.env
-      environment:
-          - POSTGRES_HOST=postgres
-          - POSTGRES_PORT=5432
-          - POSTGRES_USER=postgres
-          - POSTGRES_PASSWORD=postgres
-          - POSTGRES_DB=routes_db
+    route_service:
+        build:
+            context: ./backend/routes/
+        container_name: routes_technostrelka
+        ports:
+            - "8082:8082"
+        depends_on:
+            - rabbitmq
+            - postgres
+            #    - redis
+        env_file:
+            - ./backend/routes/.env
+        environment:
+            - POSTGRES_HOST=postgres
+            - POSTGRES_PORT=5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=routes_db
 
-          - RABBITMQ_HOST=rabbitmq
-          - RABBITMQ_USER=guest
-          - RABBITMQ_PASSWORD=guest
-      networks:
-          - work
+            - RABBITMQ_HOST=rabbitmq
+            - RABBITMQ_USER=guest
+            - RABBITMQ_PASSWORD=guest
+        networks:
+            - work
+
+    frontend:
+        build:
+            context: ./frontend/
+        container_name: frontend
+        ports:
+            - "3000:3000"
+        depends_on:
+            - route_service
+            - auth_service
+        env_file:
+            - ./frontend/.env
+        networks:
+            - work
 
 #    python-example:
 #        build:
@@ -109,9 +123,9 @@ services:
 #            - work
 
 networks:
-  work:
+    work:
 
 volumes:
-  postgres_data:
-  redis_data:
-  elastic_data:
+    postgres_data:
+    redis_data:
+    elastic_data:

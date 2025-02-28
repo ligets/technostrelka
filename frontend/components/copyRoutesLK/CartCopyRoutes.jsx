@@ -15,13 +15,13 @@ export default function CartCopyRoutes({ data }) {
                 <div className="flex flex-row justify-between gap-[3em]">
                     <div className="flex flex-col gap-[0.5em] items-start">
                         <p className="text-[#000] font-light text-[15px]">Расстояние</p>
-                        <h1 className="text-[#000] font-bold text-[17px]">{ data.route.distance }</h1>
+                        <h1 className="text-[#000] font-bold text-[17px]">{ data.route.distance } км.</h1>
                     </div>
                     <div className="flex flex-col gap-[0.5em] items-start">
                         <p className="text-[#000] font-light text-[15px]">Рейтинг</p>
                         <div className="flex justify-between flex-row items-center">
                             <Image src="/Star.png" alt="" width={25} height={25}/>
-                            <h1 className="text-[#000] font-bold text-[17px]">{ data.raiting ? data.raiting : 0 }</h1>
+                            <h1 className="text-[#000] font-bold text-[17px]">{ data.rating ? data.rating : 0 }</h1>
                         </div>
                     </div>
                 </div>
