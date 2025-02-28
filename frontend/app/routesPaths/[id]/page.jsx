@@ -180,7 +180,6 @@ export default function RoutePath() {
     };
 
     useEffect(() => {
-        console.log("1")
         if (route) {
             const points = route.points.map(point => ([point.coord_x, point.coord_y]));
             const bounds = calculateBounds(points);
@@ -286,7 +285,7 @@ export default function RoutePath() {
                             <a className="text-[#6874f9] text-[16px] font-semibold" href="">{route.title}</a>
                             <div className="flex justify-between flex-row items-center">
                                 <Image src="/Star.png" alt="" width={17} height={16}/>
-                                <h1 className="text-[#000] font-bold text-[17px]">{rating.toFixed(2)}</h1>
+                                <h1 className="text-[#000] font-bold text-[17px]">{rating ? rating.toFixed(2) : 0}</h1>
                             </div>
                         </div>
                         <div className="flex flex-row gap-[1em]">
