@@ -2,11 +2,11 @@ import uuid
 from typing import Union
 
 from fastapi import HTTPException
-from sqlalchemy import and_
+from sqlalchemy import and_, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app.routes.dao import RouteDAO, PointDAO
-from src.app.routes.models import RouteStatus, RouteModel, PointModel
+from src.app.routes.models import RouteStatus, RouteModel, PointModel, SavedRouteModel
 from src.app.routes.schemas import RouteCreate, RouteCreateDB, RouteUpdateDB, RouteUpdate, FilterParams
 from src.app.routes.utils import upload_photo
 
@@ -146,4 +146,13 @@ class RouteService:
                 status=status,
                 photos=saved_files
             )
+        )
+
+    @classmethod
+    async def add_save_route(cls, session: AsyncSession, id: uuid.UUID, user: dict):
+        return await session.execute(
+            insert(SavedRouteModel).values({
+                "route_id": id,
+                "user_id": uuid.UUID(user.get("sub"))
+            }).returning(SavedRouteModel)
         )
