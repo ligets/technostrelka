@@ -106,14 +106,14 @@ export default function RootLayout({ children }) {
                     <div className="flex gap-2">
                         {isAuthenticated ? (
                             <div className="flex gap-x-[25%]">
-                                <div className="flex items-center gap-2">
+                                <Link href="/lk" className="flex items-center gap-2">
                                     <img
                                         src="/man_lk.png"
                                         className="rounded-[50px] h-[50px]"
                                         alt="User avatar"
                                     />
                                     <span className="text-black">{user ? user.first_name : 'Гость'}</span>
-                                </div>
+                                </Link>
                                 <button
                                     onClick={quit}
                                     className="rounded-[25px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[15px] font-bold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300"
