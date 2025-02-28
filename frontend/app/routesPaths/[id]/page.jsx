@@ -144,7 +144,17 @@ export default function RoutePath() {
     }, [routeId]);
 
     const ToLike = () => {
-
+        const token = document.cookie.split('; ').find(row => row.startsWith('access_token='));
+        if (!token) {
+            alert("Вам требуется войти в аккаунт или зарегистрироваться")
+            return;
+        }
+        axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES}${routeId}/save`, {},{
+            headers: {
+                Authorization: `Bearer ${token.split('=')[1]}`,
+            },
+        })
+            .catch(error => console.error("Ошибка:", error));
     }
     const handleAddComment = () => {
         if (!commentText.trim()) {
@@ -300,7 +310,7 @@ export default function RoutePath() {
                             <button onClick={() => setShowLinkModal(true)}
                                 className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Поделиться
                             </button>
-                            <button onclick={() => ToLike}
+                            <button onClick={() => ToLike}
                                 className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Сохранить
                             </button>
 
