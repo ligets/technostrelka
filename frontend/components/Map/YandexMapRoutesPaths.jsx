@@ -34,7 +34,6 @@ const YandexMap = ({ center = [55.751244, 37.618423], zoom = 10, routes }) => {
         });
         try {
           console.log("ЕБЕН", routes);
-        
           // Если routes — это массив объектов с точками, нам нужно их привести к нужному формату
           const formattedRoutes = routes.flatMap(route => 
             route.map(point => [point.coord_y, point.coord_x])  // Преобразуем каждую точку в [широта, долгота]

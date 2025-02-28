@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import YandexMap from "@/components/Map/YandexMapRoutesPaths";
-import Image from "next/image"; // Добавьте импорт Image, если используете Next.js Image
-import { useRouter } from "next/navigation"; // Хук для навигации
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const getUserLocation = () => {
     return new Promise((resolve, reject) => {
@@ -19,7 +19,7 @@ const getUserLocation = () => {
 };
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Радиус Земли в километрах
+    const R = 6371;
     const dLat = toRadians(lat2 - lat1);
     const dLon = toRadians(lon2 - lon1);
     const a =
@@ -30,9 +30,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return R * c;
 };
 
-const toRadians = (degrees) => {
-    return degrees * (Math.PI / 180);
-};
+const toRadians = (degrees) => degrees * (Math.PI / 180);
 
 const sortRoutesByDistance = (routes, userCoords) => {
     return routes.map(route => {
@@ -43,13 +41,15 @@ const sortRoutesByDistance = (routes, userCoords) => {
 };
 
 export default function RoutesPaths() {
-    const router = useRouter();  // Хук для навигации
+    const router = useRouter();
     const [routeFull, setRouteFull] = useState([]);
     const [sortedRoutes, setSortedRoutes] = useState([]);
     const [selectedRoute, setSelectedRoute] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [mapCenter, setMapCenter] = useState([55.751244, 37.618423]); // Начальный центр карты
+    const [mapZoom, setMapZoom] = useState(10); // Начальный зум
 
     useEffect(() => {
         axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES}`)
@@ -80,18 +80,44 @@ export default function RoutesPaths() {
             })
             .catch(error => {
                 console.log("Ошибка при получении местоположения пользователя:", error);
-                setUserLocation({ latitude: 55.751244, longitude: 37.618423 }); // Москва
+                setUserLocation({ latitude: 55.751244, longitude: 37.618423 });
                 setError("Не удалось получить местоположение. Используются дефолтные координаты.");
             })
             .finally(() => setLoading(false));
     }, []);
 
-    // Преобразуем selectedRoute в нужный формат
     function formattedRoute(points) {
-        return points.map(point => ([
-            point.coord_x, // широта
-            point.coord_y  // долгота
-        ]));
+        return points.map(point => ([point.coord_x, point.coord_y]));
+    }
+
+    function calculateBounds(points) {
+        let minLat = Infinity;
+        let maxLat = -Infinity;
+        let minLon = Infinity;
+        let maxLon = -Infinity;
+
+        points.forEach(([lat, lon]) => {
+            if (lat < minLat) minLat = lat;
+            if (lat > maxLat) maxLat = lat;
+            if (lon < minLon) minLon = lon;
+            if (lon > maxLon) maxLon = lon;
+        });
+
+        return { minLat, maxLat, minLon, maxLon };
+    }
+
+    function calculateOptimalZoom(bounds) {
+        const latRange = bounds.maxLat - bounds.minLat;
+        const lonRange = bounds.maxLon - bounds.minLon;
+
+        let zoom = 10;
+        if (latRange > 0 || lonRange > 0) {
+            zoom = Math.max(
+                10 - Math.floor(latRange * 2),
+                10 - Math.floor(lonRange * 2)
+            );
+        }
+        return Math.min(Math.max(zoom, 5), 18);
     }
 
     if (loading) {
@@ -121,10 +147,21 @@ export default function RoutesPaths() {
                                         <button
                                             className="text-[#000] text-[11px] font-light"
                                             onClick={() => {
-                                                const formattedPoints = formattedRoute(route.route.points); // Конвертируем points
-                                                setSelectedRoute(formattedPoints);  // Обновляем выбранный маршрут
+                                                const formattedPoints = formattedRoute(route.route.points);
+
+                                                if (formattedPoints.length > 0) {
+                                                    const firstPoint = formattedPoints[0];
+                                                    const bounds = calculateBounds(formattedPoints);
+                                                    const newZoom = calculateOptimalZoom(bounds);
+
+                                                    setMapCenter(firstPoint);
+                                                    setMapZoom(newZoom);
+                                                }
+
+                                                setSelectedRoute(formattedPoints);
                                                 console.log("Выбранный маршрут:", formattedPoints);
-                                            }}>
+                                            }}
+                                        >
                                             Показать на карте
                                         </button>
                                     </div>
@@ -154,7 +191,7 @@ export default function RoutesPaths() {
                     ))
                     : <h1>Нет доступных маршрутов</h1>}
             </div>
-            <YandexMap center={[55.751244, 37.618423]} zoom={10} routes={selectedRoute} />
+            <YandexMap center={mapCenter} zoom={mapZoom} routes={selectedRoute} />
         </div>
     );
 }
