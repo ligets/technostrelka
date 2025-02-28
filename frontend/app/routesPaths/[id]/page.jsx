@@ -144,7 +144,17 @@ export default function RoutePath() {
     }, [routeId]);
 
     const ToLike = () => {
-
+        const token = document.cookie.split('; ').find(row => row.startsWith('access_token='));
+        if (!token) {
+            alert("Вам требуется войти в аккаунт или зарегистрироваться")
+            return;
+        }
+        axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES}${routeId}/save`, {},{
+            headers: {
+                Authorization: `Bearer ${token.split('=')[1]}`,
+            },
+        })
+            .catch(error => console.error("Ошибка:", error));
     }
     const handleAddComment = () => {
         if (!commentText.trim()) {
