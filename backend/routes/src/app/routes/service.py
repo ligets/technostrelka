@@ -149,9 +149,13 @@ class RouteService:
 
     @classmethod
     async def add_save_route(cls, session: AsyncSession, id: uuid.UUID, user: dict):
-        return await session.execute(
+        route = RouteDAO.find_one_or_none(session, RouteModel.id == id)
+        if not route:
+            raise HTTPException(status_code=404, detail="Route not found")
+        res = await session.execute(
             insert(SavedRouteModel).values({
                 "route_id": id,
                 "user_id": uuid.UUID(user.get("sub"))
             }).returning(SavedRouteModel)
         )
+        return await res.scalars().one_or_none()
