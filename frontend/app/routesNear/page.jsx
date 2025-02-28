@@ -4,6 +4,8 @@ import axios from "axios";
 import YandexMap from "@/components/Map/YandexMapRoutesPaths";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 const getUserLocation = () => {
     return new Promise((resolve, reject) => {
@@ -135,35 +137,34 @@ export default function RoutesPaths() {
                 <div className="bg-[#D9D9D9] w-[100%] h-[2px]"></div>
                 {sortedRoutes.length > 0
                     ? sortedRoutes.map((route) => (
-                        <div key={route.route.id} className="w-[100%] bg-[#FFFFFF] rounded-[30px] flex flex-row">
-                            <div className="flex flex-col gap-[1em] p-[2em]">
+                        <div key={route.route.id} className="w-[100%] bg-[#FFFFFF] rounded-[30px] flex flex-row items-center">
+                            <div className="flex flex-1 flex-col gap-[1em] p-[2em]">
                                 <div className="flex flex-col gap-[0.5em]">
-                                    <div className="flex gap-[1em] items-center">
+                                    <div className="flex gap-[1em] items-center justify-between">
                                         <h1 className="text-[#000] text-[11px] font-light">{route.route.type} туризм</h1>
-                                        <a className="text-[#000] text-[11px] font-light" href="#" onClick={(e) => {
-                                            e.preventDefault();
-                                            router.push(`/routesPaths/${route.route.id}`)
-                                        }}>Подробнее о маршруте</a>
-                                        <button
-                                            className="text-[#000] text-[11px] font-light"
-                                            onClick={() => {
-                                                const formattedPoints = formattedRoute(route.route.points);
+                                        <div className="flex gap-3">
+                                            <Link className="text-[#000] text-[11px] text-[#6874f9] font-light" href={"/routesPaths/" + route.route.id}>Подробнее о маршруте</Link>
+                                            <button
+                                                className="text-[#6874f9] text-[11px] font-light"
+                                                onClick={() => {
+                                                    const formattedPoints = formattedRoute(route.route.points);
 
-                                                if (formattedPoints.length > 0) {
-                                                    const firstPoint = formattedPoints[0];
-                                                    const bounds = calculateBounds(formattedPoints);
-                                                    const newZoom = calculateOptimalZoom(bounds);
+                                                    if (formattedPoints.length > 0) {
+                                                        const firstPoint = formattedPoints[0];
+                                                        const bounds = calculateBounds(formattedPoints);
+                                                        const newZoom = calculateOptimalZoom(bounds);
 
-                                                    setMapCenter(firstPoint);
-                                                    setMapZoom(newZoom);
-                                                }
+                                                        setMapCenter(firstPoint);
+                                                        setMapZoom(newZoom);
+                                                    }
 
-                                                setSelectedRoute(formattedPoints);
-                                                console.log("Выбранный маршрут:", formattedPoints);
-                                            }}
-                                        >
-                                            Показать на карте
-                                        </button>
+                                                    setSelectedRoute(formattedPoints);
+                                                    console.log("Выбранный маршрут:", formattedPoints);
+                                                }}
+                                            >
+                                                Показать на карте
+                                            </button>
+                                        </div>
                                     </div>
                                     <h1 className="text-[#000] text-[16px] font-semibold">{route.route.title}</h1>
                                 </div>
@@ -186,6 +187,13 @@ export default function RoutesPaths() {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div className="w-[25%] h-[150px] me-4 relative">
+                                <Image
+                                    src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${route.route.photos[0].photo_path}`}
+                                    alt="Route Image" layout="fill" objectFit="cover"
+                                    className="rounded-2xl"
+                                />
                             </div>
                         </div>
                     ))
