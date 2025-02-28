@@ -2,7 +2,7 @@
 import axios from "axios";
 import Image from "next/image";
 import {usePathname, useRouter} from "next/navigation";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import JSZip from "jszip";
 import YandexMap from "@/components/Map/YandexMapRoutesPaths"; // Убедитесь, что путь правильный
 
@@ -56,7 +56,7 @@ const generateKML = (points, routeTitle) => {
 };
 
 const downloadFile = (content, filename, type) => {
-    const blob = new Blob([content], { type });
+    const blob = new Blob([content], {type});
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -71,7 +71,7 @@ const convertKMLToKMZ = async (kmlContent, filename) => {
     const zip = new JSZip();
     zip.file('doc.kml', kmlContent);
 
-    const content = await zip.generateAsync({ type: 'blob' });
+    const content = await zip.generateAsync({type: 'blob'});
     const url = window.URL.createObjectURL(content);
     const a = document.createElement('a');
     a.href = url;
@@ -84,7 +84,6 @@ const convertKMLToKMZ = async (kmlContent, filename) => {
 
 export default function RoutePath() {
     const [route, setRoute] = useState(null);
-    const [comments, setComments] = useState([]);
     const [showCommentModal, setShowCommentModal] = useState(false);
     const [commentText, setCommentText] = useState('');
     const [mapCenter, setMapCenter] = useState([55.751244, 37.618423]); // Начальный центр карты
@@ -93,6 +92,7 @@ export default function RoutePath() {
     const segments = pathname.split("/"); // Разбиваем URL по "/"
     const routeId = segments[segments.length - 1]; // Берем последний элемент
     const router = useRouter()
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (routeId) {
@@ -101,13 +101,8 @@ export default function RoutePath() {
                     setRoute(response.data);
                 })
                 .catch(error => console.error("Ошибка загрузки маршрута:", error));
-
-            axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST_COMMENTS}?route_id=${routeId}`)
-                .then((response) => {
-                    setComments(response.data);
-                })
-                .catch(error => console.error("Ошибка загрузки комментариев:", error));
         }
+        setLoading(false)
     }, [routeId]);
 
     const handleAddComment = () => {
@@ -206,7 +201,7 @@ export default function RoutePath() {
             if (lon > maxLon) maxLon = lon;
         });
 
-        return { minLat, maxLat, minLon, maxLon };
+        return {minLat, maxLat, minLon, maxLon};
     };
 
     const calculateOptimalZoom = (bounds) => {
@@ -223,6 +218,28 @@ export default function RoutePath() {
         return Math.min(Math.max(zoom, 5), 18);
     };
 
+    function RatingStars({ rating }) {
+        console.log(rating)
+        const maxStars = 5;
+
+        // Создаём массив из 5 элементов, где индекс определяет цвет звезды
+        const stars = Array.from({ length: maxStars }, (_, index) => (
+            <Image
+                key={index}
+                src={index < rating ? "/Star.png" : "/StarGray.png"} // Жёлтая или серая звезда
+                alt="Рейтинг"
+                width={17}
+                height={16}
+            />
+        ));
+
+        return <div className="flex">{stars}</div>;
+    }
+
+    if(loading) {
+        return <div>Загрузка...</div>
+    }
+
     return (
         <div className="flex flex-row gap-[2em] w-[100%] justify-between">
             <div className="flex flex-col gap-[2em] w-[65%]">
@@ -231,25 +248,32 @@ export default function RoutePath() {
                         <h1 className="text-[#000] text-[25px] font-semibold"></h1>
                         <a className="text-[#6874f9] text-[16px] font-semibold" href="">{route.title}</a>
                         <div className="flex justify-between flex-row items-center">
-                            <Image src="/Star.png" alt="" width={17} height={16} />
+                            <Image src="/Star.png" alt="" width={17} height={16}/>
                             <h1 className="text-[#000] font-bold text-[17px]">{route.rating || 0}</h1>
                         </div>
                     </div>
                     <div className="flex flex-row gap-[1em]">
-                        <button onClick={() => setShowCommentModal(true)} className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Отзыв</button>
-                        <button className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Поделиться</button>
-                        <button className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Сохранить</button>
+                        <button onClick={() => setShowCommentModal(true)}
+                                className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Отзыв
+                        </button>
+                        <button
+                            className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Поделиться
+                        </button>
+                        <button
+                            className="text-[#000] text-[16px] font-light border-[1px] border-[#6874f9] px-[1.5em] py-[0.5em] rounded-[5px]">Сохранить
+                        </button>
 
                     </div>
                 </div>
 
                 <div className="w-[153%] h-[400px]">
-                    <YandexMap center={mapCenter} zoom={mapZoom} routes={route.points.map(point => ([point.coord_x, point.coord_y]))} />
+                    <YandexMap center={mapCenter} zoom={mapZoom}
+                               routes={route.points.map(point => ([point.coord_x, point.coord_y]))}/>
                 </div>
 
                 <div className="flex flex-col gap-[1em]">
                     <h1 className="text-[#4e4e4e] text-[25px] font-semibold">Фото маршрута</h1>
-                    <div className="relative flex flex-row justify-between w-[100%]" >
+                    <div className="relative flex flex-row justify-between w-[100%]">
                         <div className="relative w-[50%] h-[500px]">
                             <Image
                                 src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${route.photos[0].photo_path}`}
@@ -258,7 +282,7 @@ export default function RoutePath() {
                                 alt="Маршрутное фото"
                             />
                         </div>
-                        <div className="flex flex-col justify-between w-[45%]" >
+                        <div className="flex flex-col justify-between w-[45%]">
                             <div className="relative w-[100%] h-[240px]">
                                 <Image
                                     src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${route.photos[1].photo_path}`}
@@ -280,7 +304,9 @@ export default function RoutePath() {
                             e.preventDefault()
                             router.push(`${pathname}/slider`)
 
-                        }} className="absolute bottom-5 right-5 border-2 border-white rounded-[10px] py-[1em] px-[1em]  bg-[rgba(217,217,217,0.5)]">Показать больше фото</a>
+                        }}
+                           className="absolute bottom-5 right-5 border-2 border-white rounded-[10px] py-[1em] px-[1em]  bg-[rgba(217,217,217,0.5)]">Показать
+                            больше фото</a>
                     </div>
                 </div>
                 <div className="flex flex-col gap-[1em]">
@@ -292,28 +318,32 @@ export default function RoutePath() {
                 <div className="flex flex-col gap-[1em]">
                     <h1 className="text-[#4e4e4e] text-[25px] font-semibold">Описание маршрута</h1>
                     <div className="flex flex-col items-center gap-[1em]">
-                        {route.points.map((point,index) => (
-                        <div key={index} className="w-[100%] border-[1px] border-[#8d8d8d]  rounded-[10px] ">
-                            <div className="flex flex-row justify-between items-center p-[1em]">
-                                <h1 className="text-[18px] font-extrabold text-[#000]">Маршрутная точка</h1>
-                                <h1 className="text-[25px] font-extrabold text-[#000]">{point.name}</h1>
+                        {route.points.map((point, index) => (
+                            <div key={index} className="w-[100%] border-[1px] border-[#8d8d8d]  rounded-[10px] ">
+                                <div className="flex flex-row justify-between items-center p-[1em]">
+                                    <h1 className="text-[18px] font-extrabold text-[#000]">Маршрутная точка</h1>
+                                    <h1 className="text-[25px] font-extrabold text-[#000]">{point.name}</h1>
+                                </div>
+                                <div className="relative w-full h-[400px] rounded-b-[9px] overflow-hidden">
+                                    <Image
+                                        src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${point.photo}`}
+                                        layout="fill"
+                                        objectFit="cover"
+                                        alt="Маршрутное фото"
+                                    />
+                                </div>
                             </div>
-                            <div className="relative w-full h-[400px] rounded-b-[9px] overflow-hidden">
-                                <Image
-                                    src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${point.photo}`}
-                                    layout="fill"
-                                    objectFit="cover"
-                                    alt="Маршрутное фото"
-                                />
-                            </div>
-                        </div>
                         ))}
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col gap-[1em]">
-                <button className="rounded-[10px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[18px] font-semibold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300">Отправить маршрут</button>
-                <div className="w-[100%] border-[#6874f9] border-[2px] rounded-[10px] flex flex-col items-center gap-[1em] p-[1em]">
+            <div className="flex flex-col gap-[1em] w-[20%]">
+                <button
+                    className="rounded-[10px] py-[0.5em] px-[2em] bg-[#6874f9] text-white text-[18px] font-semibold border-[1px] border-[#6874f9] hover:bg-transparent hover:text-blue-600 transition-all duration-300">Отправить
+                    маршрут
+                </button>
+                <div
+                    className="w-[100%] border-[#6874f9] border-[2px] rounded-[10px] flex flex-col items-center gap-[1em] p-[1em]">
                     <h1 className="text-[#6874f9] text-[18px] font-semibold">Экспорт маршрута</h1>
                     <button
                         className="text-[#8d8d8d] text-[18px] font-light"
@@ -343,7 +373,7 @@ export default function RoutePath() {
                         </div>
                         <div className="flex flex-row gap-[1em]">
                             <div className="flex justify-between flex-row items-center">
-                                <Image src="/Star.png" alt="" width={17} height={16} />
+                                <Image src="/Star.png" alt="" width={17} height={16}/>
                                 <h1 className="text-[#000] font-bold text-[16px]">4.5</h1>
                             </div>
                             <h1 className="text-[#000] text-[16px] font-semibold">15 маршрутов</h1>
@@ -373,29 +403,37 @@ export default function RoutePath() {
                         <h1 className="text-[#000] text-[18px] font-semibold">Рейтинг и комментарии</h1>
                         <div className="flex flex-row gap-[1em]">
                             <div className="flex justify-between flex-row items-center">
-                                <Image src="/Star.png" alt="" width={17} height={16} />
+                                <Image src="/Star.png" alt="" width={17} height={16}/>
                                 <h1 className="text-[#000] font-bold text-[17px]">4.5</h1>
                             </div>
                             <div className="w-[1px] bg-[#000]"></div>
-                            <h1 className="text-[#000] font-light text-[14px]">2 комментария</h1>
-                            {Array.isArray(comments) && comments.map(comment => (
-                                <div>
-                                    {comment.text} - Рейтинг: {comment.rating}
-                                    <button onClick={() => {
-                                        setSelectedCommentId(comment.id);
-                                        setShowAnswerModal(true);
-                                    }}>Ответить</button>
-                                    {comment.answers && comment.answers.map(answer => (
-                                        <div>{answer.text}</div>
-                                    ))}
-                                </div>
-                            ))}
+                            <h1 className="text-[#000] font-light text-[14px]">{route.comments.length} комментария</h1>
+                        </div>
+                        <div>
+                            {route.comments ? (
+                                route.comments.map(comment => (
+                                    <div key={comment.id} className="flex flex-col text-black mt-3">
+                                        <RatingStars rating={comment.rating} />
+                                        <span className="break-words">{comment.text}</span>
+                                        <button onClick={() => {
+                                            setSelectedCommentId(comment.id);
+                                            setShowAnswerModal(true);
+                                        }}>Ответить
+                                        </button>
+                                        {comment.answers && comment.answers.map(answer => (
+                                            <div>{answer.text}</div>
+                                        ))}
+                                    </div>
+                                ))
+                            ) : ""}
                         </div>
                     </div>
                 </div>
             </div>
             {showCommentModal && (
-                <div className="modal-overlay absolute items-center top-1/3 left-[40%] bg-[#FFFFFF] rounded-[40px] p-[20px] text-black border" onClick={() => setShowCommentModal(false)}>
+                <div
+                    className="modal-overlay absolute items-center top-1/3 left-[40%] bg-[#FFFFFF] rounded-[40px] p-[20px] text-black border"
+                    onClick={() => setShowCommentModal(false)}>
                     <div className="modal-content flex-col" onClick={e => e.stopPropagation()}>
                         <h2>Добавить комментарий</h2>
                         <textarea
