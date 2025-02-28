@@ -2,7 +2,7 @@ import uuid
 from typing import Union
 
 from fastapi import HTTPException
-from sqlalchemy import and_, insert
+from sqlalchemy import and_, insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app.routes.dao import RouteDAO, PointDAO
@@ -152,6 +152,13 @@ class RouteService:
         route = await RouteDAO.find_one_or_none(session, RouteModel.id == id)
         if not route:
             raise HTTPException(status_code=404, detail="Route not found")
+        check = await session.execute(
+            select(SavedRouteModel).where(
+                and_(SavedRouteModel.route_id == id, SavedRouteModel.user_id == uuid.UUID(user.get("sub")))
+            )
+        )
+        if check.scalars().one_or_none():
+            raise HTTPException(status_code=400, detail="Route already saved")
         res = await session.execute(
             insert(SavedRouteModel).values({
                 "route_id": id,
