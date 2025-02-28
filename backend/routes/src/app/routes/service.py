@@ -128,9 +128,8 @@ class RouteService:
             raise HTTPException(status_code=404, detail="Route not found")
         if route.owner_id != uuid.UUID(user.get("sub")):
             raise HTTPException(status_code=403, detail="Access denied")
-
+        saved_files = []
         if data.photos:
-            saved_files = []
             for i, photo in enumerate(data.photos):
                 saved_files.append(await upload_photo(i, photo))
             del data.photos
