@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import YandexMap from "@/components/Map/YandexMapRoutesPaths";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 export default function RoutesPaths() {
     const router = useRouter();
+    const searchParams = useSearchParams(); // Отслеживание параметров URL
     const [routeFull, setRouteFull] = useState([]);
     const [selectedRoute, setSelectedRoute] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,60 +16,58 @@ export default function RoutesPaths() {
     const [mapCenter, setMapCenter] = useState([55.751244, 37.618423]); // Начальный центр карты
     const [mapZoom, setMapZoom] = useState(10); // Начальный зум
 
+    // Функция запроса маршрутов с параметрами
+    const fetchRoutes = async (title) => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES}?title=${title}`, {});
+            setRouteFull(response.data);
+            console.log("Полученные данные:", response.data);
+        } catch (error) {
+            console.error("Ошибка при получении данных:", error);
+            setError("Ошибка при получении данных");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Вызываем запрос при изменении URL-параметра (например, ?filter=...)
     useEffect(() => {
-        axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES}`)
-            .then((response) => {
-                setRouteFull(response.data);
-                console.log("Полученные данные:", response.data);
-            })
-            .catch(error => {
-                console.log("Ошибка при получении данных:", error);
-                setError("Ошибка при получении данных");
-            })
-            .finally(() => setLoading(false));
-    }, []);
+        const title = searchParams.get("title"); // Берем параметр из URL
+        fetchRoutes(title); // Запрашиваем маршруты с этим параметром
+
+    }, [searchParams]); // Следим за изменениями URL
+    useEffect(() => {
+        fetchRoutes("")
+    }, [])
 
     function formattedRoute(points) {
         return points.map(point => ([point.coord_x, point.coord_y]));
     }
 
     function calculateBounds(points) {
-        let minLat = Infinity;
-        let maxLat = -Infinity;
-        let minLon = Infinity;
-        let maxLon = -Infinity;
-
+        let minLat = Infinity, maxLat = -Infinity, minLon = Infinity, maxLon = -Infinity;
         points.forEach(([lat, lon]) => {
             if (lat < minLat) minLat = lat;
             if (lat > maxLat) maxLat = lat;
             if (lon < minLon) minLon = lon;
             if (lon > maxLon) maxLon = lon;
         });
-
         return { minLat, maxLat, minLon, maxLon };
     }
 
     function calculateOptimalZoom(bounds) {
         const latRange = bounds.maxLat - bounds.minLat;
         const lonRange = bounds.maxLon - bounds.minLon;
-
         let zoom = 10;
         if (latRange > 0 || lonRange > 0) {
-            zoom = Math.max(
-                10 - Math.floor(latRange * 2),
-                10 - Math.floor(lonRange * 2)
-            );
+            zoom = Math.max(10 - Math.floor(latRange * 2), 10 - Math.floor(lonRange * 2));
         }
         return Math.min(Math.max(zoom, 5), 18);
     }
 
-    if (loading) {
-        return <div>Загрузка...</div>;
-    }
-
-    if (error) {
-        return <div className="text-red-500">{error}</div>;
-    }
+    if (loading) return <div>Загрузка...</div>;
+    if (error) return <div className="text-red-500">{error}</div>;
 
     return (
         <div className="absolute top-[80px] left-0 flex w-[100%] h-[100%]">
@@ -89,16 +87,13 @@ export default function RoutesPaths() {
                                                 className="text-[#6874f9] text-[11px] font-light"
                                                 onClick={() => {
                                                     const formattedPoints = formattedRoute(route.route.points);
-
                                                     if (formattedPoints.length > 0) {
                                                         const firstPoint = formattedPoints[0];
                                                         const bounds = calculateBounds(formattedPoints);
                                                         const newZoom = calculateOptimalZoom(bounds);
-
                                                         setMapCenter(firstPoint);
                                                         setMapZoom(newZoom);
                                                     }
-
                                                     setSelectedRoute(formattedPoints);
                                                     console.log("Выбранный маршрут:", formattedPoints);
                                                 }}

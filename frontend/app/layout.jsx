@@ -11,6 +11,7 @@ import {useCookies} from "react-cookie";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 import axios from "axios";
 import {resolveTitle} from "next/dist/lib/metadata/resolvers/resolve-title";
+import {useRouter} from "next/navigation";
 
 const montserrat = Montserrat({
     variable: "--font-montserrat-sans",
@@ -26,6 +27,14 @@ export default function RootLayout({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const router = useRouter();
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const handleSearch = (event) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+        router.push(`/routesPaths?title=${encodeURIComponent(value)}`);
+    };
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -97,9 +106,10 @@ export default function RootLayout({ children }) {
                             </svg>
                         </div>
                         <input
+                            onChange={handleSearch}
                             type="text"
                             placeholder="Искать маршруты"
-                            className="border px-10 py-2 w-[100%] rounded-[25px] border-gray-400 p-2 shadow-md bg-white outline-none"
+                            className="border text-black px-10 py-2 w-[100%] rounded-[25px] border-gray-400 p-2 shadow-md bg-white outline-none"
                         />
                     </div>
 
