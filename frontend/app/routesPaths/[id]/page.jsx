@@ -1,10 +1,11 @@
 "use client"
 import axios from "axios";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname,useRouter } from "next/navigation";
 import { useEffect,useState } from "react"
 
 export default function routePath(){
+    const router = useRouter()
     const [route,setRoute] = useState(null); 
     const pathname = usePathname();
     const segments = pathname.split("/"); // Разбиваем URL по "/"
@@ -47,12 +48,38 @@ export default function routePath(){
 
                 <div className="flex flex-col gap-[1em]">
                     <h1 className="text-[#4e4e4e] text-[25px] font-semibold">Фото маршрута</h1>
-                    <div className="flex flex-row justify-between w-[100%]" >
-                        <img src="" alt="" className="w-[50%] h-[500px]"/>
-                        <div className="flex flex-col justify-between w-[45%]" >
-                            <img src="" alt="" className="w-[100%] h-[240px]"/>
-                            <img src="" alt="" className="w-[100%] h-[240px]"/>
+                    <div className="relative flex flex-row justify-between w-[100%]" >
+                        <div className="relative w-[50%] h-[500px]">
+                            <Image 
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${route.photos[0].photo_path}`} 
+                                layout="fill" 
+                                objectFit="cover" 
+                                alt="Маршрутное фото"
+                            />
                         </div>
+                        <div className="flex flex-col justify-between w-[45%]" >
+                            <div className="relative w-[100%] h-[240px]">
+                                <Image 
+                                    src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${route.photos[1].photo_path}`} 
+                                    layout="fill" 
+                                    objectFit="cover" 
+                                    alt="Маршрутное фото"
+                                />
+                            </div>
+                            <div className="relative w-[100%] h-[240px]">
+                                <Image 
+                                    src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${route.photos[2].photo_path}`} 
+                                    layout="fill" 
+                                    objectFit="cover" 
+                                    alt="Маршрутное фото"
+                                />
+                            </div>
+                        </div>
+                        <a href="" onClick={(e) => {
+                            e.preventDefault()
+                            router.push(`${pathname}/slider`)
+
+                        }} className="absolute bottom-5 right-5 border-2 border-white rounded-[10px] py-[1em] px-[1em]  bg-[rgba(217,217,217,0.5)]">Показать больше фото</a>
                     </div>
                 </div>
 
@@ -66,13 +93,20 @@ export default function routePath(){
                 <div className="flex flex-col gap-[1em]">
                     <h1 className="text-[#4e4e4e] text-[25px] font-semibold">Описание маршрута</h1>
                     <div className="flex flex-col items-center gap-[1em]">
-                        {route.points.map((point) => (
-                            <div className="w-[100%] border-[1px] border-[#8d8d8d]  rounded-[10px]">
+                        {route.points.map((point,index) => (
+                        <div key={index} className="w-[100%] border-[1px] border-[#8d8d8d]  rounded-[10px] ">
                             <div className="flex flex-row justify-between items-center p-[1em]">
                                 <h1 className="text-[18px] font-extrabold text-[#000]">Маршрутная точка</h1>
                                 <h1 className="text-[25px] font-extrabold text-[#000]">{point.name}</h1>
                             </div>
-                            
+                            <div className="relative w-full h-[400px] rounded-b-[9px] overflow-hidden">
+                                <Image 
+                                    src={`${process.env.NEXT_PUBLIC_BACKEND_HOST_ROUTES_MEDIA}${point.photo}`} 
+                                    layout="fill" 
+                                    objectFit="cover" 
+                                    alt="Маршрутное фото"
+                                />
+                            </div>
                         </div>
                         ))}
 
